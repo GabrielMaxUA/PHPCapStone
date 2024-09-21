@@ -8,6 +8,9 @@
 }
 
 body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures body height covers the full viewport */
     background: #e1d79e;
 }
 
@@ -33,43 +36,43 @@ header {
 }
 
 .backHead  {
-    margin-top: 45px;
-    width: 100%;
+    padding-top: 12px;
+    width: 70vw;
     position: absolute;
     background: none;
-    transition: top 0.4s ease-in-out 0.4s;
+    transition: bottom 0.4s ease-in-out 0.4s;
     z-index: 1;
-    top: -198px;
+    bottom: -198px;
 }
 
 .backHead.active {
-    margin-top: 45px;
-    width: 100%;
+    padding-top: 12px;
+    width: 70vw;
     position: absolute;
     background: none;
-    transition: top 0.4s ease-in-out;
+    transition: bottom 0.4s ease-in-out;
     z-index: 1;
-    top: 0;
+    bottom: 0;
 } 
 
 .backNature {
-    margin-top: 45px;
-    width: 100%;
+    padding-top: 12px;
+    width: 68vw;
     position: absolute;
     background: none;
-    transition: top 0.4s ease-in-out ;
+    transition: bottom 0.4s ease-in-out ;
     z-index: 1;
-    top: -198px;
+    bottom: -198px;
 }
 
 .backNature.active {
-    margin-top: 45px;
-    width: 98%;
+    padding-top: 12px;
+    width: 68vw;
     position: absolute;
     background: none;
-    transition: top 0.4s ease-in-out 0.4s;
+    transition: bottom 0.4s ease-in-out 0.4s;
     z-index: 1;
-    top: 0;
+    bottom: 0;
 } 
 
 .signature{
@@ -85,7 +88,7 @@ header {
 
 #border{
     height: 2px;
-    width: 80%;
+    width: 80vw;
     margin: 10 auto;
     color: rgb(0, 0, 0);
 }
@@ -112,13 +115,12 @@ header {
     width: 90px;
     cursor: pointer;
     top: 8px;
-    right: 8px;
+    right: -18px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     z-index: 6;
-    margin: 8px;
     position: fixed;
     cursor: pointer;
     background: none;
@@ -175,7 +177,7 @@ aside {
     background:none;
     position: fixed;  
     right: -130px;
-    width: 130px;
+    width: 65px;
     height: 100vh;
     transition: right 0.4s ease-in-out; 
     z-index: 5;
@@ -205,6 +207,7 @@ aside.active {
 .nav {
     display: flex;
     flex-flow: column nowrap;
+    margin: 0 auto;
     width: 100%;
     background: none;
     margin-top: 150px;
@@ -231,11 +234,11 @@ aside.active {
 
 
 main {
-    z-index: 3;
+    z-index: 1;
     background: #e1d79e;
-    width: 100%;
-    position:relative;
-    min-height: 200px;
+    width: calc(100% - 60px);
+    position: relative;
+    margin: 0 auto;
 }
 
 .navbar {
@@ -244,7 +247,18 @@ main {
     justify-content: space-evenly;
     margin: 0 auto;
     background: #e1d79e;
-    z-index: 4;
+    z-index: 1;
+}
+
+.navbar-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 40;
+    width: 100%;
+    background: #e1d79e; /* Ensure the navbar has a background when fixed */
 }
 
 #about, #gallery, #connect {
@@ -256,30 +270,73 @@ main {
     z-index: 4;
 }
 
+.scroll{
+    height: fit-content;
+    
+}
+
 .gallery, .connect, .about {
     background: none;
+    background: #e1d79e;
+    margin-bottom: 40px;
 }
 
 .about {
+    width: 100%;
+    position: absolute;
+    background: none;
+    transition: left 0.4s ease-in-out;
+    z-index: 10;
+    left: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    margin: 0 50px;
-    margin-top: 30px;
+    margin-bottom: 40px;
 }
 
-.gallery{
-    display: none;
+.about.active {
+    margin: 0 auto;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    background: none;
+    transition: left 0.4s ease-in-out;
+    z-index: 10;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #e1d79e;
+    margin-bottom: 40px;
 }
 
-.gallery.active{
+.about {
+    left: -100%;
+    margin: 0 auto;
+    background: #e1d79e; /* Slide the element to the left when active */
+}
+
+.gallery {
+    background: #e1d79e;
+    position: absolute;
+    width: 100%;
+    right: -100%; /* Start hidden to the right of the screen */
+    transition: right 0.4s ease-in-out;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    margin: 0 50px;
     height: auto;
+    margin-top: 40px;
+}
+
+.gallery.active {
+    position: absolute;
+    right: 0; /* Slide the element in from the right */
+    margin: 0 auto;
+    background: #e1d79e;
+    margin-top: 40px;
 }
 
 .galleryOption{
@@ -299,6 +356,7 @@ main {
 .bio{
     text-align: center;
     font-size: 1.1em;
+    margin-bottom: 40px;
 }
 .description{
     padding: 40px;
@@ -306,12 +364,11 @@ main {
     background: none;
 }
 
-.gallerySection{
+.gallerySection, .connect{
     align-items: center;
     text-align: center;
     font-size: 1.1em;
     background: none;
-    
 }
 
 .gallerySection h2{
@@ -333,17 +390,38 @@ main {
     box-shadow: 5px 5px 15px #414040, -5px -5px 15px #414040;
 }
 
+.connect {
+    width: 100%;
+    background: #e1d79e;
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out; /* Smooth transition for sliding effect */
+    z-index: 10;
+    transform: translateY(-100%); /* Start off-screen at the top */
+    opacity: 0; /* Hidden initially */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+/* Styles when .connect section is active */
+.connect.active {
+    transform: translateY(0); /* Slide down into view when active */
+    opacity: 1; /* Fully visible */
+}
+
 /* .createdImg:hover {
     transform: scale(1.05);
 } */
 
 footer {
-    position: relative;
+    position: fixed;
+    bottom: 0;
     background: #e1d79e;
-    padding: 20px 0;
+    padding-bottom: 20px;
+    padding-top: 5px ;
     text-align: center;
     width: 100%;
-    margin-top: 20px; /* Adds space above the footer */
-    z-index: 2;
-
+    z-index: 4;
+    margin-top: 0; /* Pushes footer to the bottom of the flex container */
 }
