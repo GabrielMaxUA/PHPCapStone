@@ -33,39 +33,43 @@ header {
 }
 
 .backHead  {
+    margin-top: 45px;
     width: 100%;
     position: absolute;
     background: none;
-    transition: bottom 0.4s ease-in-out 0.4s;
+    transition: top 0.4s ease-in-out 0.4s;
     z-index: 1;
-    bottom: -98px;
+    top: -198px;
 }
 
 .backHead.active {
+    margin-top: 45px;
     width: 100%;
     position: absolute;
     background: none;
-    transition: bottom 0.4s ease-in-out;
+    transition: top 0.4s ease-in-out;
     z-index: 1;
-    bottom: 0;
+    top: 0;
 } 
 
 .backNature {
+    margin-top: 45px;
     width: 100%;
     position: absolute;
     background: none;
-    transition: bottom 0.4s ease-in-out ;
+    transition: top 0.4s ease-in-out ;
     z-index: 1;
-    bottom: -98px;
+    top: -198px;
 }
 
 .backNature.active {
+    margin-top: 45px;
     width: 98%;
     position: absolute;
     background: none;
-    transition: bottom 0.4s ease-in-out 0.4s;
+    transition: top 0.4s ease-in-out 0.4s;
     z-index: 1;
-    bottom: 0;
+    top: 0;
 } 
 
 .signature{
