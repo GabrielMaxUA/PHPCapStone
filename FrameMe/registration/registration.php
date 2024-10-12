@@ -21,6 +21,14 @@ if (!$email) {
     $errors['email'] = 'Invalid email format.';
 }
 
+if (!$firstName) {
+  $errors['firstName'] = 'Please enter your first name.';
+}
+
+if (!$lastName) {
+  $errors['lastName'] = 'Please enter your last name.';
+}
+
 // Validate password length
 if (strlen($password) < 9) {
     $errors['password'] = 'Password must be at least 9 characters long.';
@@ -117,13 +125,13 @@ if (empty($errors)) {
         <aside>
             <div class="nav">
                 <a class="social" href="#" target="_blank">
-                    <img src="./Assets/logos/instagram.png" alt="">
+                    <img src="../Assets/logos/instagram.png" alt="">
                 </a>
                 <a class="social" href="#" target="_blank">
-                    <img src="./Assets/logos/facebook.png" alt="">
+                    <img src="../Assets/logos/facebook.png" alt="">
                 </a>
                 <a class="social" href="#" target="_blank">
-                    <img src="./Assets/logos/message.png" alt="">
+                    <img src="../Assets/logos/message.png" alt="">
                 </a>
             </div>
         </aside>
@@ -131,9 +139,9 @@ if (empty($errors)) {
 <nav>
     <div class="border"></div>
     <div class="navbar">
-        <a id="about"  href = "../index.php">About</a>
-        <a id="gallery"  href = "galleries.php">Gallery</a>
-        <a id="info" href = "registration_form.php">Register</a>
+        <a id="about"  href = "../index.php">Back to main</a>
+        <!-- <a id="gallery"  href = "galleries.php">Gallery</a>
+        <a id="info" href = "registration_form.php">Register</a> -->
     </div>
 </nav>
 <main>
@@ -161,21 +169,21 @@ if (empty($errors)) {
         </div>
 
         <div class="labs">
-            <label for="phone">Phone:</label>
-            <input type="text" name="phone" value="<?php echo htmlspecialchars($phone); ?>">
-            <?php if (isset($errors['phone'])): ?>
-                <span class="error">
-                    <span class="message"><?php echo $errors['phone']; ?></span>
-                </span>
-            <?php endif; ?>
-        </div>
-
-        <div class="labs">
             <label for="email">Email:</label>
             <input type="text" name="email" value="<?php echo htmlspecialchars($email); ?>">
             <?php if (isset($errors['email'])): ?>
                 <span class="error">
                     <span class="message"><?php echo $errors['email']; ?></span>
+                </span>
+            <?php endif; ?>
+        </div>
+
+        <div class="labs">
+            <label for="phone">Phone:</label>
+            <input type="text" name="phone" value="<?php echo htmlspecialchars($phone); ?>">
+            <?php if (isset($errors['phone'])): ?>
+                <span class="error">
+                    <span class="message"><?php echo $errors['phone']; ?></span>
                 </span>
             <?php endif; ?>
         </div>
@@ -209,4 +217,11 @@ if (empty($errors)) {
 </form>
 
 </main>
-<?php include '../layout/footer.php'; ?>
+<footer>
+        <div class="border"></div>
+        <p>&copy; All Rights Reserved.</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>    
+    <script src="../JS/app.js"></script>
+</body>
+</html>

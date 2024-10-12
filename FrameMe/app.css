@@ -237,6 +237,7 @@ form{
     flex-direction: column;
     align-items: center;
     justify-content: start;
+    width: 60%;
   }
   
   #data{
@@ -266,11 +267,20 @@ form{
 
   .button{
     margin-top: 20px;
+    
+  }
+  
+  .button input{
+    width: 70px;
+    height: 30px;
+    border-radius: 4px;
+    background: #e7e3ca;
   }
 
   .error {
     color: red;
     width: 30%;
+    
 }
 .message {
     margin-left: .2em;

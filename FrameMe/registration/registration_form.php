@@ -17,13 +17,13 @@
         <aside>
             <div class="nav">
                 <a class="social" href="#" target="_blank">
-                    <img src="./Assets/logos/instagram.png" alt="">
+                    <img src="../Assets/logos/instagram.png" alt="">
                 </a>
                 <a class="social" href="#" target="_blank">
-                    <img src="./Assets/logos/facebook.png" alt="">
+                    <img src="../Assets/logos/facebook.png" alt="">
                 </a>
                 <a class="social" href="#" target="_blank">
-                    <img src="./Assets/logos/message.png" alt="">
+                    <img src="../Assets/logos/message.png" alt="">
                 </a>
             </div>
         </aside>
@@ -31,9 +31,9 @@
 <nav>
     <div class="border"></div>
     <div class="navbar">
-        <a id="about"  href = "../index.php">About</a>
-        <a id="gallery"  href = "galleries.php">Gallery</a>
-        <a id="info" href = "registration_form.php">Register</a>
+        <a id="about"  href = "../index.php">Back to main</a>
+        <!-- <a id="gallery"  href = "galleries.php">Gallery</a>
+        <a id="info" href = "registration_form.php">Register</a> -->
     </div>
 </nav>
 <main>
@@ -73,5 +73,11 @@
         </div>
     </form>
 </main>
-
-<?php include '../layout/footer.php'; ?>
+<footer>
+        <div class="border"></div>
+        <p>&copy; All Rights Reserved.</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>    
+    <script src="../JS/app.js"></script>
+</body>
+</html>
