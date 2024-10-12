@@ -37,42 +37,17 @@
     </div>
 </nav>
 <main>
-    <form action="registration.php" method="post">
-        <div id="data">
-            <div class="labs">
-                <label for="">First name:</label>
-                <input type="text" name="firstName"><br>
-            </div>
-
-            <div class="labs">
-                <label for="">Last name:</label>
-                <input type="text" name="lastName"><br>
-            </div>
-
+    <form action="signin.php" method="post">
             <div class="labs">
                 <label for="">Email:</label>
                 <input type="email" name="email"><br>
-            </div>
-
-            <div class="labs" >
-                <label for="">Phone:</label>
-                <input type="phone" name="phone"><br>
             </div>
             <div class="labs" >
                 <label for="">Password:</label>
                 <input type="text" name="password"><br>
             </div>
-            <div class="labs" >
-                <label for="">Re-renter Password:</label>
-                <input type="text" name="rPassword"><br>
-            </div>
-            <div class="labs" >
-                <label for="">DOB:</label>
-                <input type="text" name="dob"><br>
-            </div>
-
             <div class="button">
-                <input type="submit" value="Register">
+                <input type="submit" value="Sign in">
             </div>
         </div>
     </form>

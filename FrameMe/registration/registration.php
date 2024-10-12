@@ -12,6 +12,7 @@ $lastName = filter_input(INPUT_POST, 'lastName');
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 $phone = filter_input(INPUT_POST, 'phone');
 $password = filter_input(INPUT_POST, 'password');
+$rPassword = filter_input(INPUT_POST, 'rPassword');
 $dob = filter_input(INPUT_POST, 'dob');
 
 $errors = [];
@@ -32,6 +33,10 @@ if (!$lastName) {
 // Validate password length
 if (strlen($password) < 9) {
     $errors['password'] = 'Password must be at least 9 characters long.';
+}
+
+if($password != $rPassword){
+  $errors['rPassword'] = 'Passwords are not matching.';
 }
 
 // Validate phone number (basic check for valid characters)
