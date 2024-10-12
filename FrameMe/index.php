@@ -1,51 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="CSS/app.css">
-    <title>Document</title>
-</head>
-<body>
-    <header>
-        <img class="signature" src="./Assets/logos/enoBW.png" alt="">
-        
-        <img src="./Assets/backHeader.png" alt="" class="backHead">
-        <img src="./Assets/nature.png" alt="" class="backNature">
-        
-        <div class="menu">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-        <aside>
-            <div class="nav">
-                <a class="social" href="#" target="_blank">
-                    <img src="./Assets/logos/instagram.png" alt="">
-                </a>
-                <a class="social" href="#" target="_blank">
-                    <img src="./Assets/logos/facebook.png" alt="">
-                </a>
-                <a class="social" href="#" target="_blank">
-                    <img src="./Assets/logos/message.png" alt="">
-                </a>
-            </div>
-        </aside>
-    </header>
-    <main>
-        <nav>
-            <div class="borderTop"></div>
-            <div class="navbar">
-                <div id="about" class="nav-link">About</div>
-                <div id="gallery" class="nav-link">Gallery</div>
-                <div id="connect" class="nav-link">Connect</div>
-            </div>
-        </nav>
-        <div class="scroll">
-            <section id="about-section" class="about">
-                <div class="author">
+<?php include 'layout/header.php' ?>
+  <nav>
+    <div class="border"></div>
+    <div class="navbar">
+      <a id="about"  href = "./index.php">About</a>
+      <a id="gallery"  href = "galleries.php">Gallery</a>
+      <a id="info" href = "./registration/registration_form.php">Register</a>
+    </div>
+  </nav>
+        <main>
+            <section class="about">
                     <img src="./Assets/mainPics/author.png" alt="">
-                </div>
                 <div class="bio">
                     <h1>Enok Da Rocha Medeiros: The Poet with a Lens</h1><br>
 
@@ -81,23 +45,5 @@
                         reminding us that beauty is all around—we just need to look.</p><br>
                 </div>
             </section>
-            <section id="gallery-section" class="gallery">
-                <div class="createdImg"></div>
-                <div class="galleryDiscription"></div>
-            </section>
-            <section id="connect-section" class="connect">
-                <!-- Connect content -->
-                <div class="author">
-                    <img src="./Assets/mainPics/italy.png" alt="">
-                </div>
-            </section>
-        </div>
-    </main>
-    <footer>
-        <div class="borderTop"></div>
-        <p>&copy; All Rights Reserved.</p>
-    </footer>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>    
-    <script src="JS/app.js"></script>
-</body>
-</html>
+        </main>
+<?php include 'layout/footer.php'?>

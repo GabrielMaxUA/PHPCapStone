@@ -1,0 +1,279 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    background: #e1d79e;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures body height covers the full viewport */
+    background: #e1d79e;
+}
+
+header {
+    width: 80%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.signature{
+    width: auto;
+    height: 12vw;
+    max-height: 100px;
+    min-height: 80px;
+    background: none;
+    margin: 20px auto;
+}
+
+#border{
+    height: 2px;
+    width: 80vw;
+    margin: 10 auto;
+    color: rgb(0, 0, 0);
+}
+
+.menu {
+    width: 90px;
+    cursor: pointer;
+    top: 8px;
+    right: -18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 6;
+    position: fixed;
+    cursor: pointer;
+    background: none;
+    transition: transform 0.4s ease-in-out, margin-right 0.4s ease-in-out, width 0.4s ease-in-out ;
+}
+
+.bar {
+    z-index: 6;
+    width: 40px;
+    height: 2px;
+    margin: 6px auto;
+    background: #000000;
+    border-radius: 1000px;
+    content: "";
+    transition: transform 0.4s ease-in-out, background-color 0.4s ease-in-out, opacity 0.4s ease-in-out, width 0.4s ease-in-out;
+}
+
+.menu.active .bar:nth-child(1) {
+    transform-origin: left;
+    transform: rotate(45deg);
+    width: calc(30px * 1.41421356237 - 3px);
+    background-color: #000000;
+}
+
+.menu.active .bar:nth-child(2) {
+    opacity: 0;
+    width: 0;
+}
+
+.menu.active .bar:nth-child(3) {
+    transform-origin: left;
+    transform: rotate(-45deg);
+    width: calc(030px * 1.41421356237 - 3px);
+    background-color: #000000;
+}
+
+.menu:not(.active) {
+    margin-right: 8px; 
+    position: fixed;
+}
+
+.menu:not(.active) .bar:nth-child(3), .menu:not(.active) .bar:nth-child(1) {
+    transform-origin: left;
+    transform: rotate(0deg);
+    width: 40px; 
+}
+
+.menu:not(.active) .bar:nth-child(2) {
+    opacity: 1; 
+    width: 40px; 
+}
+
+aside {
+    background:none;
+    position: fixed;  
+    right: -130px;
+    width: 65px;
+    height: 100vh;
+    transition: right 0.4s ease-in-out; 
+    z-index: 5;
+    font-size: 1.2em;
+}
+
+aside.active {
+    right: 0;
+    top: 0;
+    z-index: 5;
+    background:none;
+    position: fixed;
+}
+
+.nav {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    background: none;
+    margin-top: 150px;
+    z-index: 5;
+}
+
+.social {
+    display: flex;
+    justify-content: center;
+}
+
+.social > img {
+    width: 3vw;
+    max-width: 35px;
+    min-width: 30px;
+    border-radius: 8px;
+    transition: width 0.4s ease-in-out;
+    margin: 20px auto;
+}
+
+.nav a:hover{
+    width: 45px;
+}
+
+.border {
+    height: 2px;
+    background-color: #000000;
+    width: calc(100% - 260px);
+    margin: 0 auto;
+}
+
+
+main {
+    background: #e1d79e;
+    width: 80vw;
+    margin: 0 auto;
+}
+
+.navbar {
+    width: calc(100vw - 260px);
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0 auto;
+    background: #e1d79e;
+}
+
+.navbar-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    background: #e1d79e; /* Ensure the navbar has a background when fixed */
+}
+
+.navbar a {
+    text-align: center;
+    font-size: 1.4em;
+    cursor: pointer;
+    width: auto;
+    background: none;
+    color: #000000;
+}
+
+.active {
+    text-decoration: underline; /* Style for the active link */
+}
+
+.about {
+    width: 100%;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+    .about > img {
+        width: 350px;
+        height: auto;
+        border-radius: 12px;
+        border: 1px solid #ffffff;
+        box-shadow: 5px 5px 15px #414040, -5px -5px 15px #414040;
+        margin: 50px;
+    }
+
+    .bio{
+        width: 80%;
+        text-align: center;
+        font-size: 1.1em;
+        margin-bottom: 40px;
+      }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    background: #e1d79e;
+    padding-bottom: 20px;
+    padding-top: 5px ;
+    text-align: center;
+    width: 100%;
+    z-index: 4;
+    margin-top: 0; /* Pushes footer to the bottom of the flex container */
+}
+
+form{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+  }
+  
+  #data{
+    text-align: center;
+    width: 90%;
+  }
+  
+  .labs{
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+    margin-top: 10px;
+    height: 40px;
+  }
+
+  .labs label{
+    margin-right: 40px;
+    width: 30%;
+    text-align: left;
+  }
+
+  .labs input{
+    margin-right: 40px;
+    text-align: left;
+    background: #fff;
+  }
+
+  .button{
+    margin-top: 20px;
+  }
+
+  .error {
+    color: red;
+    width: 30%;
+}
+.message {
+    margin-left: .2em;
+    width: 15em;
+    font-size: 12px;
+}
