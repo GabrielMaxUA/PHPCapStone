@@ -265,13 +265,28 @@ form{
   .button{
     margin: 20px;
     background: #e1dcbd;
-
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
   }
   
   .button input{
     width: 70px;
     height: 30px;
     border-radius: 4px;
+    background: none;
+    margin-right: 30px;
+  }
+
+  .link{
+    text-align: center;
+    margin: 0 auto;
+    margin-left: 40px;
+    background: none;
+  }
+
+  .link h3, a{
     background: none;
   }
 

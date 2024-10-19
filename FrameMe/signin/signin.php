@@ -8,6 +8,7 @@ require_once('../model/database.php');
 
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 $password = filter_input(INPUT_POST, 'password');
+
 $errors = [];
 
 if (!$email) {
@@ -28,7 +29,7 @@ if (empty($errors)) {
 
   if ($user) {
     // Email exists, now check the password
-    if ($password == $user['userPassword']) {
+    if (password_verify($password, $user['userPassword'])) {
         // Password matches, log the user in
         $_SESSION['customer'] = $user['firstName'] . ' ' . $user['lastName'];
 

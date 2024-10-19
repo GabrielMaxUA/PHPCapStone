@@ -48,6 +48,10 @@
             </div>
             <div class="button">
                 <input type="submit" value="Sign in">
+                <div class = "link">
+                <h3>Not a member yet?</h3>
+                <a href="../registration/registration_form.php">Register</a>
+                </div>
             </div>
         </div>
     </form>
