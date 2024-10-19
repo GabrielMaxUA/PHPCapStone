@@ -3,7 +3,29 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Start session
 session_start();
+
+// Automatically log out any previously logged-in user by destroying the session
+if (isset($_SESSION['customer']) || isset($_SESSION['adminIn'])) {
+    // Unset all of the session variables
+    $_SESSION = [];
+
+    // If the session uses cookies, delete the session cookie
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+
+    // Destroy the session
+    session_destroy();
+
+    // Start a fresh session after logging out the previous user
+    session_start();
+}
 require_once('../model/database.php');
 
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -19,31 +41,49 @@ if (!$password) {
   $errors['password'] = 'Please enter the password.';
 }
 
+
 if (empty($errors)) {
-  $query = "SELECT * FROM customers WHERE eMail = :email";
-  $statement = $db->prepare($query);
-  $statement->bindValue(':email', $email);
-  $statement->execute();
-  $user = $statement->fetch(PDO::FETCH_ASSOC);
-  $statement->closeCursor();
+    // Try to log in as admin first
+    $query = "SELECT * FROM admins WHERE eMail = :email";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':email', $email);
+    $statement->execute();
+    $user = $statement->fetch(PDO::FETCH_ASSOC);
+    $statement->closeCursor();
 
-  if ($user) {
-    // Email exists, now check the password
-    if (password_verify($password, $user['userPassword'])) {
-        // Password matches, log the user in
-        $_SESSION['customer'] = $user['firstName'] . ' ' . $user['lastName'];
-
-        // Redirect to the main page or dashboard
-        header("Location: welcome.php");
-        die();
+    if ($user) {
+        if (password_verify($password, $user['adminPassword'])) {
+            $_SESSION['customer'] = $user['firstName'] . ' ' . $user['lastName'];
+            $_SESSION['adminIn'] = true;
+            $_SESSION['customerEmail'] = $user['eMail'];
+            header("Location: ../index.php");
+            die();
+        } else {
+            $errors['password'] = 'Incorrect password. Please try again.';
+        }
     } else {
-        // Invalid password
-        $errors['password'] = 'Incorrect password. Please try again.';
+        // If no admin, check customers
+        $query = "SELECT * FROM customers WHERE eMail = :email";
+        $statement = $db->prepare($query);
+        $statement->bindValue(':email', $email);
+        $statement->execute();
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        $statement->closeCursor();
+
+        if ($user) {
+            if (password_verify($password, $user['userPassword'])) {
+                $_SESSION['customer'] = $user['firstName'] . ' ' . $user['lastName'];
+                $_SESSION['adminIn'] = false;
+                $_SESSION['customerEmail'] = $user['eMail'];
+                header("Location: ../index.php");
+                die();
+            } else {
+                $errors['password'] = 'Incorrect password. Please try again.';
+            }
+        } else {
+            $errors['email'] = 'No account found with this email.';
+        }
     }
-} else {
-    // Email not found
-    $errors['email'] = 'No account found with this email.';
-}
 }
 
 ?>
@@ -67,6 +107,11 @@ if (empty($errors)) {
         </div>
         <aside>
             <div class="nav">
+            <?php if (isset($_SESSION['customer'])): ?>
+                    <a class="social" href="./signin/logout.php" target="">
+                        Logout
+                    </a>
+                <?php endif; ?>
                 <a class="social" href="#" target="_blank">
                     <img src="../Assets/logos/instagram.png" alt="">
                 </a>
@@ -83,8 +128,6 @@ if (empty($errors)) {
     <div class="border"></div>
     <div class="navbar">
         <a id="about"  href = "../index.php">Back to main</a>
-        <!-- <a id="gallery"  href = "galleries.php">Gallery</a>
-        <a id="info" href = "registration_form.php">Register</a> -->
     </div>
 </nav>
 <main>
@@ -109,6 +152,10 @@ if (empty($errors)) {
         </div>
             <div class="button">
                 <input type="submit" value="Sign in">
+                <div class = "link">
+                <h3>Not a member yet?</h3>
+                <a href="../registration/registration_form.php">Register</a>
+                </div>
             </div>
         </div>
     </form>

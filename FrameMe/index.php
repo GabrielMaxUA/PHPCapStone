@@ -1,5 +1,11 @@
 <?php
 session_start();
+// if(isset($_SESSION['adminIn']) && $_SESSION['adminIn'] === true){
+//     if ($_SESSION['customerEmail'] === 'maxim.don.mg@gmail.com'){
+//         header("Location: ./registration/registration_form.php");
+//         die();
+//     }
+// }
 ?>
 
 
@@ -21,6 +27,12 @@ session_start();
         </div>
         <aside>
             <div class="nav">
+                <?php if (isset($_SESSION['customer'])): ?>
+                    <a class="social" href="./signin/logout.php" target="">
+                        Logout
+                    </a>
+                <?php endif; ?>
+
                 <a class="social" href="#" target="_blank">
                     <img src="./Assets/logos/instagram.png" alt="">
                 </a>

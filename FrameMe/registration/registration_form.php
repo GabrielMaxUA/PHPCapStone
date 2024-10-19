@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +19,11 @@
         </div>
         <aside>
             <div class="nav">
+                <?php if (isset($_SESSION['customer'])): ?>
+                    <a class="social" href="./signin/logout.php" target="">
+                        Logout
+                    </a>
+                <?php endif; ?>
                 <a class="social" href="#" target="_blank">
                     <img src="../Assets/logos/instagram.png" alt="">
                 </a>
@@ -60,11 +68,11 @@
             </div>
             <div class="labs" >
                 <label for="">Password:</label>
-                <input type="text" name="password"><br>
+                <input type="password" name="password"><br>
             </div>
             <div class="labs" >
                 <label for="">Re-renter Password:</label>
-                <input type="text" name="rPassword"><br>
+                <input type="password" name="rPassword"><br>
             </div>
             <div class="labs" >
                 <label for="">DOB:</label>

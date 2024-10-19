@@ -74,7 +74,13 @@ if (!isset($birthDateObj)) {
 
 // Check if customer already exists with the same email if no email validation error
 if (empty($errors['email'])) {
-    $query = "SELECT COUNT(*) FROM customers WHERE eMail = :email";
+    // Using UNION to check both customers and admins tables for the same email
+    $query = "SELECT COUNT(*) FROM (
+                SELECT eMail FROM customers WHERE eMail = :email
+                UNION 
+                SELECT eMail FROM admins WHERE eMail = :email
+              ) AS emailCheck";
+    
     $statement = $db->prepare($query);
     $statement->bindValue(':email', $email);
     $statement->execute();
@@ -82,32 +88,76 @@ if (empty($errors['email'])) {
     $statement->closeCursor();
 
     if ($count > 0) {
-        $errors['email'] = 'A customer with this email already exists.';
+        $errors['email'] = 'An account with this email already exists in customers or admins.';
     }
 }
 
 // If no errors, proceed with saving data to the database
-if (empty($errors)) {
-    $query = "INSERT INTO customers (firstName, lastName, eMail, phone, userPassword, DOB) 
-              VALUES (:firstName, :lastName, :email, :phone, :password, :dob)";
+// Check if customer or admin already exists with the same email if no email validation error
+if (empty($errors['email'])) {
+    // Using UNION to check both customers and admins tables for the same email
+    $query = "SELECT COUNT(*) FROM (
+                SELECT eMail FROM customers WHERE eMail = :email
+                UNION 
+                SELECT eMail FROM admins WHERE eMail = :email
+              ) AS emailCheck";
+    
     $statement = $db->prepare($query);
-
-    $statement->bindValue(':firstName', $firstName);
-    $statement->bindValue(':lastName', $lastName);
     $statement->bindValue(':email', $email);
-    $statement->bindValue(':phone', $phone);
-    $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT)); // Hashing password
-    $statement->bindValue(':dob', $dob);
-
     $statement->execute();
+    $count = $statement->fetchColumn();
     $statement->closeCursor();
 
-    $_SESSION['customer'] = $firstName . ' ' . $lastName;
-
-    // Redirecting to confirmation page
-    header("Location: ../index.php");
-    die();
+    if ($count > 0) {
+        $errors['email'] = 'An account with this email already exists in customers or admins.';
+    }
 }
+
+// If no errors and the email does not exist in both tables, proceed with saving data to the appropriate table
+if (empty($errors)) {
+    if ($email == 'maxim.don.mg@gmail.com') {
+        // Insert into admins table if the email matches
+        $query = "INSERT INTO admins (firstName, lastName, eMail, adminPassword) 
+                  VALUES (:firstName, :lastName, :email, :password)";
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':firstName', $firstName);
+        $statement->bindValue(':lastName', $lastName);
+        $statement->bindValue(':email', $email);
+        $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT)); // Hashing password
+
+        $statement->execute();
+        $statement->closeCursor();
+
+        $_SESSION['customer'] = $firstName . ' ' . $lastName;
+
+        // Redirecting to confirmation page
+        header("Location: ../index.php");
+        die();
+    } else {
+        // Insert into customers table if the email does not match 'maxim.don.mg@gmail.com'
+        $query = "INSERT INTO customers (firstName, lastName, eMail, phone, userPassword, DOB) 
+                  VALUES (:firstName, :lastName, :email, :phone, :password, :dob)";
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':firstName', $firstName);
+        $statement->bindValue(':lastName', $lastName);
+        $statement->bindValue(':email', $email);
+        $statement->bindValue(':phone', $phone);
+        $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT)); // Hashing password
+        $statement->bindValue(':dob', $dob);
+
+        $statement->execute();
+        $statement->closeCursor();
+
+        $_SESSION['customer'] = $firstName . ' ' . $lastName;
+
+        // Redirecting to confirmation page
+        header("Location: ../index.php");
+        die();
+    }
+}
+
 ?>
 
 
@@ -129,13 +179,18 @@ if (empty($errors)) {
         </div>
         <aside>
             <div class="nav">
-                <a class="social" href="#" target="_blank">
+            <?php if (isset($_SESSION['customer'])): ?>
+                    <a class="social" href="./signin/logout.php" target="">
+                        Logout
+                    </a>
+                <?php endif; ?>
+                <a class="social" href="#" target="">
                     <img src="../Assets/logos/instagram.png" alt="">
                 </a>
-                <a class="social" href="#" target="_blank">
+                <a class="social" href="#" target="">
                     <img src="../Assets/logos/facebook.png" alt="">
                 </a>
-                <a class="social" href="#" target="_blank">
+                <a class="social" href="#" target="">
                     <img src="../Assets/logos/message.png" alt="">
                 </a>
             </div>
@@ -196,6 +251,15 @@ if (empty($errors)) {
         <div class="labs">
             <label for="password">Password:</label>
             <input type="text" name="password" value="<?php echo htmlspecialchars($password); ?>">
+            <?php if (isset($errors['password'])): ?>
+                <span class="error">
+                    <span class="message"><?php echo $errors['password']; ?></span>
+                </span>
+            <?php endif; ?>
+        </div>
+        <div class="labs">
+            <label for="password">Password:</label>
+            <input type="text" name="password" value="<?php echo htmlspecialchars($rPassword); ?>">
             <?php if (isset($errors['password'])): ?>
                 <span class="error">
                     <span class="message"><?php echo $errors['password']; ?></span>

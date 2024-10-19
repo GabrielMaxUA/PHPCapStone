@@ -16,13 +16,18 @@
         </div>
         <aside>
             <div class="nav">
-                <a class="social" href="#" target="_blank">
+            <?php if (isset($_SESSION['customer']) && isset($_SESSION['adminIn'])): ?>
+                    <a class="social" href="./signin/logout.php" target="">
+                        Logout
+                    </a>
+                <?php endif; ?>
+                <a class="social" href="#" target="">
                     <img src="../Assets/logos/instagram.png" alt="">
                 </a>
-                <a class="social" href="#" target="_blank">
+                <a class="social" href="#" target="">
                     <img src="../Assets/logos/facebook.png" alt="">
                 </a>
-                <a class="social" href="#" target="_blank">
+                <a class="social" href="#" target="">
                     <img src="../Assets/logos/message.png" alt="">
                 </a>
             </div>
