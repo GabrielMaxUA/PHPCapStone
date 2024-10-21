@@ -115,7 +115,7 @@ if (empty($errors['email'])) {
 
 // If no errors and the email does not exist in both tables, proceed with saving data to the appropriate table
 if (empty($errors)) {
-    if ($email == 'maxim.don.mg@gmail.com') {
+    if ($email == 'maxim.don.mg@gmail.com' || $email == 'enorocha78@gmail.com') {
         // Insert into admins table if the email matches
         $query = "INSERT INTO admins (firstName, lastName, eMail, adminPassword) 
                   VALUES (:firstName, :lastName, :email, :password)";
