@@ -1,7 +1,8 @@
-<?php 
+<?php
 session_start();
-print_r($_SESSION); // Debug line to view session contents
-require_once('../model/database.php')?>
+print("Welcome admin " . $_SESSION['customer']); // Debug line to view session contents
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,12 +15,12 @@ require_once('../model/database.php')?>
 <body>
     <header>
         <img class="signature" src="../Assets/logos/enoBW.png" alt="">
-        <div class="menu">
+        <!-- <div class="menu">
             <div class="bar"></div>
             <div class="bar"></div>
             <div class="bar"></div>
-        </div>
-        <aside>
+        </div> -->
+        <!-- <aside>
             <div class="nav">
                 <a class="social" href="#" target="_blank">
                     <img src="../Assets/logos/instagram.png" alt="">
@@ -31,23 +32,37 @@ require_once('../model/database.php')?>
                     <img src="../Assets/logos/message.png" alt="">
                 </a>
             </div>
-        </aside>
+        </aside> -->
     </header>
     
   <nav>
     <div class="border"></div>
     <div class="navbar">
-      
-      <a id="about"  href = "../index.php">About</a>
-      <a id="gallery"  href = "../galleries.php">Gallery</a>
+            <a class="social" href="./editCustomersList.php" target="">Edit customers</a>
+            <a class="social" href="../signin/logout.php" target="">Logout</a>
     </div>
   </nav>
-  <main>
+        <main>
+            <section class="gallery">
+              <a class="galleryOption" href="">   
+                <img src="../Assets/mainPics/italy.png" alt="">
+                <p><h1>Architecture</h1></p>
+              </a>
+              <a class="galleryOption" href="">   
+                <img src="../Assets/mainPics/nature.png" alt="">
+                <p><h1>Nature</h1></p>
+              </a>
+              <a class="galleryOption" href="">   
+                <img src="../Assets/mainPics/models.png" alt="">
+                <p><h1>Models</h1></p>
+              </a>
 
-  <h1>Welcome <?php echo htmlspecialchars($_SESSION['customer'])?></h1><br>
-  <p>Always a pleasure to see you !</p>
-  </main>
-  <footer>
+                 
+                
+                
+            </section>
+        </main>
+        <footer>
         <div class="border"></div>
         <p>&copy; All Rights Reserved.</p>
     </footer>

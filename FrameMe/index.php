@@ -1,11 +1,5 @@
 <?php
 session_start();
-// if(isset($_SESSION['adminIn']) && $_SESSION['adminIn'] === true){
-//     if ($_SESSION['customerEmail'] === 'maxim.don.mg@gmail.com'){
-//         header("Location: ./registration/registration_form.php");
-//         die();
-//     }
-// }
 ?>
 
 
@@ -27,12 +21,6 @@ session_start();
         </div>
         <aside>
             <div class="nav">
-                <?php if (isset($_SESSION['customer'])): ?>
-                    <a class="social" href="./signin/logout.php" target="">
-                        Logout
-                    </a>
-                <?php endif; ?>
-
                 <a class="social" href="#" target="_blank">
                     <img src="./Assets/logos/instagram.png" alt="">
                 </a>
@@ -50,13 +38,18 @@ session_start();
     <div class="border"></div>
     <div class="navbar">
       <a id="about"  href = "index.php">About</a>
-      <a id="gallery"  href = "galleries.php">Gallery</a>
+      <a id="gallery"  href = "./gallery/gallery.php">Gallery</a>
 
-      <?php if (!isset($_SESSION['customer'])): ?>
+        <?php if (!isset($_SESSION['customer'])): ?>
                 <a id="info" href="signin/signin_form.php">Sign in/Register</a>
             <?php else: ?>
                 <a id="info" href="cart.php" >Cart</a>
             <?php endif; ?>
+        <?php if (isset($_SESSION['customer'])): ?>
+                    <a class="social" href="./signin/logout.php" target="">
+                        Logout
+                    </a>
+                <?php endif; ?>
     </div>
   </nav>
         <main>

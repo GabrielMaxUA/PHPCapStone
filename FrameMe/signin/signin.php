@@ -54,9 +54,9 @@ if (empty($errors)) {
     if ($user) {
         if (password_verify($password, $user['adminPassword'])) {
             $_SESSION['customer'] = $user['firstName'] . ' ' . $user['lastName'];
+            print( $_SESSION['customer']);
             $_SESSION['adminIn'] = true;
-            $_SESSION['customerEmail'] = $user['eMail'];
-            header("Location: ../index.php");
+            header("Location: ../admin/admin.php");
             die();
         } else {
             $errors['password'] = 'Incorrect password. Please try again.';
@@ -75,7 +75,7 @@ if (empty($errors)) {
                 $_SESSION['customer'] = $user['firstName'] . ' ' . $user['lastName'];
                 $_SESSION['adminIn'] = false;
                 $_SESSION['customerEmail'] = $user['eMail'];
-                header("Location: ../index.php");
+                header("Location: ./welcome.php");
                 die();
             } else {
                 $errors['password'] = 'Incorrect password. Please try again.';
@@ -107,11 +107,6 @@ if (empty($errors)) {
         </div>
         <aside>
             <div class="nav">
-            <?php if (isset($_SESSION['customer'])): ?>
-                    <a class="social" href="./signin/logout.php" target="">
-                        Logout
-                    </a>
-                <?php endif; ?>
                 <a class="social" href="#" target="_blank">
                     <img src="../Assets/logos/instagram.png" alt="">
                 </a>
@@ -143,7 +138,7 @@ if (empty($errors)) {
         </div>
         <div class="labs">
             <label for="password">Password:</label>
-            <input type="text" name="password" value="<?php echo htmlspecialchars($password); ?>">
+            <input type="password" name="password" value="<?php echo htmlspecialchars($password); ?>">
             <?php if (isset($errors['password'])): ?>
                 <span class="error">
                     <span class="message"><?php echo $errors['password']; ?></span>

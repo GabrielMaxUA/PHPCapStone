@@ -16,11 +16,6 @@
         </div>
         <aside>
             <div class="nav">
-            <?php if (isset($_SESSION['customer']) && isset($_SESSION['adminIn'])): ?>
-                    <a class="social" href="./signin/logout.php" target="">
-                        Logout
-                    </a>
-                <?php endif; ?>
                 <a class="social" href="#" target="">
                     <img src="../Assets/logos/instagram.png" alt="">
                 </a>
@@ -49,7 +44,7 @@
             </div>
             <div class="labs" >
                 <label for="">Password:</label>
-                <input type="text" name="password"><br>
+                <input type="password" name="password"><br>
             </div>
             <div class="button">
                 <input type="submit" value="Sign in">
