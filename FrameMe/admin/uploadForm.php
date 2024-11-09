@@ -12,15 +12,15 @@ $category = $_GET['category'] ?? '';
 </head>
 <body>
     <h2>Upload Product Images for Gallery: <?php echo htmlspecialchars($category); ?></h2>
-    <form class="upload" action="uploadImage.php" method="post" enctype="multipart/form-data">
+    <form class="upload" action="uploadImage.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
         <input type="hidden" name="category" value="<?php echo htmlspecialchars($category); ?>">
         <div id="inputFieldsContainer">
         <div class="fileInputContainer">
             <label for="productPrice">Product Price:</label>
-            <input type="text" name="productPrice" required>
+            <input type="text" name="productPrice[]" >
 
             <label for="productImage">Choose Image:</label>
-            <input type="file" name="productImage[]" accept="image/*" required>
+            <input type="file" name="productImage[]" accept="image/*" >
         </div>
         </div>
 

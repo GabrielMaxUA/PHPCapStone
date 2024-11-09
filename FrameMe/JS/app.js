@@ -57,8 +57,8 @@ function addFileInput() {
   priceLabel.textContent = 'Product Price: ';
   const priceInput = document.createElement('input');
   priceInput.type = 'text';
-  priceInput.name = 'productPrice';
-  priceInput.required = true;
+  priceInput.name = 'productPrice[]';
+  priceInput.placeholder = 'Enter price';
 
   // Create the label and input for the product image
   const imageLabel = document.createElement('label');
@@ -67,7 +67,6 @@ function addFileInput() {
   imageInput.type = 'file';
   imageInput.name = 'productImage[]';
   imageInput.accept = 'image/*';
-  imageInput.required = true;
 
   // Append all elements to the new container div
   newContainer.appendChild(priceLabel);
@@ -78,3 +77,30 @@ function addFileInput() {
   // Append the new container div to the main form container
   mainContainer.appendChild(newContainer);
 };
+
+function validateForm() {
+  const priceFields = document.querySelectorAll("input[name='productPrice[]']");
+  const imageFields = document.querySelectorAll("input[name='productImage[]']");
+  let hasValidEntry = false;
+
+  for (let i = 0; i < priceFields.length; i++) {
+      const price = priceFields[i].value.trim();
+      const image = imageFields[i].files.length > 0;
+
+      // Check if both fields in a container are filled
+      if (price && image) {
+          hasValidEntry = true; // At least one valid entry exists
+      } else if (price || image) {
+          // If only one of the fields is filled, show an error
+          alert("Please fill both the product price and image fields for each entry.");
+          return false; // Prevent form submission
+      }
+  }
+
+  if (!hasValidEntry) {
+      alert("Please fill in at least one complete set of fields (price and image) before submitting.");
+      return false; // Prevent form submission
+  }
+
+  return true; // Allow form submission if validation passes
+}

@@ -6,8 +6,8 @@ require_once('../model/database.php');
 
 // Check if the form was submitted with a POST request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Retrieve the product price and category from the form
-    $productPrice = $_POST['productPrice'];
+    // Retrieve the product prices as an array and category from the form
+    $productPrices = $_POST['productPrice'];
     $status = 1; // Default status for new product
     $category = $_POST['category'] ?? '';
 
@@ -40,7 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Process each uploaded file
     foreach ($_FILES['productImage']['tmp_name'] as $index => $tmpName) {
-        // Skip file if it wasn't uploaded correctly
+        // Check if both the product price and file are empty and skip if true
+        if (empty($productPrices[$index]) && empty($tmpName)) {
+            continue;
+        }
+
+        // Retrieve the product price for the current index
+        $productPrice = $productPrices[$index] ?? '';
+
+        // Skip file if there was an upload error
         if ($_FILES['productImage']['error'][$index] !== UPLOAD_ERR_OK) {
             echo "Error uploading file #" . ($index + 1);
             continue;
@@ -117,8 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['message'] = "Images uploaded successfully.";
     header("Location: ../signin/welcome.php");
     exit;
-} 
-else {
+} else {
     echo "Invalid request.";
 }
 ?>
