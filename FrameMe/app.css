@@ -309,15 +309,12 @@ h1{
 }
 
 footer {
-    position: fixed;
-    bottom: 0;
     background: #e1d79e;
     padding-bottom: 20px;
     padding-top: 5px ;
     text-align: center;
     width: 100%;
-    z-index: 4;
-    margin-top: 0; /* Pushes footer to the bottom of the flex container */
+    margin-top: 30px; /* Pushes footer to the bottom of the flex container */
 }
 
 .gallery{
@@ -331,6 +328,7 @@ footer {
     display: flex;
     flex-flow: column nowrap;
     margin: 0 20px;
+    justify-content: center;
     text-align: center;
     text-decoration: none;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -373,21 +371,24 @@ footer {
     
     a{
         margin: 0 auto;
+        text-decoration: none;
      }
     /* Block link styling */
-    a > button{
+    button{
         background-color: #c7a056;
         text-decoration: none;
-        width: 50px;
+        width: 70px;
         border-radius: 4px;
         border-color: #ddd;
         height: auto;
         margin: 0 auto;
     }
     
-    a > button:hover {
+    button:hover {
         background-color: #c9932f;
+        cursor: pointer;
     }
+
     .search{
         display: flex;
         flex-flow: row wrap;
@@ -396,12 +397,63 @@ footer {
         justify-content: center;
         align-content: baseline;
     }
-        .search button{
-            background-color: #c7a056;
-            text-decoration: none;
-            width: 50px;
-            border-radius: 4px;
-            border-color: #ddd;
-            height: auto;
-            margin-left: 20px;
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin: 15px;
+            justify-content: center;
         }
+        
+        .form-group label {
+            font-weight: bold;
+            text-align: right;
+            width: 200px;
+            margin-right: 20px;
+        }
+        
+        .form-group h4 {
+            padding: 8px;
+            margin-left: 20px;
+            border-radius: 4px;
+            width: 400px;
+            text-align: left;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+
+        .checkbox-group :hover{
+            cursor: pointer;
+        }
+
+        .checkbox-group label{
+            width: fit-content;
+        }
+        
+        .edit button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #007bff;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .edit button[type="button"] {
+            background-color: #de6310;
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .edit button:hover {
+            opacity: 0.9;
+        }
+.addPic{
+  width:auto;
+  padding: 5px;
+}

@@ -38,28 +38,30 @@ print("Welcome admin " . $_SESSION['customer']); // Debug line to view session c
   <nav>
     <div class="border"></div>
     <div class="navbar">
+            <a class="social" href="../orders_page.php" target="">Orders</a>
             <a class="social" href="./editCustomersList.php" target="">Edit customers</a>
             <a class="social" href="../signin/logout.php" target="">Logout</a>
     </div>
   </nav>
         <main>
             <section class="gallery">
-              <a class="galleryOption" href="">   
+              <div class="galleryOption">
                 <img src="../Assets/mainPics/italy.png" alt="">
-                <p><h1>Architecture</h1></p>
-              </a>
-              <a class="galleryOption" href="">   
+                <a  href=""><h1>Architecture</h1></a>
+                <button class="addPic" onclick="window.location.href='./uploadForm.php?category=A'">Add Photos</button>
+              </div>
+               
+              <div class="galleryOption">
                 <img src="../Assets/mainPics/nature.png" alt="">
-                <p><h1>Nature</h1></p>
-              </a>
-              <a class="galleryOption" href="">   
+                <a  href=""><h1>Nature</h1></a>
+                <button class="addPic" onclick="window.location.href='./uploadForm.php?category=N'">Add Photos</button>
+              </div>
+              <div class="galleryOption">     
                 <img src="../Assets/mainPics/models.png" alt="">
-                <p><h1>Models</h1></p>
-              </a>
-
-                 
-                
-                
+                <a  href=""><h1>Models</h1></a>
+                <button class="addPic" onclick="window.location.href='./uploadForm.php?category=M'">Add Photos</button>
+              </div>
+               
             </section>
         </main>
         <footer>

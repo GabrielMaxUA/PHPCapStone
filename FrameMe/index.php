@@ -38,18 +38,19 @@ session_start();
     <div class="border"></div>
     <div class="navbar">
       <a id="about"  href = "index.php">About</a>
-      <a id="gallery"  href = "./gallery/gallery.php">Gallery</a>
+      <a id="gallery"  href = "./gallery/gallery_page.php">Gallery</a>
 
         <?php if (!isset($_SESSION['customer'])): ?>
-                <a id="info" href="signin/signin_form.php">Sign in/Register</a>
-            <?php else: ?>
-                <a id="info" href="cart.php" >Cart</a>
-            <?php endif; ?>
+            <a id="info" href="signin/signin_form.php">Sign in/Register</a>
+        <?php elseif (isset($_SESSION['admin'])): ?>
+            <a id="info" href="orders.php">Orders</a>
+        <?php else: ?>
+            <a id="info" href="cart.php" >Cart</a>
+        <?php endif; ?>
+
         <?php if (isset($_SESSION['customer'])): ?>
-                    <a class="social" href="./signin/logout.php" target="">
-                        Logout
-                    </a>
-                <?php endif; ?>
+            <a class="social" href="./signin/logout.php" target="">Logout</a>
+        <?php endif; ?>
     </div>
   </nav>
         <main>

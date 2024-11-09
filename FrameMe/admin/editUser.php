@@ -39,36 +39,47 @@ if ($customerID) {
 
     <main>
         <h2>Edit Customer</h2>
-        <form class = "edit" method="POST" action="Edit.php">
-            <!-- Hidden input to pass customerID to Edit.php -->
+        
+
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <h4> <?php echo htmlspecialchars($customer['firstName']); ?></h4>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <h4> <?php echo htmlspecialchars($customer['lastName'])?></h4>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <h4> <?php echo htmlspecialchars($customer['phone']); ?></h4>
+            </div>
+
+            <div class="form-group">
+                <label for="DOB">DOB:</label>
+                <h4><?php echo htmlspecialchars($customer['DOB']); ?></h4>
+            </div>
+
+            <div class="form-group">
+                <label for="eMail">Email:</label>
+                <h4><?php echo htmlspecialchars($customer['eMail']); ?></h4>
+            </div>
+
+            <form class="edit" method="POST" action="./edit.php">
             <input type="hidden" name="customerID" value="<?php echo htmlspecialchars($customerID); ?>">
+            <div class="form-group checkbox-group">
+              <?php if ($customer['banned']): ?>
+                        <label for="bannedToggle">Blocked:</label>
+                        <input type="checkbox" id="bannedToggle" name="banned" value="1" <?php echo $customer['banned'] ? 'checked' : ''; ?>>
+              <?php else: ?>
+                        <label for="bannedToggle">Block:</label>
+                        <input type="checkbox" id="bannedToggle" name="banned" value="0" <?php echo $customer['banned'] ? 'checked' : ''; ?>>
+              <?php endif ?>
+            </div>
 
-            <label for="firstName">First Name:</label>
-            <input type="text" name="firstName" id="firstName" value="<?php echo htmlspecialchars($customer['firstName']); ?>" required>
-            
-            <label for="lastName">Last Name:</label>
-            <input type="text" name="lastName" id="lastName" value="<?php echo htmlspecialchars($customer['lastName']); ?>" required>
-            
-            <label for="phone">Phone:</label>
-            <input type="text" name="phone" id="phone" value="<?php echo htmlspecialchars($customer['phone']); ?>" required>
-            
-            <label for="DOB">DOB:</label>
-            <input type="date" name="DOB" id="DOB" value="<?php echo htmlspecialchars($customer['DOB']); ?>" required>
-
-            <label for="eMail">Email:</label>
-            <input type="email" name="eMail" id="eMail" value="<?php echo htmlspecialchars($customer['eMail']); ?>" required>
-
-            <?php if(!$customer['banned']):?>
-              <label for="banned">Ban User:</label>
-              <input type="checkbox" id="bannedToggle" name="banned" value="0" <?php echo $customer['banned'] ? 'checked' : ''; ?>>
-            <?php elseif($customer['banned']):?>
-              <label for="banned">Activate:</label>
-              <input type="checkbox" id="bannedToggle" name="banned" value="0" <?php echo $customer['banned'] ? 'checked' : ''; ?>>
-            <?php endif?>
-              
-            
-            <button type="submit">Save Changes</button>
-            <a href="admin.php"><button type="button">Cancel</button></a>
+            <button type="submit">Save</button>
+            <a href="editCustomersList.php"><button type="button">Cancel</button></a>
         </form>
     </main>
 

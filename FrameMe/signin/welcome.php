@@ -39,13 +39,24 @@ require_once('../model/database.php')?>
     <div class="navbar">
       
       <a id="about"  href = "../index.php">About</a>
-      <a id="gallery"  href = "../galleries.php">Gallery</a>
+      <?php if(!isset($_SESSION['admin'])): ?>
+        <a href="../admin/admin.php">Back to upload</a>
+        <?php else: ?>
+      <a id="gallery"  href = "../gallery/gallery_page.php">Gallery</a>
+      <?php endif; ?>
     </div>
   </nav>
   <main>
 
-  <h1>Welcome <?php echo htmlspecialchars($_SESSION['customer'])?></h1><br>
-  <p>Always a pleasure to see you !</p>
+  <?php if(!isset($_SESSION['admin'])): ?>
+    <h1>Success</h1><br>
+    <p>Image was uploaded!</p>
+        <?php else: ?>
+          <h1>Welcome <?php echo htmlspecialchars($_SESSION['customer'])?></h1><br>
+          <p>Always a pleasure to see you !</p>
+      <?php endif; ?>
+
+  
   </main>
   <footer>
         <div class="border"></div>

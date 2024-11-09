@@ -1,8 +1,9 @@
 <?php
 session_start();
 require_once('../model/database.php');
-
+print($_SESSION['message'] . "");
 print("Welcome admin " . $_SESSION['customer']); // Debug line to view session contents
+
 
 // Capture the search term if submitted
 $searchTerm = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_STRING);
@@ -73,7 +74,7 @@ $statement->closeCursor();
                 <td><?php echo htmlspecialchars($customer['firstName'] . ' ' . $customer['lastName']); ?></td>
                 <td><?php echo htmlspecialchars($customer['phone']); ?></td>
                 <td><?php echo htmlspecialchars($customer['email']); ?></td>
-                <td><?php echo htmlspecialchars($customer['dob']); ?></td>
+                <td><?php echo htmlspecialchars($customer['DOB']); ?></td>
                 <td><?php echo $customer['banned'] ? 'Blocked' : 'Active'; ?></td>
                 <td>
                     <a href="editUser.php?custID=<?php echo urlencode($customer['custID']); ?>">
@@ -81,7 +82,7 @@ $statement->closeCursor();
                     </a>
                 </td>
                 <td>
-                    <a href="deleteUser.php?custID=<?php echo urlencode($customer['custID']); ?>">
+                    <a href="deleteCustomer.php?custID=<?php echo urlencode($customer['custID']); ?>">
                         <button type="button">Delete</button>
                     </a>
                 </td>

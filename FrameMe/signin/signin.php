@@ -73,7 +73,6 @@ if (empty($errors)) {
         if ($user) {
             if (password_verify($password, $user['userPassword'])) {
                 $_SESSION['customer'] = $user['firstName'] . ' ' . $user['lastName'];
-                $_SESSION['adminIn'] = false;
                 $_SESSION['customerEmail'] = $user['eMail'];
                 header("Location: ./welcome.php");
                 die();
