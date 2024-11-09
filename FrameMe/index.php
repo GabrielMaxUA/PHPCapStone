@@ -92,7 +92,7 @@ session_start();
                 </div>
             </section>
         </main>
-        <footer>
+    <footer>
         <div class="border"></div>
         <p>&copy; All Rights Reserved.</p>
     </footer>

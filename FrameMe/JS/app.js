@@ -41,6 +41,40 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
+        
 });
 
 
+function addFileInput() {
+  const mainContainer = document.querySelector('#inputFieldsContainer');
+
+  // Create a new div container for the new set of inputs
+  const newContainer = document.createElement('div');
+  newContainer.className = 'fileInputContainer';
+
+  // Create the label and input for the product price
+  const priceLabel = document.createElement('label');
+  priceLabel.textContent = 'Product Price: ';
+  const priceInput = document.createElement('input');
+  priceInput.type = 'text';
+  priceInput.name = 'productPrice';
+  priceInput.required = true;
+
+  // Create the label and input for the product image
+  const imageLabel = document.createElement('label');
+  imageLabel.textContent = ' Choose Image: ';
+  const imageInput = document.createElement('input');
+  imageInput.type = 'file';
+  imageInput.name = 'productImage[]';
+  imageInput.accept = 'image/*';
+  imageInput.required = true;
+
+  // Append all elements to the new container div
+  newContainer.appendChild(priceLabel);
+  newContainer.appendChild(priceInput);
+  newContainer.appendChild(imageLabel);
+  newContainer.appendChild(imageInput);
+
+  // Append the new container div to the main form container
+  mainContainer.appendChild(newContainer);
+};
