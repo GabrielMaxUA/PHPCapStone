@@ -19,4 +19,5 @@ export class NavBarComponent implements OnInit {
       this.user = user;
     });
   }
+  
 }

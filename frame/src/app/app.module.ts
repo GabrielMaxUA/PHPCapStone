@@ -15,6 +15,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ListComponent } from './list/list.component';
 import { NavBarComponent } from './base/navbar/navbar.component';
+import { GalleryComponent } from './gallery/gallery.component';
+import { NatureComponent } from './gallery/nature/nature.component';
+import { ArchitechtureComponent } from './gallery/architechture/architechture.component';
+import { StagedComponent } from './gallery/staged/staged.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +34,10 @@ import { NavBarComponent } from './base/navbar/navbar.component';
     LogoutComponent,
     LoginComponent,
     ListComponent,
+    GalleryComponent,
+    NatureComponent,
+    ArchitechtureComponent,
+    StagedComponent,
   ],
   imports: [
     BrowserModule,

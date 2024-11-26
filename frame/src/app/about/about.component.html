@@ -11,13 +11,18 @@
   <div class="bio" [innerHTML]="bioText"></div>
 </section>
 
-<div *ngIf="user?.type === 'admin'" class="admin">
+<!-- <div *ngIf="user?.type === 'admin'" class="admin"> -->
+  
   <!-- Bio Edit -->
-  <textarea [(ngModel)]="bioText" class="bio"></textarea>
+   <div class="text-end me-5">
+    <textarea [(ngModel)]="bioText" class="bio"></textarea>
+   </div>
+
+  
   <!-- Image Upload -->
   <div class="filePick">
     <input type="file" (change)="onFileSelected($event)" />
   
   <button (click)="submitBio()">Submit</button>
 </div>
-</div>
+<!-- </div> -->

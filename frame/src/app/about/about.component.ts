@@ -43,7 +43,7 @@ export class AboutComponent implements OnInit {
   submitBio(): void{
     if(this.selectedFile){
       this.isUploading = true;
-      this.service.uploadImage(this.selectedFile).subscribe(
+      this.service.uploadMainImage(this.selectedFile).subscribe(
         (response:any)=>{
           console.log('Image uploaded. Success', response);
           this.ngOnInit()

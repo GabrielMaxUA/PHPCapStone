@@ -1,0 +1,49 @@
+
+<div id="Gallery" class="m-4">
+  <!-- Nature Section -->
+  <div class="gallery_option text-center">
+    <img [src]="nImageUrl" alt="" *ngIf="nImageUrl">
+    <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+    <div class="filePick m-2">
+      <input type="file" (change)="onFileSelected($event, 'n')" />
+    </div>
+    <a class="text-center" routerLink="/nature">Nature</a>
+    <div class="nText" [innerHTML]="nText"></div>
+    <textarea class="text-center" [(ngModel)]="nText"></textarea>
+  </div>
+
+  <!-- Architecture Section -->
+  <div class="gallery_option">
+    <img [src]="aImageUrl" alt="" *ngIf="aImageUrl">
+    <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+    <div class="filePick m-2">
+      <input type="file" (change)="onFileSelected($event, 'a')" />
+    </div>
+    <a class="text-center" routerLink="/architecture">Architecture</a>
+    <div class="aText" [innerHTML]="aText"></div>
+    <textarea [(ngModel)]="aText"></textarea>
+  </div>
+
+  <!-- Staged Section -->
+  <div class="gallery_option">
+    <img [src]="sImageUrl" alt="" *ngIf="sImageUrl">
+    <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+    <div class="filePick m-2">
+      <input type="file" (change)="onFileSelected($event, 's')" />
+    </div>
+    <a class="text-center" routerLink="/staged">Staged</a>
+    <div class="sText" [innerHTML]="sText"></div>
+    <textarea [(ngModel)]="sText"></textarea>
+  </div>
+</div>
+
+<!-- Single Submit Button -->
+<div class="text-center">
+  <button (click)="submitAllChanges()">Submit All Changes</button>
+</div>

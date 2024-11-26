@@ -7,11 +7,9 @@
   scroll-behavior: smooth;
 }
 
- html body {
+  body {
   background-color: #e1d79e;
   width: 100vw;
-  display: flex;
-  flex-direction: column;
   min-height: 100vh; /* Ensures body height covers the full viewport */
   background: #e1d79e;
 }
@@ -236,3 +234,4 @@ margin: 10px auto;
 .add-more-btn:hover {
 background-color: #0056b3;
 } */
+
