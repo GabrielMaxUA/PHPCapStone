@@ -1,0 +1,63 @@
+.form-content{
+  margin: 40px auto;
+  padding: 15px;
+  width: 90%;
+  border: 2px #000000 solid;
+  background: #e1dcbd;
+  border-radius: 12px;
+  height: fit-content;
+}
+
+form{
+text-align: center;
+}
+
+form .labs{
+  float: left;
+  margin-left: 10%;
+}
+
+.labs{
+  align-items: center;
+  margin: 10px auto;
+  width: 100%;
+}
+
+.labs label{
+  width: 10%;
+  float: left;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.labs input{
+  width: 30%;
+  text-align: left;
+  float: left;
+}
+
+button.btn:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  border: 1px solid #999999;
+  padding: 5px 10px;
+  border:1px solid #666666;
+  border-radius: 4px;
+}
+button.btn {
+  background-color: #f99a00;
+  color: #ffffff;
+  cursor: not-allowed;
+  border: 1px solid #999999;
+  padding: 5px 10px;
+  border:1px solid #666666;
+  border-radius: 4px;
+}
+
+
+.error {
+  color: red;
+  width: 30%;
+  margin-left: auto;
+}

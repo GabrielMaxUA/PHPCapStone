@@ -1,0 +1,106 @@
+header {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+}
+
+.signature{
+  height: 12vw;
+  max-height: 100px;
+  min-height: 80px;
+  margin: 20px auto;
+}
+
+.menu {
+  position: fixed;
+  top: 8px;
+  right: -18px;
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  z-index: 6;
+  transition: transform 0.4s ease-in-out, margin-left 0.4s ease-in-out;
+}
+
+.bar {
+  width: 40px;
+  height: 2px;
+  margin: 6px auto;
+  background: #000000;
+  border-radius: 1000px;
+  transition: transform 0.4s ease-in-out;
+}
+
+.menu.active .bar:nth-child(1) {
+  transform-origin: left;
+  transform: rotate(45deg);
+}
+
+.menu.active .bar:nth-child(2) {
+  margin-left: 100px;
+}
+
+.menu.active .bar:nth-child(3) {
+  transform-origin: left;
+  transform: rotate(-45deg);
+}
+
+.menu:not(.active) {
+  margin-right: 8px; 
+  position: fixed;
+}
+
+.menu.active {
+  margin-right: 8px; /* Keep the same margin */
+}
+
+.menu:not(.active) .bar:nth-child(3), .menu:not(.active) .bar:nth-child(1) {
+  transform-origin: left;
+  transform: rotate(0deg);
+  width: 40px; 
+}
+
+.menu:not(.active) .bar:nth-child(2) {
+  margin-left: 25px; 
+}
+
+aside {
+  position: fixed;  
+  right: -130px;
+  width: 65px;
+  height: 100vh;
+  transition: right 0.4s ease-in-out; 
+  z-index: 5;
+  font-size: 1.2em;
+}
+
+aside.active {
+  right: 8px;
+  top: 0;
+  z-index: 5;
+}
+
+.nav {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  width: 100%;
+  margin-top: 150px;
+}
+
+.social img {
+  width: 35px;
+  border-radius: 8px;
+  transition: width 0.4s ease-in-out;
+  margin: 20px auto;
+}
+
+.social:hover{
+  width: 85px;
+  margin-right: 20px;
+}
+
+/* comenting */

@@ -1,0 +1,11 @@
+<nav>
+  <div class="border bg-success"></div>
+  <div class="navbar">
+    <a id="about" routerLink="/about">About</a>
+    <a id="gallery" routerLink="/gallery">Gallery</a>
+    <a *ngIf="!user" id="info" routerLink="/signin">Sign in/Register</a>
+    <a *ngIf="user?.type === 'admin'" id="info" routerLink="/orders">Orders</a>
+    <a *ngIf="user?.type === 'customer'" id="info" routerLink="/cart">Cart</a>
+    <a *ngIf="user" class="social" routerLink="/logout">Logout</a>
+  </div>
+</nav>

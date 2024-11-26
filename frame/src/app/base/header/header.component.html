@@ -1,0 +1,21 @@
+<header>
+  <img class="signature" src="./logos/enoBW.png" alt="">
+  <div class="menu" (click)="toggleMenu()" [class.active]="menuActive">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+  <aside [class.active]="menuActive">
+    <div class="nav" >
+      <a class="social" href="#" target="_blank">
+        <img src="./logos/instagram.png" alt="">
+      </a>
+      <a class="social" href="#" target="_blank">
+        <img src="./logos/facebook.png" alt="">
+      </a>
+      <a class="social" href="#" target="_blank">
+        <img src="./logos/message.png" alt="">
+      </a>
+    </div>
+  </aside>
+</header>

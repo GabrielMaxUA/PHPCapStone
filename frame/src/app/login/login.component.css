@@ -1,0 +1,70 @@
+.form-content{
+  margin: 40px auto;
+  padding: 15px;
+  width: 95vw;
+  border: 2px #000000 solid;
+  background: #e1dcbd;
+  border-radius: 12px;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+form{
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+form .labs{
+  float: left;
+}
+
+.labs{
+  margin: 10px;
+  width: 100%;
+  background: #e1dcbd;
+}
+
+.labs label{
+  width: 10%;
+  background: #e1dcbd;
+  float: left;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.labs input{
+  float: left;
+  width: 250px;
+  background: #fff;
+}
+
+.link{
+  margin-top: 40px;
+  text-align: center;
+  background: none;
+}
+
+.link h3, a{
+  background: none;
+}
+
+.btn:disabled{
+  background: #f0d080;
+}
+.btn{
+  border-radius: 4px;
+  border: 1px solid #f0d150;
+  width: 70px;
+  background: #f0d105;
+  padding: 5px;
+  margin: 20px;
+}
+.error {
+  color: red;
+  width: 300px;
+  margin-left: 20px;
+  float: left;
+}

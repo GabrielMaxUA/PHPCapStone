@@ -1,0 +1,44 @@
+<p>login works!</p>
+<div class="form-content">
+  <form #f="ngForm" (submit)="login(f)">
+    <div class="labs">
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        class="form-control"
+        name="email"
+        ngModel
+        #email="ngModel"
+        required
+      /> 
+      <div *ngIf="email.invalid && email.touched" class="error">Email is required</div>
+      <div *ngIf="formErrors.email" class="error">{{ formErrors.email }}</div>
+    </div>
+
+    <div class="labs">
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        class="form-control"
+        name="password"
+        ngModel
+        #password="ngModel"
+        required
+      />
+      <div *ngIf="password.invalid && password.touched" class="error">Password is required</div>
+      <div *ngIf="formErrors.password" class="error">{{ formErrors.password }}</div>
+    </div>
+
+      <button class="btn" type="submit" [disabled]="f.invalid">Login</button>
+
+    <div *ngIf="success" class="success-message">{{ success }}</div>
+  </form>
+  <div class="link">
+    <h3>Not a member yet?</h3>
+    <a routerLink="/register">Register</a>
+  </div>
+</div>
+
+  
+
+
