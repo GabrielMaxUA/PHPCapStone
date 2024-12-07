@@ -8,5 +8,8 @@ export interface User {
   dob?: Date;
   status?: string;
   type?: string;
+  orderDetailsID?: number;
+  cardID?: number;
+  created_at?: Date;
   //same format (string, boolean, number) variables as in thedatabase they are related to
  }

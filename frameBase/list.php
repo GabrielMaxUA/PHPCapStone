@@ -7,7 +7,8 @@ error_reporting(E_ALL);
 require 'connection.php';
 
 $contacts = [];
-$sql = "SELECT customerID, firstName, lastName, email, password, phone, dob, status, type FROM customers";
+$sql = "SELECT customerID, firstName, lastName, email, password, phone, dob, status, type, created_at, orderDetailsID 
+FROM customers";
 
 if($_SERVER)
 if($result = mysqli_query($con, $sql)) {
@@ -22,6 +23,8 @@ if($result = mysqli_query($con, $sql)) {
     $customers[$count]['status'] = $row['status'];
     $customers[$count]['type'] = $row['type'];
     $customers[$count]['dob'] = $row['dob'];
+    $customers[$count]['created_at'] = $row['created_at'];
+    $customers[$count]['orderDetailsID'] = $row['orderDetailsID'];
     $count++;
   }
   

@@ -1,24 +1,15 @@
-<!-- <nav>
-  <div class="border border-black m-3"></div>
 
-  <div class="navbar">
-    <a id="about" (click)="toggle()" [class.active]="active" routerLink="/about">About</a>
-    <a id="gallery" routerLink="/gallery">Gallery</a>
-    <a *ngIf="!user" id="info" routerLink="/signin">Sign in/Register</a>
-    <a *ngIf="user?.type === 'admin'" id="info" routerLink="/orders">Orders</a>
-    <a *ngIf="user?.type === 'customer'" id="info" routerLink="/cart">Cart</a>
-    <a *ngIf="user" class="social" routerLink="/logout">Logout</a>
-  </div>
-</nav> -->
 <nav>
-  <div class="border border-black m-3"></div>
+  <div class="border border-black"></div>
 
   <div class="navbar">
     <a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">About</a>
     <a routerLink="/gallery" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Gallery</a>
     <a *ngIf="!user" routerLink="/signin" routerLinkActive="active">Sign in/Register</a>
     <a *ngIf="user?.type === 'admin'" routerLink="/orders" routerLinkActive="active">Orders</a>
+    <a *ngIf="user?.type === 'admin'" routerLink="/customers" routerLinkActive="active">Customers</a>
     <a *ngIf="user?.type === 'customer'" routerLink="/cart" routerLinkActive="active">Cart</a>
-    <a *ngIf="user" class="social" routerLink="/logout" routerLinkActive="active">Logout</a>
+    <a *ngIf="user" class="social" (click)="logout()">Logout</a>
+
   </div>
 </nav>

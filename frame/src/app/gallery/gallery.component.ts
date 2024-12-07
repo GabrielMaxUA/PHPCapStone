@@ -4,9 +4,10 @@ import { Service } from '../service/service';
 import { UserService } from '../service/user.service';
 
 @Component({
-  selector: 'app-gallery',
-  templateUrl: './gallery.component.html',
-  styleUrl: './gallery.component.css'
+    selector: 'app-gallery',
+    templateUrl: './gallery.component.html',
+    styleUrl: './gallery.component.css',
+    standalone: false
 })
 export class GalleryComponent {
   selectedFile: File | null = null;
@@ -48,7 +49,7 @@ export class GalleryComponent {
   }
 
   loadGalleryData(): void {
-    this.service.getGallery().subscribe(
+    this.service.getMainGalleriesPageContent().subscribe(
       (response) => {
         this.sText = response.sText;
         this.sImageUrl = `http://localhost/frameBase/${response.sImageMain}`;
@@ -82,11 +83,7 @@ export class GalleryComponent {
   }
   
   submitAllChanges(): void {
-    console.log('Submitting changes:', {
-      nText: this.nText,
-      aText: this.aText,
-      sText: this.sText,
-    });
+    console.log('Submitting changes:', this.allChanges);
   
     const formData = new FormData();
     formData.append('nText', this.nText || '');
@@ -95,7 +92,7 @@ export class GalleryComponent {
   
     // Add file changes if any
     if (this.allChanges.nFile) {
-      formData.append('nFile', this.allChanges.nFile);
+      formData.append('nFile', this.allChanges.nFile, this.allChanges.nFile.name);
     }
     if (this.allChanges.aFile) {
       formData.append('aFile', this.allChanges.aFile);
@@ -104,7 +101,7 @@ export class GalleryComponent {
       formData.append('sFile', this.allChanges.sFile);
     }
   
-    this.service.submitGalleryChanges(formData).subscribe({
+    this.service.submitMainGalleryChanges(formData).subscribe({
       next: (response: any) => {
         console.log('Submitted successfully:', response);
         if (response.nImageUrl) this.nImageUrl = response.nImageUrl;

@@ -6,9 +6,10 @@ footer {
   width: 100%;
   margin-top: 30px;
 }
+
 .border {
   height: 2px;
   background-color: #000000;
-  width: calc(100% - 260px);
+  width: 80%;
   margin: 0 auto;
 }

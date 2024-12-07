@@ -4,9 +4,10 @@ import { User } from '../user';
 import { Service } from '../service/service';
 
 @Component({
-  selector: 'app-about',
-  templateUrl: './about.component.html',
-  styleUrl: './about.component.css'
+    selector: 'app-about',
+    templateUrl: './about.component.html',
+    styleUrl: './about.component.css',
+    standalone: false
 })
 
 export class AboutComponent implements OnInit {
@@ -24,15 +25,7 @@ export class AboutComponent implements OnInit {
       this.user = user;
     });
 
-    this.service.getBio().subscribe(
-      (response)=>{
-        this.bioText = response.bioText,
-        this.imageUrl = `http://localhost/frameBase/${response.mainImage}`
-      },
-      (error: any) => {
-        console.error('Error getting data:', error);
-      }
-    );
+    this.getBio();
 
   }
 
@@ -65,4 +58,16 @@ export class AboutComponent implements OnInit {
       }
     );
   }//save bio
+
+  getBio(){
+    this.service.getBio().subscribe(
+      (response)=>{
+        this.bioText = response.bioText,
+        this.imageUrl = `http://localhost/frameBase/${response.mainImage}`
+      },
+      (error: any) => {
+        console.error('Error getting data:', error);
+      }
+    );
+  }
 }

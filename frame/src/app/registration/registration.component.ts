@@ -8,9 +8,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { format, isValid, parse } from 'date-fns';
 
 @Component({
-  selector: 'app-registration',
-  templateUrl: './registration.component.html',
-  styleUrl: './registration.component.css'
+    selector: 'app-registration',
+    templateUrl: './registration.component.html',
+    styleUrl: './registration.component.css',
+    standalone: false
 })
 export class RegistrationComponent {
 
@@ -43,11 +44,11 @@ export class RegistrationComponent {
           this.users.push(response);
           console.log('Registration successful')
           this.success = 'Registration successful';
-          this.router.navigate(['about']);
+          this.router.navigate(['signin']);
         },
         (err) => {
-          console.error('Error:', err);
-          this.formErrors = err.error;
+          console.error('Error:', err.error);
+          this.formErrors['email'] = err.error.error;
         }
       );
     }

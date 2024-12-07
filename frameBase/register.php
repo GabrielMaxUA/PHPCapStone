@@ -35,6 +35,15 @@ if (isset($postdata) && !empty($postdata)) {
       echo json_encode(['error' => 'Invalid date format. Expected yyyy-MM-dd.']);
       exit;
   }
+
+  $checkEmailSql = "SELECT `email` FROM `customers` WHERE `email` = '$email'";
+  $checkEmailResult = mysqli_query($con, $checkEmailSql);
+
+  if (mysqli_num_rows($checkEmailResult) > 0) {
+      http_response_code(400); // Bad request
+      echo json_encode(['error' => 'Customer with this email already exists. Please log in.']);
+      exit;
+  }
     // Insert data into the database
     $sql = "INSERT INTO `customers` (`firstName`, `lastName`, `email`, `password`, `phone`, `dob`) 
             VALUES ('$firstName', '$lastName', '$email', '$password', '$phone', '$dob')";

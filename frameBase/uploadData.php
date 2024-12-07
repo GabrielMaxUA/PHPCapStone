@@ -55,7 +55,7 @@ if ($method === 'GET') {
         echo json_encode(['message' => 'Invalid action for GET']);
     }
 } elseif ($method === 'POST') {
-    if ($action === 'updateMainGallery') {
+    if ($action === 'mainGallery') {
         $response = [];
         $errors = [];
 
@@ -74,7 +74,7 @@ if ($method === 'GET') {
         // File uploads
         foreach (['nFile' => 'nImageMain', 'aFile' => 'aImageMain', 'sFile' => 'sImageMain'] as $fileKey => $dbColumn) {
             if (isset($_FILES[$fileKey]) && $_FILES[$fileKey]['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = 'uploads/';
+                $uploadDir = 'uploads/main/';
                 $fileName = basename($_FILES[$fileKey]['name']);
                 $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -124,7 +124,7 @@ if ($method === 'GET') {
 
         // Handle image upload
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'uploads/';
+            $uploadDir = 'uploads/main/';
             $originalFileName = basename($_FILES['image']['name']);
             $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
 

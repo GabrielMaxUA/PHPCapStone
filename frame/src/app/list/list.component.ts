@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Service } from '../service/service';
 import { User } from '../user';
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrl: './list.component.css'
+    selector: 'app-list',
+    templateUrl: './list.component.html',
+    styleUrl: './list.component.css',
+    standalone: false
 })
 export class ListComponent {
 

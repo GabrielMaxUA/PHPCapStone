@@ -1,0 +1,16 @@
+#itemID{
+  display: none;
+}
+
+.border{
+  width: 90%;
+}
+
+table{
+  border: 2px solid #000000;
+  margin: 0 auto;
+}
+
+.top-left-radius {
+  border-top-left-radius: 8px;
+}

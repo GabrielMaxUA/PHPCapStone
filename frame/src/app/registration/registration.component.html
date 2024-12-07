@@ -67,7 +67,7 @@
           required
         />
         <div *ngIf="password.invalid && password.touched" class="error">Password is required</div>
-        <div *ngIf="formErrors.email" class="error">{{ formErrors.email }}</div>
+        <div *ngIf="formErrors.password" class="error">{{ formErrors.password }}</div>
       </div>
   
       <div class="labs">
@@ -101,6 +101,7 @@
   <div class="text-center mt-2 ">
     <button  type="submit" [disabled]="f.invalid">Register</button>
   </div>
+  <a routerLink="/signin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Login</a>
       
     </form> 
   </div> 

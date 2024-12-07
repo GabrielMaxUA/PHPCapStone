@@ -1,0 +1,122 @@
+<p>customers works!</p>
+<div class="border text-center border-black p-2">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th id="itemID">Customer ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Orders</th>
+        <th>Joined</th>
+        <th>DOB</th>
+        <th>Type</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of customers">
+        <td id="itemID">{{ item.customerID }}</td>
+        <td>{{ item.firstName }}</td>
+        <td>{{ item.lastName }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.phone }}</td>
+        <td>{{ item.orderDetailsID }}</td>
+        <td>{{ item.created_at }}</td>
+        <td>{{ item.dob }}</td>
+        <td>{{ item.type }}</td>
+        <td *ngIf="item.type === 'customer'">
+          <label>
+            <input
+              type="radio"
+              [checked]="item.status === 'active'"
+              (change)="toggleStatus(item)"
+              value="active"
+            /> Active
+          </label>
+          <label>
+            <input
+              type="radio"
+              [checked]="item.status === 'blocked'"
+              (change)="toggleStatus(item)"
+              value="blocked"
+            /> Blocked
+          </label>
+        </td>
+        
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+<!-- <p>customers works!</p>
+<div class="border text-center m-5 border-black d-flex flex-column">
+  <div *ngFor="let item of customers" class="m-1 d-flex flex-row align-items-center">
+    <div id="itemID">{{item.customerID}}</div>
+    <div class="firstName">first name</div>
+    <div class="lastName">last name</div>
+    <div class="email">email</div>
+    <div class="phone">phone</div>
+    <div class="dob">DOB</div>
+    <div class="type">type</div>
+    <div class="status">status</div>
+    <div>
+      <label>
+        <input 
+          type="radio" 
+          [checked]="item.status === 'active'" 
+          (change)="toggleStatus(item)" 
+          value="Active"> Active
+      </label>
+      <label>
+        <input 
+          type="radio" 
+          [checked]="item.status === 'blocked'" 
+          (change)="toggleStatus(item)" 
+          value="Blocked"> Blocked
+      </label>
+    </div>
+    <button 
+      class="btn btn-m btn-warning" 
+      (click)="editUser(item.customerID)">Edit</button>
+    <button 
+      class="btn btn-m btn-danger" 
+      (click)="deleteUser(item.customerID)">Delete</button>
+  </div>
+  <div *ngFor="let item of customers" class="m-1 d-flex flex-row align-items-center">
+    <div id="itemID">{{item.customerID}}</div>
+    <div class="firstName">{{item.firstName}}</div>
+    <div class="lastName">{{item.lastName}}</div>
+    <div class="email">{{item.email}}</div>
+    <div class="phone">{{item.phone}}</div>
+    <div class="dob">{{item.dob}}</div>
+    <div class="type">{{item.type}}</div>
+    <div class="status">{{item.status}}</div>
+    <div>
+      <label>
+        <input 
+          type="radio" 
+          [checked]="item.status === 'active'" 
+          (change)="toggleStatus(item)" 
+          value="Active"> Active
+      </label>
+      <label>
+        <input 
+          type="radio" 
+          [checked]="item.status === 'blocked'" 
+          (change)="toggleStatus(item)" 
+          value="Blocked"> Blocked
+      </label>
+    </div>
+    <button 
+      class="btn btn-m btn-warning" 
+      (click)="editUser(item.customerID)">Edit</button>
+    <button 
+      class="btn btn-m btn-danger" 
+      (click)="deleteUser(item.customerID)">Delete</button>
+  </div>
+</div> -->

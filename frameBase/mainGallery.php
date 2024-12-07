@@ -50,7 +50,7 @@ if ($method === 'GET') {
     // File uploads
     foreach (['nFile' => 'nImageMain', 'aFile' => 'aImageMain', 'sFile' => 'sImageMain'] as $fileKey => $dbColumn) {
         if (isset($_FILES[$fileKey]) && $_FILES[$fileKey]['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'uploads/';
+            $uploadDir = 'uploads/main/';
             $fileName = basename($_FILES[$fileKey]['name']);
             $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
 

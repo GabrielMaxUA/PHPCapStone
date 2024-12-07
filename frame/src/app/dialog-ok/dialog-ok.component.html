@@ -1,0 +1,9 @@
+<h2 mat-dialog-title class="dialog-box">Attention</h2> <!-- Title styled by .dialog-box -->
+
+<div mat-dialog-content class="dialog-box">
+  <p>{{ data.message }}</p> <!-- Paragraph styled by p -->
+</div>
+
+<div class="buttons" mat-dialog-actions> <!-- Buttons container styled by .buttons -->
+  <button mat-button (click)="onConfirm()">OK</button> <!-- OK button styled by button:last-child -->
+</div>

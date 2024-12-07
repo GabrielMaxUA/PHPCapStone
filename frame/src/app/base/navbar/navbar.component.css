@@ -1,7 +1,6 @@
 .border {
   height: 2px;
-  background: #000000;
-  width: calc(100% - 65px);
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -37,3 +36,4 @@ a {
   text-decoration: underline; /* Add underline to active links */
   font-weight: bold; /* Optional: Make the active link stand out more */
 }
+

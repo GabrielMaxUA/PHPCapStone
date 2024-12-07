@@ -14,15 +14,11 @@
   background: #e1d79e;
 }
 
-/* 
-
-main {
-  background: #e1d79e;
-  width: 80vw;
-  margin: 0 auto;
-  text-align: center;
+.mat-mdc-dialog-surface {
+  background-color: #f2c45b;
 }
 
+/*
 
 
 .about {
@@ -235,3 +231,6 @@ margin: 10px auto;
 background-color: #0056b3;
 } */
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

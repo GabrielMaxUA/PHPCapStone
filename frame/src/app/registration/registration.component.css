@@ -9,24 +9,23 @@
 }
 
 form{
-text-align: center;
-}
-
-form .labs{
-  float: left;
-  margin-left: 10%;
+display: flex;
+flex-flow: column nowrap;
+justify-content: start;
 }
 
 .labs{
-  align-items: center;
   margin: 10px auto;
   width: 100%;
 }
 
-.labs label{
+ label{
+  display: flex;
+  align-items: center;
+  justify-content: end;
   width: 10%;
+  height: 38px;
   float: left;
-  text-align: right;
   margin-right: 10px;
 }
 
@@ -58,6 +57,6 @@ button.btn {
 
 .error {
   color: red;
-  width: 30%;
-  margin-left: auto;
+  width: 15%;
+  margin: 0 auto;
 }

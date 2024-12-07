@@ -9,7 +9,6 @@ import { FooterComponent } from './base/footer/footer.component';
 import { HeaderComponent } from './base/header/header.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AdminComponent } from './admin/admin.component';
-import { CustomerComponent } from './customer/customer.component';
 import { ProductsComponent } from './products/products.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,8 +16,17 @@ import { ListComponent } from './list/list.component';
 import { NavBarComponent } from './base/navbar/navbar.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { NatureComponent } from './gallery/nature/nature.component';
-import { ArchitechtureComponent } from './gallery/architechture/architechture.component';
 import { StagedComponent } from './gallery/staged/staged.component';
+import { CustomersComponent } from './customers/customers.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DialogComponent } from './dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+import { DialogOkComponent } from './dialog-ok/dialog-ok.component';
+import { ArchitectureComponent } from './gallery/architechture/architecture.component';
+
+
 
 @NgModule({
   declarations: [
@@ -28,7 +36,6 @@ import { StagedComponent } from './gallery/staged/staged.component';
     FooterComponent,
     AboutComponent,
     AdminComponent,
-    CustomerComponent,
     ProductsComponent,
     RegistrationComponent,
     LogoutComponent,
@@ -36,16 +43,24 @@ import { StagedComponent } from './gallery/staged/staged.component';
     ListComponent,
     GalleryComponent,
     NatureComponent,
-    ArchitechtureComponent,
+    ArchitectureComponent,
     StagedComponent,
+    CustomersComponent,
+    DialogComponent,
+    DialogOkComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    MatButtonModule
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
