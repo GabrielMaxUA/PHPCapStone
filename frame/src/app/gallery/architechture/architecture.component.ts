@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Service } from '../../service/service';
 import { UserService } from '../../service/user.service';
-import { User } from '../../user';
+import { User } from '../../Models/user';
 
 @Component({
     selector: 'app-architecture',
@@ -52,48 +52,6 @@ export class ArchitectureComponent {
     console.log('Updated allChanges:', this.allChanges);
     this.isUploading = false;
   }
-
-  // submitChanges(): void {
-  //   console.log('Submitting changes:', this.allChanges);
-  
-  //   const formData = new FormData();
-  
-  //   // Add file changes if any
-  //   if (this.allChanges.aFile) {
-  //     formData.append('aGallery', this.allChanges.aFile);
-  //   }
-  
-  //   // Add price changes if any
-  //   if (this.allChanges.price !== null) {
-  //     formData.append('price', this.allChanges.price.toString());
-  //   }
-  
-  //   this.service.submitGalleriesData(formData, "architectureGallery").subscribe(
-  //     (response: any) => {
-  //       console.log('Response from server:', response);
-  
-  //       // Assuming the response is an array of gallery items
-  //       if (Array.isArray(response)) {
-  //         this.galleryItems = response.map((item: { pictureID: any; aGalleryImage: any; price: any }) => ({
-  //           pictureID: item.pictureID,
-  //           aGalleryImage: `http://localhost/frameBase/${item.aGalleryImage}`,
-  //           price: parseFloat(parseFloat(item.price).toFixed(2)),
-  //         }));
-  //       } else {
-  //         console.error('Unexpected response format:', response);
-  //       }
-  
-  //       this.isUploading = false;
-  
-  //       // Reload gallery data if necessary
-  //       this.loadGalleryData();
-  //     },
-  //     (error) => {
-  //       console.error('Error submitting changes:', error);
-  //       this.isUploading = false; // Ensure this is updated in case of an error
-  //     }
-  //   );
-  // }
   
 
   submitChanges(): void {
@@ -153,7 +111,7 @@ export class ArchitectureComponent {
     formData.append('pictureID', pictureID);
     formData.append('price', parseFloat(price).toFixed(2)); // Ensure 2 decimal places
   
-    this.service.submitArchitectureGalleryChanges(formData).subscribe(
+    this.service.submitPriceChange(formData, "architectureGallery").subscribe(
       (response: any) => {
         console.log('Response from backend:', response);
         if (Array.isArray(response)) {
@@ -249,4 +207,22 @@ export class ArchitectureComponent {
     }
   }
   
+  addToCart(pictureID: number){
+    console.log('Nature component: Received pictureID:', pictureID);
+    console.log('Current gallery items:', this.galleryItems);
+    const item = this.galleryItems.find(item => Number(item.pictureID) === Number(pictureID));
+    if(item){
+      console.log('Found item:', item); // Debug log
+      this.service.addToCart({
+        pictureID: item.pictureID,
+        aGalleryImage: item.aGalleryImage,
+        price: item.price,
+        quantity: 1
+      });
+    }
+     else {
+      console.error('Item not found for pictureID:', pictureID);
+      console.log('Available pictureIDs:', this.galleryItems.map(item => item.pictureID));
+    }
+  }
 }

@@ -1,0 +1,31 @@
+
+<div class="cart-container">
+    <h2 class="text-center mb-4">Shopping Cart</h2>
+  
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <p>Your cart is empty</p>
+      <a routerLink="/gallery" class="btn btn-primary">Continue Shopping</a>
+    </div>
+  
+    <div *ngIf="cartItems.length > 0" class="cart-items">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <div class="item-image">
+          <img [src]="item.nGalleryImage || item.sGalleryImage || item.aGalleryImage" 
+               alt="Product Image" 
+               class="thumbnail">
+        </div>
+        <div class="item-details">
+          <p id="pictureID">{{item.pictureID}}</p>
+          <p>Price: {{item.price | currency}}</p>
+          <button class="remove-btn" (click)="removeItem(item.pictureID)">Remove</button>
+        </div>
+      </div>
+    </div>
+    <div class="cart-summary text-center">
+      <h3>Total: {{total | currency}}</h3>
+      <div class="cart-actions">
+        <button class="clear-btn" (click)="clearCart()">Clear Cart</button>
+        <button class="checkout-btn">Checkout</button>
+      </div>
+    </div>
+  </div>

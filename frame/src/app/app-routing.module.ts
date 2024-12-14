@@ -10,12 +10,14 @@ import { NatureComponent } from './gallery/nature/nature.component';
 import { ArchitectureComponent } from './gallery/architechture/architecture.component';
 import { StagedComponent } from './gallery/staged/staged.component';
 import { CustomersComponent } from './customers/customers.component';
+import { CartComponent } from './cart/cart/cart.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/about', pathMatch: 'full' },
   { path: 'signin', component: LoginComponent },
   { path: 'register', component: RegistrationComponent },
   { path: 'about', component: AboutComponent },
+  { path: 'cart', component: CartComponent },
   { path: 'admin', component: AdminComponent},
   { path: 'customers', component: CustomersComponent},
   { path: 'gallery', component: GalleryComponent},

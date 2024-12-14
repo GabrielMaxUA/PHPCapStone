@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Service } from '../service/service';
 import { FormsModule, Form } from '@angular/forms';
-import { User } from '../user';
+import { User } from '../Models/user';
 import { HttpClientModule } from '@angular/common/http';
 import { format, isValid, parse } from 'date-fns';
 
@@ -47,7 +47,7 @@ export class RegistrationComponent {
           this.router.navigate(['signin']);
         },
         (err) => {
-          console.error('Error:', err.error);
+          console.error('Error:', err.error.error);
           this.formErrors['email'] = err.error.error;
         }
       );

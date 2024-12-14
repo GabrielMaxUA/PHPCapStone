@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { Service } from '../../service/service';
 import { UserService } from '../../service/user.service';
-import { User } from '../../user';
-
-
+import { User } from '../../Models/user';
 
 @Component({
     selector: 'app-nature',
@@ -20,7 +18,6 @@ export class NatureComponent {
   nGalleryImage: string = '';
   pictureID: number = 0;
   selectedImageIndex: number | null = null;
-
 
   allChanges: {
     price: number | null,
@@ -112,7 +109,7 @@ export class NatureComponent {
     formData.append('pictureID', pictureID);
     formData.append('price', parseFloat(price).toFixed(2)); // Ensure 2 decimal places
   
-    this.service.submitNatureGalleryChanges(formData).subscribe(
+    this.service.submitPriceChange(formData, "natureGallery").subscribe(
       (response: any) => {
         if (Array.isArray(response)) {
           this.galleryItems = response.map((item: { pictureID: any; price: any; nGalleryImage: any }) => ({
@@ -207,6 +204,25 @@ navigateGallery(direction: number): void {
       this.selectedImageIndex = 0;
     }
   }
-}
+} 
+
+  addToCart(pictureID: number){
+    console.log('Nature component: Received pictureID:', pictureID);
+    console.log('Current gallery items:', this.galleryItems);
+    const item = this.galleryItems.find(item => Number(item.pictureID) === Number(pictureID));
+    if(item){
+      console.log('Found item:', item); // Debug log
+      this.service.addToCart({
+        pictureID: item.pictureID,
+        nGalleryImage: item.nGalleryImage,
+        price: item.price,
+        quantity: 1
+      });
+    }
+     else {
+      console.error('Item not found for pictureID:', pictureID);
+      console.log('Available pictureIDs:', this.galleryItems.map(item => item.pictureID));
+    }
+  }
 
 }

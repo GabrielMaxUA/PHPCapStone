@@ -7,10 +7,13 @@
     <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
       <div class="spinner-border text-primary" role="status"></div>
     </div>
+
     <div *ngIf="user?.type === 'admin'" class="filePick m-2">
       <input type="file" (change)="onFileSelected($event, 'n')" />
     </div>
+
     <a class="text-center p-3" routerLink="/nature">Nature</a>
+
     <div class="nText text-center p-3" [innerHTML]="nText"></div>
     <textarea *ngIf="user?.type === 'admin'" class="text-center" [(ngModel)]="nText"></textarea>
   </div>
@@ -18,13 +21,17 @@
   <!-- Architecture Section -->
   <div class="gallery_option">
     <div class="p-3"><img [src]="aImageUrl" alt="" *ngIf="aImageUrl"></div>
+
     <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
       <div class="spinner-border text-primary" role="status"></div>
     </div>
+
     <div *ngIf="user?.type === 'admin'" class="filePick m-2">
       <input type="file" (change)="onFileSelected($event, 'a')" />
     </div>
+
     <a class="text-center p-3" routerLink="/architecture">Architecture</a>
+
     <div class="aText text-center p-3" [innerHTML]="aText"></div>
     <textarea *ngIf="user?.type === 'admin'" [(ngModel)]="aText"></textarea>
   </div>
@@ -38,7 +45,15 @@
     <div *ngIf="user?.type === 'admin'" class="filePick m-2">
       <input type="file" (change)="onFileSelected($event, 's')" />
     </div>
-    <a class="text-center p-3" routerLink="/staged">Staged</a>
+    <!-- <a *ngIf="user?.status === 'active'"class="text-center p-3" routerLink="/staged">Staged</a>
+    <a *ngIf="user?.status === 'blocked'" class="text-center p-3" (click)="adultWarning()">Staged</a> -->
+    <a
+      class="text-center p-3" 
+      href="#"
+      (click)="handleLinkClick($event)">
+    Staged
+    </a>
+
     <div class="sText text-center p-3" [innerHTML]="sText"></div>
     <textarea *ngIf="user?.type === 'admin'" [(ngModel)]="sText"></textarea>
   </div>

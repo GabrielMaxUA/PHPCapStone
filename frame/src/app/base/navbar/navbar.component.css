@@ -1,5 +1,6 @@
 .border {
   height: 2px;
+  background-color: #000000;
   width: 80%;
   margin: 0 auto;
 }
@@ -9,7 +10,6 @@
   display: flex;
   justify-content: space-evenly;
   margin: 0 auto;
-  background: #e1d79e;
 }
 
 .navbar-fixed {
@@ -37,3 +37,20 @@ a {
   font-weight: bold; /* Optional: Make the active link stand out more */
 }
 
+.cartLink{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+}
+.counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: black;
+  color: white;
+  font-size: 1.2rem;
+  margin: 5px;
+}

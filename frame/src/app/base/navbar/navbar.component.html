@@ -5,10 +5,13 @@
   <div class="navbar">
     <a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">About</a>
     <a routerLink="/gallery" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Gallery</a>
+    <a class="cartLink" *ngIf="!user || user?.type === 'customer'" routerLink="/cart" routerLinkActive="active">
+      Cart
+      <span class="counter" *ngIf="cartCount > 0">{{cartCount}}</span>
+    </a>
     <a *ngIf="!user" routerLink="/signin" routerLinkActive="active">Sign in/Register</a>
     <a *ngIf="user?.type === 'admin'" routerLink="/orders" routerLinkActive="active">Orders</a>
     <a *ngIf="user?.type === 'admin'" routerLink="/customers" routerLinkActive="active">Customers</a>
-    <a *ngIf="user?.type === 'customer'" routerLink="/cart" routerLinkActive="active">Cart</a>
     <a *ngIf="user" class="social" (click)="logout()">Logout</a>
 
   </div>

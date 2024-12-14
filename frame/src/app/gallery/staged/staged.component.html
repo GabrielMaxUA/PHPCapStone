@@ -1,1 +1,97 @@
 <p>staged works!</p>
+<h1 class="text-center mt-4">Staged models</h1>
+<h3 class="text-center">Enjoy the perfection of body lines and game of light and shapes</h3>
+
+<!-- Filter Buttons -->
+<div class="filter-buttons text-center mt-4">
+  <button (click)="filterGallery('black')" class="btn btn-dark m-2">Black & White</button>
+  <button (click)="filterGallery('color')" class="btn btn-primary m-2">Color</button>
+  <button (click)="resetFilter()" class="btn btn-secondary m-2">Reset Filter</button>
+</div>
+
+<!-- Admin Upload Section -->
+<div *ngIf="user?.type === 'admin'" class="text-center">
+  <form #form="ngForm" (ngSubmit)="submitGalleryChanges()" novalidate>
+    <div class="filePick m-2">
+      <!-- Color Image Upload -->
+      <div class="imageInput m-4">
+        <label for="fileInputColor">Upload new color image:</label>
+        <input
+          class="uploadImage"
+          type="file"
+          id="fileInputColor"
+          (change)="onFileSelected($event, 'color')"
+          name="fileInputColor"
+        />
+      </div>
+      <div class="priceInput m-4">
+        <label for="priceInputColor">Price for Color Image:</label>
+        <input
+          type="number"
+          id="priceInputColor"
+          [(ngModel)]="colorPrice"
+          name="priceInputColor"
+        />
+      </div>
+
+      <!-- Black & White Image Upload -->
+      <div class="imageInput m-4">
+        <label for="fileInputBlack">Upload new Black/White image:</label>
+        <input
+          class="uploadImage"
+          type="file"
+          id="fileInputBlack"
+          (change)="onFileSelected($event, 'black')"
+          name="fileInputBlack"
+        />
+      </div>
+      <div class="priceInput m-4">
+        <label for="priceInputBlack">Price for Black/White Image:</label>
+        <input
+          type="number"
+          id="priceInputBlack"
+          [(ngModel)]="blackPrice"
+          name="priceInputBlack"
+        />
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="!isFormValid()">Upload</button>
+  </form>
+</div>
+
+<!-- Gallery Section -->
+<div id="Gallery" class="text-center mt-5">
+  <div *ngFor="let item of filteredGalleryItems; let i = index" class="gallery_option text-center">
+    <app-card 
+      [item]="item"
+      [isAdmin]="user?.type === 'admin'"
+      galleryType="staged"
+      (imageClick)="openImageOverlay(i)"
+      (priceChange)="submitPriceChange($event.pictureID, $event.price)"
+      (deleteImage)="delete(+$event)"
+      (cartAdd)="addToCart(+$event)">
+    </app-card>
+  </div>
+</div>
+
+<!-- Image Overlay -->
+<div
+  class="image-overlay"
+  *ngIf="selectedImageIndex !== null"
+  (click)="closeImageOverlay()"
+>
+  <div class="image-container" (click)="$event.stopPropagation()">
+    <img
+      [src]="galleryItems[selectedImageIndex].sGalleryImage"
+      alt="Enlarged Image"
+    />
+    <button class="nav-arrow left-arrow" (click)="navigateGallery(-1)">
+      &#8249;
+    </button>
+    <button class="nav-arrow right-arrow" (click)="navigateGallery(1)">
+      &#8250;
+    </button>
+  </div>
+</div>

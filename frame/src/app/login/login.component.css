@@ -1,7 +1,7 @@
 .form-content{
   margin: 40px auto;
   padding: 15px;
-  width: 95vw;
+  width: 80vw;
   border: 2px #000000 solid;
   background: #e1dcbd;
   border-radius: 12px;
@@ -13,7 +13,7 @@
 
 form{
   margin: 0 auto;
-  width: 100%;
+  width: 80%;
   text-align: center;
 }
 

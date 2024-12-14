@@ -16,42 +16,36 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   success ='';
+  status: string = '';
 
 constructor(private service: Service, private router: Router, private userService: UserService, private cdr: ChangeDetectorRef){}
 
-// ngOnInit(){
-//   this.service.checkSession().subscribe((response)=>{
-//     if(response.status === 'active') {
-//       this.router.navigate(['about']);
-//     }
-//   });
-// }
 
 login(f: NgForm): void {
   if (f.valid) {
     this.service.login(f.value).subscribe(
       (response: {
-        // firstName: any;
-        // lastName: any; 
         success: boolean; 
         token: string; 
-        userType: string 
+        userType: string;
+        userStatus: string;
 }) => {
         console.log('Login successful:', response);
         this.success = 'Login successful';
-
-        // Save the user type and token
+        this.status = response.userStatus;
+        
+           // Save the user type and token
         const user = {
           email: f.value.email,
           type: response.userType,
-          // firstName: response.firstName,
-          // lastName: response.lastName
+          status: response.userStatus
         };
         this.userService.setUser(user);
         localStorage.setItem('token', response.token);
 
         // Navigate to the appropriate page
         this.router.navigate(['about']);
+    
       },
       (err) => {
         // Reset errors first

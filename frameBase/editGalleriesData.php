@@ -78,6 +78,37 @@ elseif($action === 'architectureGallery'){
   }
   exit;
 }
+elseif($action === 'stagedGallery'){
+    $action = 'staged';
+    $pictureID = isset($_POST['pictureID']) ? intval($_POST['pictureID']) : null;
+    $price = isset($_POST['price']) ? floatval($_POST['price']) : null;
+  
+    // Validate Inputs
+    if ($price === null) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Price is required']);
+        exit;
+    }
+  
+    if ($pictureID) {
+        // UPDATE Existing Record
+        $query = "UPDATE staged_gallery SET price = ? WHERE pictureID = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('di', $price, $pictureID);
+    
+        if ($stmt->execute()) {
+            // Fetch updated data
+            fetchUpdatedData($con, $action);
+        } else {
+            http_response_code(500);
+            echo json_encode(['message' => 'Failed to update price']);
+        }
+    } else {
+        http_response_code(400);
+        echo json_encode(['message' => 'Picture ID is required for updating the price']);
+    }
+    exit;
+  }
 }
 
 

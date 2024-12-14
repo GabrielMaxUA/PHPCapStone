@@ -10,7 +10,8 @@ import { DialogComponent } from '../dialog/dialog.component';
   styleUrl: './dialog-ok.component.css'
 })
 export class DialogOkComponent {
-  constructor(public dialogRef: MatDialogRef<DialogComponent>,@Inject(MAT_DIALOG_DATA) public data: { message: string }) {}
+  constructor(public dialogRef: MatDialogRef<DialogOkComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { message: string }) {}
 
   onConfirm(): void {
     this.dialogRef.close(true);

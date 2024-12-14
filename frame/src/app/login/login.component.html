@@ -1,6 +1,8 @@
-<p>login works!</p>
-<div class="form-content">
-  <form #f="ngForm" (submit)="login(f)">
+
+<div class="form-content text-center">
+  
+  <form #f="ngForm" class="m-4" (submit)="login(f)">
+    
     <div class="labs">
       <label for="email">Email:</label>
       <input
@@ -11,6 +13,7 @@
         #email="ngModel"
         required
       /> 
+      <div *ngIf="status === 'blocked'" class="error text-center">{{ success }}</div>
       <div *ngIf="email.invalid && email.touched" class="error">Email is required</div>
       <div *ngIf="formErrors.email" class="error">{{ formErrors.email }}</div>
     </div>
@@ -30,8 +33,7 @@
     </div>
 
       <button class="btn" type="submit" [disabled]="f.invalid">Login</button>
-
-    <div *ngIf="success" class="success-message">{{ success }}</div>
+      
   </form>
   <div class="link">
     <h3>Not a member yet?</h3>

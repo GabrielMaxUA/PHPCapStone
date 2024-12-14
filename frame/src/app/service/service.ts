@@ -1,25 +1,54 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
-import { User } from '../user';
+import { BehaviorSubject, map, Observable } from 'rxjs';
+import { User } from '../Models/user';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
+import { CartItem } from '../Models/cartItem';
+import { DialogOkComponent } from '../dialog-ok/dialog-ok.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Service {
   baseUrl = 'http://localhost/frameBase';
+  cartItems: CartItem[] =[];
+  cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
+  cartCountSubject = new BehaviorSubject<number>(0);
+  showDialog = false; // Whether the dialog is visible
+  dialogMessage = ''; // Message to display in the dialog
 
-  constructor(private http: HttpClient, private router: Router, private userService: UserService){
+  cartItems$ = this.cartItemsSubject.asObservable();
+  cartCount$ = this.cartCountSubject.asObservable();
+
+  constructor(private http: HttpClient, private dialog: MatDialog, 
+    private userService: UserService){
     this.userService.clearUser(); // Clear user data
-    this.router.navigate(['about']); // Redirect 
+    //this.router.navigate(['about']); // Redirect 
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      this.cartItems = JSON.parse(savedCart);
+      this.updateCart(); // Update subjects with saved data
+    }
   }
 
   login(data: { email: string; password: string }): Observable<any> {
       const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.baseUrl}/login`, data, {headers});
+    return this.http.post(`${this.baseUrl}/login`, data, {headers}).pipe(
+      map((response:any) =>{
+        console.log('Login response:', response); // Debugging
+        if(response.success){
+          this.userService.setUser({
+            email: data.email,
+            type: response.userType,
+            status: response.userStatus
+          });
+        }
+        return response;
+      })
+    );
   }
 
    // Check session status
@@ -104,16 +133,17 @@ export class Service {
     return this.postRequest(`galleriesData?action=${action}`, formData, true);
   }  
 
-  submitNatureGalleryChanges(formData: FormData): Observable<any> {
-    return this.postRequest('editGalleriesData?action=natureGallery', formData, true);
-  }
+  submitPriceChange(formData: FormData, action: string): Observable<any> {
+    return this.postRequest(`editGalleriesData?action=${action}`, formData, true);
+  } 
 
-  submitArchitectureGalleryChanges(formData: FormData): Observable<any> {
-    return this.postRequest('editGalleriesData?action=architectureGallery', formData, true);
-  }
 
   getNatureContent(): Observable<{pictureID: number, nGalleryImage: string; price: number }[]> {
     return this.getRequest<{pictureID: number, nGalleryImage: string; price: number }[]>('galleriesData?action=natureGallery');
+  }
+
+  getStagedContent(): Observable<{pictureID: number, sGalleryImage: string; price: number, type: string }[]> {
+    return this.getRequest<{pictureID: number, sGalleryImage: string; price: number, type: string}[]>('galleriesData?action=stagedGallery');
   }
 
   getArchitectureContent(): Observable<{pictureID: number, aGalleryImage: string; price: number }[]> {
@@ -141,5 +171,64 @@ export class Service {
     console.log('passing to server:', pictureID, action);
     return this.deleteRequest(`deleteImage?pictureID=${pictureID}&action=${action}`);
 }
+
+  addToCart(item: CartItem){
+    console.log("Adding item to the cart: ", item);
+    const existingItem = this.cartItems.find( i => i.pictureID === item.pictureID);
+
+    if (existingItem){
+      const message =
+        'The item is already in your cart';
+      const dialogRef = this.dialog.open(DialogOkComponent, {
+        width: '400px',
+        data: { message: message } // Pass the message dynamically
+      });}
+    else{
+      this.cartItems.push({...item, quantity: 1});
+    }
+
+    this.updateCart();
+    this.saveCartToStorage(); // Save to localStorage
+  }
+
+
+  removeFromCart(pictureID: number){
+    this.cartItems = this.cartItems.filter(item => item.pictureID !== pictureID);
+    this.updateCart();
+  }
+
+  // updateQuantity(pictureID: number, quantity: number){
+  //   const item = this.cartItems.find(i => i.pictureID === pictureID);
+  //   if(item){
+  //     item.quantity = quantity;
+  //     this.updateCart();
+  //     this.saveCartToStorage();
+  //   }
+  // }
+
+  clearCart(){
+    this.cartItems = [];
+    this.updateCart();
+    this.saveCartToStorage();
+  }
+
+  private updateCart(){
+    console.log('Updating cart. Items:', this.cartItems); // Debug log
+    this.cartItemsSubject.next(this.cartItems);
+    const totalItems = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    this.cartCountSubject.next(totalItems);
+  }
+
+  private saveCartToStorage() {
+    localStorage.setItem('cart', JSON.stringify(this.cartItems));
+  }
+
+  getCartItems(){
+    return this.cartItems;
+  }
+
+  getCartCount(){
+    return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  }
 
 }

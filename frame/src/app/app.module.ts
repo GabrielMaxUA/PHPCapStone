@@ -9,7 +9,6 @@ import { FooterComponent } from './base/footer/footer.component';
 import { HeaderComponent } from './base/header/header.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AdminComponent } from './admin/admin.component';
-import { ProductsComponent } from './products/products.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ListComponent } from './list/list.component';
@@ -25,7 +24,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import { DialogOkComponent } from './dialog-ok/dialog-ok.component';
 import { ArchitectureComponent } from './gallery/architechture/architecture.component';
-
+import { CardComponent } from './gallery/imageCard/card/card.component';
+import { CartComponent } from './cart/cart/cart.component';
 
 
 @NgModule({
@@ -36,7 +36,6 @@ import { ArchitectureComponent } from './gallery/architechture/architecture.comp
     FooterComponent,
     AboutComponent,
     AdminComponent,
-    ProductsComponent,
     RegistrationComponent,
     LogoutComponent,
     LoginComponent,
@@ -48,6 +47,8 @@ import { ArchitectureComponent } from './gallery/architechture/architecture.comp
     CustomersComponent,
     DialogComponent,
     DialogOkComponent,
+    CardComponent,
+    CartComponent,
   ],
   imports: [
     BrowserModule,

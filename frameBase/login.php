@@ -41,8 +41,7 @@ if (isset($postdata) && !empty($postdata)) {
             // Generate a token (for simplicity, use a static token or implement JWT)
             $token = bin2hex(random_bytes(16)); // Example token generation
             $userType = $user['type'];
-            // $userFirstName = $user['firstName'];
-            // $userLastName = $user['lastName'];
+            $userStatus = $user['status'];
             setcookie('authToken', $token, [
               'expires' => 0, // Expires when the browser is closed
               'path' => '/',
@@ -55,9 +54,8 @@ if (isset($postdata) && !empty($postdata)) {
             echo json_encode([
                 'success' => true,
                 'token' => $token,
-                'userType' => $userType
-                // 'firstNme' => $userFirstName
-                // 'lastName'=> $userLastName
+                'userType' => $userType,
+                'userStatus' => $userStatus
             ]);
         } else {
             http_response_code(401);

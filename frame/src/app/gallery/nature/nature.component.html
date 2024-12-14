@@ -47,31 +47,17 @@
 <!-- Nature user Section -->
 <div id="Gallery" class="text-center">
   <div *ngFor="let item of galleryItems; let i = index" class="gallery_option text-center">
-    <div id="pictureID">
-      Picture ID: {{ item.pictureID }}
-    </div>
-    <div class="p-2">
-      <img 
-      [src]="item.nGalleryImage" 
-      alt="Nature Image"
-      class="thumbnail"
-      (click)="openImageOverlay(i)">
-    </div>
-    <div class="price">
-      <strong>{{ galleryItems[i].price | currency }}</strong>
-    </div>
-    <!-- admin section-->
-    <div *ngIf="user?.type === 'admin'">
-      <input type="number" step="0.10" [(ngModel)]="galleryItems[i].price">
-      <div class="d-flex flex-row">
-      <button (click)="submitPriceChange(item.pictureID, galleryItems[i].price)">Submit</button>
-      <button (click)="delete(item.pictureID)">Delete</button>
-    </div>
-    </div>
-
+    <app-card 
+    [item]="item"
+    [isAdmin]="user?.type === 'admin'"
+    galleryType="nature"
+    (imageClick)="openImageOverlay(i)"
+    (priceChange)="submitPriceChange($event.pictureID, $event.price)"
+    (deleteImage)="delete(+$event)"
+    (cartAdd)="addToCart(+$event)">
+  </app-card>
   </div>
 </div>
-
 <!-- Image Overlay -->
 <div
   class="image-overlay"

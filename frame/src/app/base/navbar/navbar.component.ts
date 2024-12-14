@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
-import { User } from '../../user';
+import { User } from '../../Models/user';
 import { Service } from '../../service/service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,14 +15,24 @@ import { DialogComponent } from '../../dialog/dialog.component';
 })
 export class NavBarComponent implements OnInit {
   user: User | null = null;
+  cartCount: number = 1;
 
-  constructor(private dialog: MatDialog,private service: Service,private userService: UserService, private router: Router) {}
+  constructor(
+    private dialog: MatDialog,
+    private service: Service,
+    private userService: UserService, 
+    private router: Router,
+    private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     // Subscribe to user changes
-    this.userService.user$.subscribe((user) => {
-      this.user = user;
-    });
+    this.service.cartCount$.subscribe(count => {
+      console.log("count updated: ", count);
+      this.cartCount = count;
+      this.cdr.detectChanges()});
+
+    this.cartCount = this.service.getCartCount();
+    this.userService.user$.subscribe((user) => {this.user = user;});
   }
   
   logout(): void {
