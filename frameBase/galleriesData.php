@@ -92,6 +92,7 @@ if ($method === 'GET') {
                   'pictureID' => $row['pictureID'],
                   'sGalleryImage' => $row['stagedLow'],
                   'price' => $row['price'],
+                  'type' => $row['type']
               ];
           }
           http_response_code(200);
@@ -236,7 +237,7 @@ if ($method === 'GET') {
             'pictureID' => mysqli_insert_id($con),
             'stagedHigh' => $targetFilePathHigh,
             'stagedLow' => $targetFilePathLow,
-            'price' => $blackPrice,
+            'price' => $colorPrice,
             'type' => 'color'
         ];
         

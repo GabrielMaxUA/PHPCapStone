@@ -29,6 +29,7 @@ export class Service {
   constructor(private http: HttpClient, private dialog: MatDialog, 
     private userService: UserService, private router: Router) {
       console.log('Service constructor - checking session'); // Debug log
+
       this.checkSession().subscribe({
         next: (response) => {
           console.log('Initial session check response:', response); // Debug log
@@ -49,23 +50,6 @@ export class Service {
           this.userService.clearUser();
         }
       });
-      // this.checkSession().subscribe({
-      //   next: (response) => {
-      //     if (response.authenticated) {
-      //       this.userService.setUser({
-      //         email: response.email, // Make sure this is returned from PHP
-      //         type: response.userType,
-      //         status: response.userStatus
-      //       });
-      //       this.startHeartbeat();
-      //     } else {
-      //       this.userService.clearUser();
-      //     }
-      //   },
-      //   error: () => {
-      //     this.userService.clearUser();
-      //   }
-      // });
 
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
@@ -93,10 +77,6 @@ export class Service {
     );
   }
 
-   // Check session status
-  // checkSession(): Observable<any> {
-  //   return this.http.get(`${this.baseUrl}/check_session`, { withCredentials: true });
-  // }
   checkSession(): Observable<any> {
     return this.http.get(`${this.baseUrl}/check_session`, { withCredentials: true })
       .pipe(

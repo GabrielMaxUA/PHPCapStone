@@ -3,17 +3,11 @@ header {
   display: flex;
   justify-content: center;
 }
-:host {
-  display: block;
-  height: 12vw;
-  max-height: 100px;
-  min-height: 80px;
-}
 
 .signature{
   height: 12vw;
-  max-height: 100px;
-  min-height: 80px;
+  max-height: 120px;
+  width: auto;
   margin: 20px auto;
 }
 
@@ -43,7 +37,7 @@ header {
 .menu.active .bar:nth-child(1) {
   transform-origin: left;
   transform: rotate(45deg);
-  width: 42px;
+  width: 40px;
 }
 
 .menu.active .bar:nth-child(2) {
@@ -55,7 +49,7 @@ header {
 .menu.active .bar:nth-child(3) {
   transform-origin: left;
   transform: rotate(-45deg);
-  width: 42px;
+  width: 40px;
 }
 
 .menu:not(.active) {
@@ -68,19 +62,25 @@ header {
   margin-right: 8px;
 }
 
-.menu:not(.active) .bar:nth-child(3),
+.menu:not(.active) .bar:nth-child(3){
+  transform-origin: left;
+  transform: rotate(0deg);
+  width: 40px;
+  height: 2.5px;
+}
+
 .menu:not(.active) .bar:nth-child(1) {
   transform-origin: left;
   transform: rotate(0deg);
   width: 40px;
-  height: 3px;
+  height: 2px;
 }
 
 .menu:not(.active) .bar:nth-child(2) {
   opacity: 1;  /* Ensure full opacity when visible */
   transform: translateX(0);  /* Reset translation */
   width: 40px;
-  height: 3px;
+  height: 2px;
 }
 
 aside {
@@ -99,7 +99,7 @@ aside.active {
   z-index: 5;
 }
 
-.nav {
+.nav_social {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;

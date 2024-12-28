@@ -4,9 +4,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 12vw;
-  max-height: 100px;
-  min-height: 80px; /* Set a fixed total height for header + navbar */
+  min-height: 80px;  /* Set a fixed total height for header + navbar */
   z-index: 100;
 }
 

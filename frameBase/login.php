@@ -1,7 +1,7 @@
 <?php
 
-ini_set('session.cookie_lifetime', 100);
-ini_set('session.gc_maxlifetime', 100);
+ini_set('session.cookie_lifetime', 1800);
+ini_set('session.gc_maxlifetime', 1800);
 session_start();
 
 require_once 'connection.php';

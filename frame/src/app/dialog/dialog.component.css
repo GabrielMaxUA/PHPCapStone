@@ -22,6 +22,10 @@ button {
   border: 1px solid #e2a919;
   border-radius: 4px ;
   cursor: pointer;
+  margin: 0 auto;
+  margin-bottom: 30px;
+
+
 }
 
 

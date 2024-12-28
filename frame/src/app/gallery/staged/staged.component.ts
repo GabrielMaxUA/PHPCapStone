@@ -22,7 +22,8 @@ export class StagedComponent {
     selectedImageIndex: number | null = null;
     galleryItems: { pictureID: number; sGalleryImage: string; price: number; type: string }[] = [];
     filteredGalleryItems: { pictureID: number; sGalleryImage: string; price: number; type: string }[] = [];
-  
+   
+    
     allChanges: {
       price: number | null,
       sFile: File | null;
@@ -211,12 +212,12 @@ export class StagedComponent {
       const newIndex = this.selectedImageIndex + direction;
   
       // Ensure the index stays within bounds
-      if (newIndex >= 0 && newIndex < this.galleryItems.length) {
+      if (newIndex >= 0 && newIndex < this.filteredGalleryItems.length) {
         this.selectedImageIndex = newIndex;
       } else if (newIndex < 0) {
         // Loop back to the last image if navigating left from the first image
-        this.selectedImageIndex = this.galleryItems.length - 1;
-      } else if (newIndex >= this.galleryItems.length) {
+        this.selectedImageIndex = this.filteredGalleryItems.length - 1;
+      } else if (newIndex >= this.filteredGalleryItems.length) {
         // Loop back to the first image if navigating right from the last image
         this.selectedImageIndex = 0;
       }
@@ -224,9 +225,11 @@ export class StagedComponent {
   }
 
   filterGallery(type: 'black' | 'color'): void {
-    console.log('Filtering items:', this.galleryItems);
+    console.log('Filtering for type:', type);
+    console.log('Current gallery items:', this.galleryItems);
     this.filteredGalleryItems = this.galleryItems.filter((item) => item.type === type);
-    this.cdr.detectChanges(); 
+    console.log('Filtered items:', this.filteredGalleryItems);
+    this.cdr.detectChanges();
   }
 
   resetFilter(): void {

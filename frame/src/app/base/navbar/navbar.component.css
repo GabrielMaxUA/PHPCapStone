@@ -1,7 +1,6 @@
 nav {
   max-width: calc(100vw - 20px);
   max-height: 30px;
-  margin-top: 25px;
 }
 
 .border {
@@ -54,60 +53,65 @@ a {
 
 /* Media query for smaller screens */
 @media screen and (max-width: 768px) {
+  nav {
+    width: 100%;
+    padding: 0;
+  }
+
   .navbar {
-    width: auto;
     flex-direction: column;
-    padding: 10px;
-    overflow: hidden;
- 
+    width: 100%;
   }
 
-  .navbar a {
-    transform: translateY(-100%);
-    visibility: hidden;
-    height: 0;
+  a {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
     margin: 0;
-    transition: all 0.4s ease-out;
-    position: relative; /* Add this */
+    display: none; /* Hide by default */
   }
 
-  .navbar a.active {
+  /* Only show the currently active link */
+  a.active {
     display: block;
-    margin-bottom: 5px;
-    visibility: visible;
-    height: auto;
-    transform: translateY(0);
+    text-decoration: underline;
+  }
+
+  /* Show gallery link ONLY when in gallery routes */
+  a[routerLink="/nature"].active {
+    display: block; /* Hide by default */
+  }
+  
+  a[routerLink="/gallery"] {
+    display: none; /* Hide by default */
+  }
+  /* Show gallery link only when it's active or when in gallery routes */
+  a[routerLink="/gallery"].active {
+    display: block;
+  }
+
+  /* Show all links when dropdown is open */
+  .navbar.show-dropdown a {
+    display: block;
+    animation: slideDown 0.3s ease forwards;
   }
 
   .navbar.show-dropdown {
-    display: flex;
     background-color: #d8d0a3b0;
   }
 
-  .navbar.show-dropdown a {
-    opacity: 1;
-    visibility: visible;
-    height: auto;
-    margin: 5px 0;
-    transform: translateY(0);
-    transition: all 0.4s ease-in-out;
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  /* Keep your transition delays for opening */
-  .navbar.show-dropdown a:nth-child(2) { transition-delay: 0.05s; }
-  .navbar.show-dropdown a:nth-child(3) { transition-delay: 0.1s; }
-  .navbar.show-dropdown a:nth-child(4) { transition-delay: 0.15s; }
-  .navbar.show-dropdown a:nth-child(5) { transition-delay: 0.2s; }
-  .navbar.show-dropdown a:nth-child(6) { transition-delay: 0.25s; }
-  .navbar.show-dropdown a:nth-child(7) { transition-delay: 0.3s; }
-
-  /* Update closing transitions */
-  .navbar:not(.show-dropdown) a:not(.active) {
-    position: absolute;
-    opacity: 0;
-    transform: translateY(-40px); /* Use fixed pixel value */
-    transition: all 0.4s ease-out;
-    margin: 5px 0;
-    pointer-events: none;
+  .cartLink {
+    justify-content: center;
   }
 }

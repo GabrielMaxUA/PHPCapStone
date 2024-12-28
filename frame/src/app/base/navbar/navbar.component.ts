@@ -36,6 +36,13 @@ export class NavBarComponent implements OnInit {
     this.userService.user$.subscribe((user) => {this.user = user;});
   }
   
+  isActive(route: string): boolean {
+    return this.router.url.startsWith(route);
+  }
+
+  isGalleryRoute(): boolean {
+    return this.router.url.includes('gallery');
+  }
 
   toggleDropdown(event: Event) {
     if (window.innerWidth <= 768) {

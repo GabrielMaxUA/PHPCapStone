@@ -10,7 +10,6 @@ import { ArchitectureComponent } from './gallery/architechture/architecture.comp
 import { StagedComponent } from './gallery/staged/staged.component';
 import { CustomersComponent } from './customers/customers.component';
 import { CartComponent } from './cart/cart/cart.component';
-import { AuthGuard } from './service/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/about', pathMatch: 'full' },
@@ -22,8 +21,8 @@ const routes: Routes = [
   { path: 'gallery', component: GalleryComponent},
   { path: 'nature', component: NatureComponent},
   { path: 'architecture', component: ArchitectureComponent},
-  { path: 'staged', component: StagedComponent, canActivate: [AuthGuard]},
-  { path: 'logout', component: LogoutComponent, canActivate: [AuthGuard]}
+  { path: 'staged', component: StagedComponent},
+  { path: 'logout', component: LogoutComponent}
 
 ];
 

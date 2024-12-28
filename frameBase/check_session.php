@@ -14,7 +14,7 @@ error_log('Cookie data: ' . print_r($_COOKIE, true));
 // Check both cookie and session variables
 if (isset($_COOKIE['authToken']) && isset($_SESSION['userType'])) {
     // Check if session hasn't expired (30 minutes = 1800 seconds)
-    if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity'] > 100)) {
+    if (!isset($_SESSION['last_activity']) || (time() - $_SESSION['last_activity'] > 1800)) {
         // Session expired
         session_unset();
         session_destroy();
