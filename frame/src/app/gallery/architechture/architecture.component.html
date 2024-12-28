@@ -47,17 +47,22 @@
 </div>
 
  <!-- Nature user Section -->
-  <div id="Gallery">
-    <div *ngFor="let item of galleryItems; let i = index" class="gallery_option text-center">
-      <app-card 
-        [item]="item"
-        [isAdmin]="user?.type === 'admin'"
-        galleryType="architecture"
-        (imageClick)="openImageOverlay(i)"
-        (priceChange)="submitPriceChange($event.pictureID, $event.price)"
-        (deleteImage)="delete(+$event)"
-        (cartAdd)="addToCart(+$event)">
-      </app-card>
+  <div class="gallery-container">   
+    <div *ngIf="galleryItems.length === 0" class="empty-cart">
+      <p>Gallery is empty</p>
+    </div>
+    <div *ngIf="galleryItems.length > 0" id="Gallery">
+      <div *ngFor="let item of galleryItems; let i = index" class=" text-center">
+        <app-card 
+          [item]="item"
+          [isAdmin]="user?.type === 'admin'"
+          galleryType="architecture"
+          (imageClick)="openImageOverlay(i)"
+          (priceChange)="submitPriceChange($event.pictureID, $event.price)"
+          (deleteImage)="delete(+$event)"
+          (cartAdd)="addToCart(+$event)">
+        </app-card>
+      </div>
     </div>
   </div>
 

@@ -28,61 +28,84 @@ if ($method === 'GET') {
       $query = "SELECT natureLow, price, pictureID FROM nature_gallery";
       $result = mysqli_query($con, $query);
 
-      if ($result && mysqli_num_rows($result) > 0) {
-        $response = [];
-        while($row = mysqli_fetch_assoc($result)){
-          $response[] = [
-              'pictureID'=>$row['pictureID'],
-              'nGalleryImage' => $row['natureLow'],
-              'price' => $row['price'],
-          ];
+      if ($result) {
+        if (mysqli_num_rows($result) > 0) {
+            $response = [];
+            while($row = mysqli_fetch_assoc($result)){
+                $response[] = [
+                    'pictureID' => $row['pictureID'],
+                    'nGalleryImage' => $row['natureLow'],
+                    'price' => $row['price'],
+                ];
+            }
+            http_response_code(200);
+            echo json_encode($response);
+        } else {
+            // Table is empty - return empty array with 200 status
+            http_response_code(200);
+            echo json_encode([]);
         }
-          echo json_encode($response);
-      } else {
-          http_response_code(404);
-          echo json_encode(['message' => 'Data not found']);
-      }
+    } else {
+        // Only send error response if there's an actual database error
+        http_response_code(500);
+        echo json_encode(['message' => 'Database error: ' . mysqli_error($con)]);
+    }
   }
   elseif ($action === 'architectureGallery') {
     // Fetch data from the main_gallery table
     $query = "SELECT archLow, price, pictureID FROM architecture_gallery";
     $result = mysqli_query($con, $query);
 
-    if ($result && mysqli_num_rows($result) > 0) {
-      $response = [];
-      while($row = mysqli_fetch_assoc($result)){
-        $response[] = [
-            'pictureID'=>$row['pictureID'],
-            'aGalleryImage' => $row['archLow'],
-            'price' => $row['price'],
-        ];
-      }
-        echo json_encode($response);
+    if ($result) {
+        if (mysqli_num_rows($result) > 0) {
+            $response = [];
+            while($row = mysqli_fetch_assoc($result)){
+                $response[] = [
+                    'pictureID' => $row['pictureID'],
+                    'aGalleryImage' => $row['archLow'],
+                    'price' => $row['price'],
+                ];
+            }
+            http_response_code(200);
+            echo json_encode($response);
+        } else {
+            // Table is empty - return empty array with 200 status
+            http_response_code(200);
+            echo json_encode([]);
+        }
     } else {
-        http_response_code(404);
-        echo json_encode(['message' => 'Data not found']);
+        // Only send error response if there's an actual database error
+        http_response_code(500);
+        echo json_encode(['message' => 'Database error: ' . mysqli_error($con)]);
     }
-  }
+}
   elseif ($action === 'stagedGallery') {
     // Fetch data from the main_gallery table
     $query = "SELECT stagedLow, price, pictureID, type FROM staged_gallery";
     $result = mysqli_query($con, $query);
 
-    if ($result && mysqli_num_rows($result) > 0) {
-      $response = [];
-      while($row = mysqli_fetch_assoc($result)){
-        $response[] = [
-            'pictureID'=>$row['pictureID'],
-            'sGalleryImage' => $row['stagedLow'],
-            'price' => $row['price'],
-            'type' => $row['type']
-        ];
+    if ($result) {
+      if (mysqli_num_rows($result) > 0) {
+          $response = [];
+          while($row = mysqli_fetch_assoc($result)){
+              $response[] = [
+                  'pictureID' => $row['pictureID'],
+                  'sGalleryImage' => $row['stagedLow'],
+                  'price' => $row['price'],
+              ];
+          }
+          http_response_code(200);
+          echo json_encode($response);
+      } else {
+          // Table is empty - return empty array with 200 status
+          http_response_code(200);
+          echo json_encode([]);
       }
-        echo json_encode($response);
-    } else {
-        http_response_code(404);
-        echo json_encode(['message' => 'Data not found']);
-    }
+  } else {
+      // Only send error response if there's an actual database error
+      http_response_code(500);
+      echo json_encode(['message' => 'Database error: ' . mysqli_error($con)]);
+  }
   }
 }//GET if 
   elseif ($method === 'POST') {

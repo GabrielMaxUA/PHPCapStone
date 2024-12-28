@@ -3,8 +3,18 @@
     border-radius: 8px;
     margin: 0.5rem ;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1) , 0 -2px 4px ;
-    background: none;
+    max-width: 250px;
+    height: fit-content;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 8px;
+    background: white;
   }
+  
   .img{
     max-width: 90%;
     height: auto;
@@ -38,4 +48,10 @@
 
   #pictureID{
     display: none;
+   }
+
+   @media screen and (max-width: 768px) {
+    .card{
+      max-width: 350px;
+    }
    }

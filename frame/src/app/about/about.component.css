@@ -1,8 +1,10 @@
 .about {
   display: flex;
   align-items: center;
-  margin: 60px;
+  margin-top: 60px;
+  top: 10;
 }
+
 .about img {
   width: 400px;
   margin-right: 20px;
@@ -54,4 +56,47 @@ textarea{
 .filePick{
   margin: 30px;
   text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .flex-media{
+    display: inline-block;
+  }
+
+  .about{
+    margin-top: 0;
+  }
+
+  section{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .bio{
+    margin-top: 30px;
+    width: 80%;
+  }
+
+  .admin{
+    display: block;
+    float: left;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .filePick{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  input{
+    width: 60%;
+    margin-bottom: 20px;
+  }
+
+  button{
+    width: 90px;
+  }
+
 }

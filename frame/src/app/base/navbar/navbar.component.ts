@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
 import { User } from '../../Models/user';
 import { Service } from '../../service/service';
@@ -16,6 +16,7 @@ import { DialogComponent } from '../../dialog/dialog.component';
 export class NavBarComponent implements OnInit {
   user: User | null = null;
   cartCount: number = 1;
+  isDropdownOpen = false;
 
   constructor(
     private dialog: MatDialog,
@@ -33,6 +34,27 @@ export class NavBarComponent implements OnInit {
 
     this.cartCount = this.service.getCartCount();
     this.userService.user$.subscribe((user) => {this.user = user;});
+  }
+  
+
+  toggleDropdown(event: Event) {
+    if (window.innerWidth <= 768) {
+      event.preventDefault();
+      this.isDropdownOpen = !this.isDropdownOpen;
+      console.log('Dropdown state:', this.isDropdownOpen);
+    }
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const navbar = document.querySelector('.navbar');
+    if (navbar && !navbar.contains(event.target as Node)) {
+      this.closeDropdown();
+    }
   }
   
   logout(): void {

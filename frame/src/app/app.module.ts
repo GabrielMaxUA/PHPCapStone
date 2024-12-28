@@ -8,9 +8,8 @@ import { AboutComponent } from './about/about.component';
 import { FooterComponent } from './base/footer/footer.component';
 import { HeaderComponent } from './base/header/header.component';
 import { LogoutComponent } from './logout/logout.component';
-import { AdminComponent } from './admin/admin.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ListComponent } from './list/list.component';
 import { NavBarComponent } from './base/navbar/navbar.component';
 import { GalleryComponent } from './gallery/gallery.component';
@@ -26,6 +25,7 @@ import { DialogOkComponent } from './dialog-ok/dialog-ok.component';
 import { ArchitectureComponent } from './gallery/architechture/architecture.component';
 import { CardComponent } from './gallery/imageCard/card/card.component';
 import { CartComponent } from './cart/cart/cart.component';
+import { AuthInterceptor } from './service/auth.interceptor';
 
 
 @NgModule({
@@ -35,7 +35,6 @@ import { CartComponent } from './cart/cart/cart.component';
     NavBarComponent,
     FooterComponent,
     AboutComponent,
-    AdminComponent,
     RegistrationComponent,
     LogoutComponent,
     LoginComponent,
@@ -60,7 +59,12 @@ import { CartComponent } from './cart/cart/cart.component';
     MatButtonModule
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

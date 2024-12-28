@@ -26,7 +26,7 @@
         <td>{{ item.created_at }}</td>
         <td>{{ item.dob }}</td>
         <td>{{ item.type }}</td>
-        <td *ngIf="item.type === 'customer'">
+        <td *ngIf="item.type === 'customer'" class ='d-flex flex-row justify-content-start'>
           <label>
             <input
               type="radio"

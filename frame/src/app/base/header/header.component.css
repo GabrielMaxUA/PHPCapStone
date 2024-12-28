@@ -3,6 +3,12 @@ header {
   display: flex;
   justify-content: center;
 }
+:host {
+  display: block;
+  height: 12vw;
+  max-height: 100px;
+  min-height: 80px;
+}
 
 .signature{
   height: 12vw;
@@ -27,50 +33,60 @@ header {
 
 .bar {
   width: 40px;
-  height: 2px;
+  height: 3px;
   margin: 6px auto;
   background: #000000;
   border-radius: 1000px;
-  transition: transform 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;  /* Changed to all for smoother transitions */
 }
 
 .menu.active .bar:nth-child(1) {
   transform-origin: left;
   transform: rotate(45deg);
+  width: 42px;
 }
 
 .menu.active .bar:nth-child(2) {
-  margin-left: 100px;
+  opacity: 0;  /* Use opacity instead of width */
+  transform: translateX(20px);  /* Add translation for smoother movement */
+  width: 40px;  /* Keep consistent width */
 }
 
 .menu.active .bar:nth-child(3) {
   transform-origin: left;
   transform: rotate(-45deg);
+  width: 42px;
 }
 
 .menu:not(.active) {
-  margin-right: 8px; 
+  margin-right: 8px;
   position: fixed;
+  height: fit-content;
 }
 
 .menu.active {
-  margin-right: 8px; /* Keep the same margin */
+  margin-right: 8px;
 }
 
-.menu:not(.active) .bar:nth-child(3), .menu:not(.active) .bar:nth-child(1) {
+.menu:not(.active) .bar:nth-child(3),
+.menu:not(.active) .bar:nth-child(1) {
   transform-origin: left;
   transform: rotate(0deg);
-  width: 40px; 
+  width: 40px;
+  height: 3px;
 }
 
 .menu:not(.active) .bar:nth-child(2) {
-  margin-left: 25px; 
+  opacity: 1;  /* Ensure full opacity when visible */
+  transform: translateX(0);  /* Reset translation */
+  width: 40px;
+  height: 3px;
 }
 
 aside {
   position: fixed;  
   right: -130px;
-  width: 65px;
+  width: 45px;
   height: 100vh;
   transition: right 0.4s ease-in-out; 
   z-index: 5;
@@ -78,7 +94,7 @@ aside {
 }
 
 aside.active {
-  right: 8px;
+  right: 20px;
   top: 0;
   z-index: 5;
 }
@@ -103,4 +119,4 @@ aside.active {
   margin-right: 20px;
 }
 
-/* comenting */
+

@@ -17,16 +17,56 @@ export class Service {
   cartItems: CartItem[] =[];
   cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   cartCountSubject = new BehaviorSubject<number>(0);
-  showDialog = false; // Whether the dialog is visible
-  dialogMessage = ''; // Message to display in the dialog
+  showDialog = false;
+  dialogMessage = ''; 
 
   cartItems$ = this.cartItemsSubject.asObservable();
   cartCount$ = this.cartCountSubject.asObservable();
 
+  private heartbeatInterval: any;
+  private readonly HEARTBEAT_INTERVAL = 2 * 60 * 1000;
+
   constructor(private http: HttpClient, private dialog: MatDialog, 
-    private userService: UserService){
-    this.userService.clearUser(); // Clear user data
-    //this.router.navigate(['about']); // Redirect 
+    private userService: UserService, private router: Router) {
+      console.log('Service constructor - checking session'); // Debug log
+      this.checkSession().subscribe({
+        next: (response) => {
+          console.log('Initial session check response:', response); // Debug log
+          if (response?.authenticated) {
+            this.userService.setUser({
+              email: response.email,
+              type: response.userType,
+              status: response.userStatus
+            });
+            this.startHeartbeat();
+          } else {
+            console.log('Not authenticated, clearing user'); // Debug log
+            this.userService.clearUser();
+          }
+        },
+        error: (error) => {
+          console.error('Session check error:', error); // Debug log
+          this.userService.clearUser();
+        }
+      });
+      // this.checkSession().subscribe({
+      //   next: (response) => {
+      //     if (response.authenticated) {
+      //       this.userService.setUser({
+      //         email: response.email, // Make sure this is returned from PHP
+      //         type: response.userType,
+      //         status: response.userStatus
+      //       });
+      //       this.startHeartbeat();
+      //     } else {
+      //       this.userService.clearUser();
+      //     }
+      //   },
+      //   error: () => {
+      //     this.userService.clearUser();
+      //   }
+      // });
+
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       this.cartItems = JSON.parse(savedCart);
@@ -36,7 +76,8 @@ export class Service {
 
   login(data: { email: string; password: string }): Observable<any> {
       const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.baseUrl}/login`, data, {headers}).pipe(
+
+    return this.http.post(`${this.baseUrl}/login`, data, {headers, withCredentials: true }).pipe(
       map((response:any) =>{
         console.log('Login response:', response); // Debugging
         if(response.success){
@@ -45,6 +86,7 @@ export class Service {
             type: response.userType,
             status: response.userStatus
           });
+          this.startHeartbeat();
         }
         return response;
       })
@@ -52,14 +94,30 @@ export class Service {
   }
 
    // Check session status
+  // checkSession(): Observable<any> {
+  //   return this.http.get(`${this.baseUrl}/check_session`, { withCredentials: true });
+  // }
   checkSession(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/check_session`, { withCredentials: true });
+    return this.http.get(`${this.baseUrl}/check_session`, { withCredentials: true })
+      .pipe(
+        map((response: any) => {
+          console.log('Session check response:', response); // Debug log
+          // Ensure we always return an object with authenticated property
+          return {
+            authenticated: response?.authenticated ?? false,
+            userType: response?.userType,
+            userStatus: response?.userStatus,
+            email: response?.email
+          };
+        })
+      );
   }
-  
+
     // Logout service
   logout(): Observable<any> {
+    this.stopHeartbeat(); // Stop the heartbeat
     console.log('Logging out'); // Log before making the HTTP call
-    return this.http.get(`${this.baseUrl}/logout`, { responseType: 'json' });
+    return this.http.get(`${this.baseUrl}/logout`, { withCredentials: true, responseType: 'json' });
   }    
 
   register(user: User) {
@@ -197,15 +255,6 @@ export class Service {
     this.updateCart();
   }
 
-  // updateQuantity(pictureID: number, quantity: number){
-  //   const item = this.cartItems.find(i => i.pictureID === pictureID);
-  //   if(item){
-  //     item.quantity = quantity;
-  //     this.updateCart();
-  //     this.saveCartToStorage();
-  //   }
-  // }
-
   clearCart(){
     this.cartItems = [];
     this.updateCart();
@@ -231,4 +280,31 @@ export class Service {
     return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
   }
 
+  startHeartbeat() {
+    // Clear any existing heartbeat
+    this.stopHeartbeat();
+    console.log('Starting heartbeat');
+    // Start new heartbeat
+    this.heartbeatInterval = setInterval(() => {
+      this.checkSession().subscribe({
+        next: (response) => {
+          if (!response.authenticated) {
+            this.stopHeartbeat();
+            this.router.navigate(['/signin']);
+          }
+        },
+        error: () => {
+          this.stopHeartbeat();
+          this.router.navigate(['/signin']);
+        }
+      });
+    }, this.HEARTBEAT_INTERVAL);
+  }
+
+  stopHeartbeat() {
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+    }
+  }
+  
 }

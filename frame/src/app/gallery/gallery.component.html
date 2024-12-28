@@ -1,6 +1,6 @@
 
-<div id="Gallery" class="m-4 d-flex ">
-  <!-- Nature Section -->
+<div id="Main_Gallery" class="m-4 d-flex ">
+ 
   <div class="gallery_option text-center">
     <div class="p-3"><img [src]="nImageUrl" alt="" *ngIf="nImageUrl"></div>
     
@@ -18,7 +18,7 @@
     <textarea *ngIf="user?.type === 'admin'" class="text-center" [(ngModel)]="nText"></textarea>
   </div>
 
-  <!-- Architecture Section -->
+ 
   <div class="gallery_option">
     <div class="p-3"><img [src]="aImageUrl" alt="" *ngIf="aImageUrl"></div>
 
@@ -45,8 +45,6 @@
     <div *ngIf="user?.type === 'admin'" class="filePick m-2">
       <input type="file" (change)="onFileSelected($event, 's')" />
     </div>
-    <!-- <a *ngIf="user?.status === 'active'"class="text-center p-3" routerLink="/staged">Staged</a>
-    <a *ngIf="user?.status === 'blocked'" class="text-center p-3" (click)="adultWarning()">Staged</a> -->
     <a
       class="text-center p-3" 
       href="#"

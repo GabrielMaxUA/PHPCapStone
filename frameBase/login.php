@@ -1,7 +1,10 @@
 <?php
+
+ini_set('session.cookie_lifetime', 100);
+ini_set('session.gc_maxlifetime', 100);
 session_start();
 
-require 'connection.php';
+require_once 'connection.php';
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -42,6 +45,13 @@ if (isset($postdata) && !empty($postdata)) {
             $token = bin2hex(random_bytes(16)); // Example token generation
             $userType = $user['type'];
             $userStatus = $user['status'];
+
+            // After successful login validation...
+            $_SESSION['userType'] = $userType;
+            $_SESSION['userStatus'] = $userStatus;
+            $_SESSION['email'] = $email;
+            $_SESSION['last_activity'] = time();
+
             setcookie('authToken', $token, [
               'expires' => 0, // Expires when the browser is closed
               'path' => '/',

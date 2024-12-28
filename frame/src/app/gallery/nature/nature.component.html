@@ -1,5 +1,6 @@
 <h1 class="text-center mt-4">Nature</h1>
 <h3 class="text-center">Enjoy the wonders of mother nature </h3>
+
 <!-- admin section-->
 <div *ngIf="user?.type === 'admin'" class="text-center">
   <!-- Form for uploading image and price -->
@@ -44,18 +45,24 @@
     <button [disabled]="form.invalid" type="submit">Upload new product</button>
   </form>
 </div>
+
 <!-- Nature user Section -->
-<div id="Gallery" class="text-center">
-  <div *ngFor="let item of galleryItems; let i = index" class="gallery_option text-center">
-    <app-card 
-    [item]="item"
-    [isAdmin]="user?.type === 'admin'"
-    galleryType="nature"
-    (imageClick)="openImageOverlay(i)"
-    (priceChange)="submitPriceChange($event.pictureID, $event.price)"
-    (deleteImage)="delete(+$event)"
-    (cartAdd)="addToCart(+$event)">
-  </app-card>
+<div class="gallery-container">   
+  <div *ngIf="galleryItems.length === 0" class="empty-cart">
+    <p>Gallery is empty</p>
+  </div>
+  <div *ngIf="galleryItems.length > 0" id="Gallery">
+    <div *ngFor="let item of galleryItems; let i = index" class="text-center">
+      <app-card 
+        [item]="item"
+        [isAdmin]="user?.type === 'admin'"
+        galleryType="nature"
+        (imageClick)="openImageOverlay(i)"
+        (priceChange)="submitPriceChange($event.pictureID, $event.price)"
+        (deleteImage)="delete(+$event)"
+        (cartAdd)="addToCart(+$event)">
+      </app-card>
+    </div>
   </div>
 </div>
 <!-- Image Overlay -->

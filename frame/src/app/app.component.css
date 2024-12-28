@@ -1,0 +1,20 @@
+/* app.component.css */
+.absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12vw;
+  max-height: 100px;
+  min-height: 80px; /* Set a fixed total height for header + navbar */
+  z-index: 100;
+}
+
+/* Style for the router content wrapper */
+.content-wrapper {
+  position: relative;
+  padding-top: 190px;
+  margin: 40px; /* Same as absolute height */
+  min-height: calc(100vh - 80px);
+}
+

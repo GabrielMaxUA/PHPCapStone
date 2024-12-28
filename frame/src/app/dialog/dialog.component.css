@@ -1,32 +1,12 @@
 
-.dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
 .dialog-box {
   padding: 20px;
-  border-radius: 12px;
   width: 300px;
   margin: 0 auto;
   text-align: center;
   color: #333;
 }
 
-.dialog-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
 .buttons{
   margin: 0 auto;
 }
@@ -36,9 +16,11 @@
 }
 
 button {
+  background-color: #dfba15;
+  color: white;
   padding: 10px 20px;
-  border: 1px solid #f44336;
-  border-radius: 4px #f44336;
+  border: 1px solid #e2a919;
+  border-radius: 4px ;
   cursor: pointer;
 }
 
@@ -55,9 +37,10 @@ button:last-child {
 
 ::ng-deep .mat-mdc-dialog-surface {
   color: #333; /* Dark text */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  background-color: #f2c45b;
-  border:5px solid #f29f4b; /* Apply background color globally */
+  border-radius: 8px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25), -4px -4px 10px rgba(0, 0, 0, 0.25);
+  background-color: hsl(42, 50%, 82%);
+  border: 2px solid hsl(42, 62%, 70%);; /* Apply background color globally */
 }
 
 

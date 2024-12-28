@@ -52,7 +52,7 @@ export class GalleryComponent {
     // Subscribe to user changes
     this.loadGalleryData();
     this.userService.user$.subscribe(user => {
-      console.log('User state updated:', user); // Debug log
+      //console.log('User state updated:', user); // Debug log
       this.user = user;
     });
   }

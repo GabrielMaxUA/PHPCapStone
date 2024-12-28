@@ -1,26 +1,24 @@
-
-<section class="about">
-  <div class="text-center">
-    <img [src]="imageUrl" alt="" *ngIf="imageUrl">
-
-    <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
-      <div class="spinner-border text-primary" role="status"></div>
+<div class="flex-media">
+  <section class="about">
+    <div class="text-center">
+      <img [src]="imageUrl" alt="" *ngIf="imageUrl">
+      <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
     </div>
-  </div>
- 
-  <div class="bio" [innerHTML]="bioText"></div>
-</section>
-  
+    <div class="bio" [innerHTML]="bioText"></div>
+  </section>
+
   <!-- Bio Edit -->
-   <div *ngIf="user?.type === 'admin'" class="text-end me-5">
+   <div *ngIf="user?.type === 'admin'" class=" admin text-end me-5">
     <textarea [(ngModel)]="bioText" class="bio"></textarea>
+    <div *ngIf="user?.type === 'admin'" class="filePick">
+      <input type="file" (change)="onFileSelected($event)" />
+    
+      <button *ngIf="user?.type === 'admin'" (click)="submitBio()">Submit</button>
+    </div>
    </div>
 
-  
   <!-- Image Upload -->
-  <div *ngIf="user?.type === 'admin'" class="filePick">
-    <input type="file" (change)="onFileSelected($event)" />
   
-  <button *ngIf="user?.type === 'admin'" (click)="submitBio()">Submit</button>
 </div>
-<!-- </div> -->

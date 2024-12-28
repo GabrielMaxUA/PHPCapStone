@@ -2,14 +2,33 @@
 <nav>
   <div class="border border-black"></div>
 
-  <div class="navbar">
-    <a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">About</a>
-    <a routerLink="/gallery" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Gallery</a>
-    <a class="cartLink" *ngIf="!user || user?.type === 'customer'" routerLink="/cart" routerLinkActive="active">
+  <div class="navbar" 
+  [class.show-dropdown]="isDropdownOpen" 
+  (clickOutside)="closeDropdown()">
+    <a routerLink="/about" 
+      routerLinkActive="active" 
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="toggleDropdown($event)">About
+    </a>
+    <a 
+      routerLink="/gallery" 
+      routerLinkActive="active" 
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="toggleDropdown($event)">Gallery
+    </a>
+    <a 
+      class="cartLink" *ngIf="!user || user?.type === 'customer'" 
+      routerLink="/cart" 
+      routerLinkActive="active"
+      (click)="toggleDropdown($event)">
       Cart
       <span class="counter" *ngIf="cartCount > 0">{{cartCount}}</span>
     </a>
-    <a *ngIf="!user" routerLink="/signin" routerLinkActive="active">Sign in/Register</a>
+    <a 
+      *ngIf="!user" routerLink="/signin" 
+      routerLinkActive="active"
+      (click)="toggleDropdown($event)">SignIn/Register
+    </a>
     <a *ngIf="user?.type === 'admin'" routerLink="/orders" routerLinkActive="active">Orders</a>
     <a *ngIf="user?.type === 'admin'" routerLink="/customers" routerLinkActive="active">Customers</a>
     <a *ngIf="user" class="social" (click)="logout()">Logout</a>

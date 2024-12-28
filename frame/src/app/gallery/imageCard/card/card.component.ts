@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { User } from '../../../Models/user';
 
 @Component({
   selector: 'app-card',
@@ -13,7 +12,7 @@ export class CardComponent {
   @Input() item: any; // You might want to create an interface for this
   @Input() isAdmin: boolean = false;
   @Input() galleryType: 'nature' | 'staged' | 'architecture' = 'nature';
-  
+  selectedImageIndex: number | null = null;
   @Output() imageClick = new EventEmitter<void>();
   @Output() priceChange = new EventEmitter<{pictureID: string, price: number}>();
   @Output() deleteImage = new EventEmitter<string>();
