@@ -49,7 +49,9 @@
 <!-- Nature user Section -->
 <div class="gallery-container">   
   <div *ngIf="galleryItems.length === 0" class="empty-cart">
-    <p>Gallery is empty</p>
+    <h3 class="text-center">
+      There are no images in the gallery. Please check back later.
+    </h3>
   </div>
   <div *ngIf="galleryItems.length > 0" id="Gallery">
     <div *ngFor="let item of galleryItems; let i = index" class="text-center">

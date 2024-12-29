@@ -1,0 +1,19 @@
+
+
+h1{
+  font-family: 'Headin1-font';
+  font-size: 40px;
+  color: #000;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+h3{
+    font-family: 'Heading2-font';
+    font-size: 30px;
+    color: #000;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

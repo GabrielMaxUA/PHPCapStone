@@ -63,7 +63,9 @@
 <!-- Gallery Section -->
 <div class="gallery-container">   
   <div *ngIf="filteredGalleryItems.length === 0" class="empty-cart">
-    <p>No images match the current filter</p>
+    <h3 class="text-center">
+      There are no images in the gallery. Please check back later.
+    </h3>
   </div>
   <div *ngIf="filteredGalleryItems.length > 0" id="Gallery">
     <div *ngFor="let item of filteredGalleryItems; let i = index" class="text-center">

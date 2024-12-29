@@ -27,7 +27,6 @@ import { CardComponent } from './gallery/imageCard/card/card.component';
 import { CartComponent } from './cart/cart/cart.component';
 import { AuthInterceptor } from './service/auth.interceptor';
 
-
 @NgModule({
   declarations: [
     AppComponent,

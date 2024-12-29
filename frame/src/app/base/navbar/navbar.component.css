@@ -1,3 +1,5 @@
+
+
 nav {
   max-width: calc(100vw - 20px);
   max-height: 30px;
@@ -16,6 +18,7 @@ nav {
 }
 
 a {
+  font-family: Heading1-font, 'Arial Narrow', Arial, sans-serif;
   float: left;
   font-size: 1.4em;
   cursor: pointer;
@@ -63,7 +66,7 @@ a {
     width: 100%;
   }
 
-  a {
+  a, .cartLink {
     width: 100%;
     text-align: center;
     padding: 15px;
@@ -77,21 +80,16 @@ a {
     text-decoration: underline;
   }
 
-  /* Show gallery link ONLY when in gallery routes */
-  a[routerLink="/nature"].active {
-    display: block; /* Hide by default */
-  }
-  
-  a[routerLink="/gallery"] {
-    display: none; /* Hide by default */
-  }
-  /* Show gallery link only when it's active or when in gallery routes */
+  a[routerLink="/nature"].active ~ a[routerLink="/gallery"],
+  a[routerLink="/architecture"].active ~ a[routerLink="/gallery"],
+  a[routerLink="/staged"].active ~ a[routerLink="/gallery"],
   a[routerLink="/gallery"].active {
     display: block;
   }
 
   /* Show all links when dropdown is open */
-  .navbar.show-dropdown a {
+ .navbar.show-dropdown a,
+  .navbar.show-dropdown .cartLink {
     display: block;
     animation: slideDown 0.3s ease forwards;
   }

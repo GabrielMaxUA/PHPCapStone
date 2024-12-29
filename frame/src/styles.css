@@ -6,8 +6,17 @@
   padding: 0;
   scroll-behavior: smooth;
 }
+@font-face {
+  font-family: 'Heading1-font';
+  src: url('../src/raleway/Raleway-Regular.ttf') format('truetype');
+}
 
-  body {
+@font-face {
+  font-family: 'Heading2-font';
+  src: url('../src/raleway/Raleway-Light.ttf') format('truetype');
+}
+
+body {
   margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif;
   width: 100vw;
@@ -27,13 +36,11 @@
   font-size: 1.4em;
   display: flex;
   flex-flow: column nowrap;
+  justify-content: center;
   margin: 0 20px;
-  justify-content: space-between;
   text-align: center;
   text-decoration: none;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: #000000;
-
 }
 
 img{
@@ -43,43 +50,50 @@ img{
 }
 
 a{
-  font-size: 2.5rem;
-  font-weight: 800;
   text-decoration: none;
   color: #000000;
-  
 } 
-a:hover{
-color: rgb(255, 0, 0);
-}
 
 .nText, .aText, .sText{
-  width: 25vw;
+  width: 80%;
+  font-family: Heading2-font;
+  line-height: 2rem;
+  word-spacing: 0.2rem;
 }
 
 #Gallery{
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: start;
+  justify-content: center;
   width: 100%;
   padding-left: 80px;
   padding-right: 80px;
+}
+
+textarea{
+  text-align: center;
+  width: 90%;
+  margin: auto;
+  margin-top: 20px;
 }
 
 .gallery_option img{
   max-width: 400px;
   margin: 10px;
   cursor: pointer;
+  text-align: center;
 }
 
 .gallery-container{
   margin-top: 40px;
+  display: flex;
+  flex-flow: row wrap;
 }
 
 input{
-  width: 10vw;
-  margin: fit-content;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .uploadImage{
@@ -198,7 +212,7 @@ button{
   }
 
   #Gallery{
-    flex-flow: column nowrap;
+    flex-flow: row wrap;
     align-items: center;
   }
   .gallery_option{
@@ -209,10 +223,12 @@ button{
     width: 80%;
   }
   .nText, .aText, .sText{
+    font-size: 1.1rem;
     width: 60vw;
   }
   textarea{
     width: 80vw;
+    text-align: center;
   }
 
   input{
