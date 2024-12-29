@@ -76,9 +76,9 @@
     margin: 20px;
   }
   
-  .clear-btn {
+  .clear-btn, .btn {
     padding: 10px 20px;
-    background: #6c757d;
+    background: hsl(0, 0%, 44%);
     color: white;
     border: none;
     border-radius: 4px;
@@ -87,7 +87,7 @@
   
   .checkout-btn {
     padding: 10px 20px;
-    background: #28a745;
+    background: hsl(0, 0%, 2%);
     color: white;
     border: none;
     border-radius: 4px;

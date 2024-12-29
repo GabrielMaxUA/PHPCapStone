@@ -9,18 +9,9 @@ RewriteRule ^ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
-# <IfModule mod_headers.c>
-#  Header always set Access-Control-Allow-Origin http://localhost:4200
-#  Header always set Access-Control-Allow-Credentials: true
-#  Header always set Access-Control-Max-Age "1000"
-#  Header always set Access-Control-Allow-Headers "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding"
-#  Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
-# </IfModule>
-
 <IfModule mod_headers.c>
-    # Set Access-Control-Allow-Origin based on Origin header
-    SetEnvIf Origin "^http://localhost:5173$" AccessControlAllowOrigin=$0
-    SetEnvIf Origin "^http://localhost:4200$" AccessControlAllowOrigin=$0
+    # Update this section with your actual domain
+    SetEnvIf Origin "^https://triosdevelopers.com$" AccessControlAllowOrigin=$0
     Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
     
     Header always set Access-Control-Allow-Credentials "true"

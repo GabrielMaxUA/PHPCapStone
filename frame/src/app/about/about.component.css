@@ -3,14 +3,15 @@
   align-items: center;
   margin-top: 60px;
   top: 10;
+  font-size: 1.4em;
 }
 
 .about img {
   width: 400px;
   margin-right: 20px;
   border-radius: 8px;
-  border: 1px solid #f1cf68;
-  box-shadow: 5px 5px 15px #eeb713;
+  border: 1px solid hsl(0, 4%, 79%);
+  box-shadow: 4px 4px 15px hsl(0, 1%, 72%), -4px -4px 15px hsl(0, 1%, 72%);
 }
 
 .bio {
@@ -90,6 +91,7 @@ textarea{
     flex-direction: column;
     align-items: center;
   }
+  
   input{
     width: 60%;
     margin-bottom: 20px;

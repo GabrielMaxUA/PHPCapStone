@@ -1,12 +1,4 @@
-@font-face {
-    font-family: 'Heading1-font';
-    src: url('../../../../src/raleway/Raleway-Bold.ttf') format('truetype');
-  }
 
-@font-face {
-  font-family: 'Heading2-font';
-  src: url('../../../../src/raleway/Raleway-Regular.ttf') format('truetype');
-}
 
 h1{
   font-family: 'Heading1-font';
@@ -24,4 +16,31 @@ h3{
     text-align: center;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.btn-bw {
+  padding: 10px 20px;
+  background: hsl(0, 0%, 12%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-color{
+  padding: 10px 20px;
+  background: hsl(189, 78%, 51%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-reset {
+  padding: 10px 20px;
+  background: hsl(0, 0%, 44%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }

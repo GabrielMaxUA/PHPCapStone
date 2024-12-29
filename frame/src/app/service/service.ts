@@ -13,7 +13,8 @@ import { MatDialog } from '@angular/material/dialog';
   providedIn: 'root',
 })
 export class Service {
-  baseUrl = 'http://localhost/frameBase';
+  baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frameBase/';
+  // baseUrl = 'http://localhost/frameBase';
   cartItems: CartItem[] =[];
   cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   cartCountSubject = new BehaviorSubject<number>(0);

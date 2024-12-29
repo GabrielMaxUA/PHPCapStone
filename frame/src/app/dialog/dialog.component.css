@@ -1,5 +1,6 @@
 
 .dialog-box {
+  font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
   padding: 20px;
   width: 300px;
   margin: 0 auto;
@@ -7,34 +8,19 @@
   color: #333;
 }
 
-.buttons{
-  margin: 0 auto;
-}
-
 .buttons {
   padding: 20px;
-}
-
-button {
-  background-color: #dfba15;
-  color: white;
-  padding: 10px 20px;
-  border: 1px solid #e2a919;
-  border-radius: 4px ;
-  cursor: pointer;
   margin: 0 auto;
-  margin-bottom: 30px;
-
-
 }
-
 
 button:first-child {
+  font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
   background-color: #ff1201;
   color: white;
 }
 
 button:last-child {
+  font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
   background-color: #ed7a21;
   color: white;
 }
@@ -43,7 +29,7 @@ button:last-child {
   color: #333; /* Dark text */
   border-radius: 8px;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25), -4px -4px 10px rgba(0, 0, 0, 0.25);
-  background-color: hsl(42, 50%, 82%);
+  background-color: hsl(42, 41%, 92%);
   border: 2px solid hsl(42, 62%, 70%);; /* Apply background color globally */
 }
 

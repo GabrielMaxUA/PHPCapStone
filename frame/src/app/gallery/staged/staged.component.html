@@ -4,9 +4,9 @@
 
 <!-- Filter Buttons -->
 <div class="filter-buttons text-center mt-4">
-  <button (click)="filterGallery('black')" class="btn btn-dark m-2">Black & White</button>
-  <button (click)="filterGallery('color')" class="btn btn-primary m-2">Color</button>
-  <button (click)="resetFilter()" class="btn btn-secondary m-2">Reset Filter</button>
+  <button (click)="filterGallery('black')" class="btn-bw m-2">Black & White</button>
+  <button (click)="filterGallery('color')" class="btn-color m-2">Color</button>
+  <button (click)="resetFilter()" class="btn-reset m-2">Reset Filter</button>
 </div>
 
 <div *ngIf="user?.type === 'admin'" class="text-center">

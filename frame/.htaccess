@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /~Max.Gabriel/frame/
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /~Max.Gabriel/frame/index.html [L]

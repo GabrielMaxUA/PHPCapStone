@@ -1,6 +1,6 @@
 
 a{
-    font-size: 2.2em;
+  font-size: 2.2em;
   font-family: Heading1-font, 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -9,3 +9,18 @@ a:hover{
     text-shadow: 5px 5px 10px hsl(0, 0%, 100%), -5px -5px 10px hsl(0, 0%, 100%);
 }
 
+img{
+  cursor: default;
+  border: 1px solid hsl(0, 4%, 79%);
+  box-shadow: 4px 4px 15px hsl(0, 1%, 72%), -4px -4px 15px hsl(0, 1%, 72%);
+}
+
+@media screen and (max-width: 1000px) {
+  a{
+    font-size: 1.7em;
+  }
+
+  .aText{
+    font-size: 1.4em;
+  }
+}

@@ -8,7 +8,7 @@
 }
 @font-face {
   font-family: 'Heading1-font';
-  src: url('../src/raleway/Raleway-Regular.ttf') format('truetype');
+  src: url('../src/raleway/Raleway-SemiBold.ttf') format('truetype');
 }
 
 @font-face {
@@ -18,11 +18,12 @@
 
 body {
   margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Heading2-font', "Helvetica Neue", sans-serif;
   width: 100vw;
   min-height: 100vh; /* Ensures body height covers the full viewport */
-  background: #d8d0a3;
+  background: hsl(51, 73%, 93%);
 }
+
 #Main_Gallery{
   display: flex;
   flex-flow: row wrap;
@@ -101,7 +102,6 @@ input{
   text-align: center;
 }
 
-
 .loading-icon {
   display: flex;
   justify-content: center;
@@ -109,11 +109,12 @@ input{
   height: 100px; 
 }
 
-button{
+button, .btn{
   border-radius: 4px;
-  padding: 5px;
+  padding: 8px;
   border: 1px solid #000000;
   margin: 5px;
+  font-family: Heading1-font, 'Arial Narrow', Arial, sans-serif;
 }
 
 .loading-icon::after {

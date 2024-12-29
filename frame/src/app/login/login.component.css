@@ -24,7 +24,6 @@ form .labs{
 .labs{
   margin: 10px;
   width: 100%;
-  background: #e1dcbd;
 }
 
 label{
@@ -40,30 +39,40 @@ label{
 .labs input{
   float: left;
   width: 250px;
-  background: #fff;
 }
 
 .link{
   margin-top: 40px;
   text-align: center;
-  background: none;
 }
 
-.link h3, a{
-  background: none;
+.link h3{
+  font-family: 'Heading2-font', 'Arial Narrow', Arial, sans-serif;
+}
+
+a{
+  font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
+  font-size: 2em;
+}
+
+a:hover{
+  color: hsl(0, 85%, 60%);
+  text-shadow: 5px 5px 10px hsl(0, 0%, 100%), -5px -5px 10px hsl(0, 0%, 100%);
 }
 
 .btn:disabled{
-  background: #f0d080;
+  background: hsl(0, 0%, 89%);
 }
-.btn{
+
+.btn {
+  padding: 10px 20px;
+  background: hsl(32, 7%, 59%);
+  color: white;
+  border: none;
   border-radius: 4px;
-  border: 1px solid #f0d150;
-  width: 70px;
-  background: #f0d105;
-  padding: 5px;
-  margin: 20px;
+  cursor: pointer;
 }
+
 .error {
   color: red;
   width: 300px;

@@ -4,7 +4,7 @@
   
     <div *ngIf="cartItems.length === 0" class="empty-cart">
       <p>Your cart is empty</p>
-      <a routerLink="/gallery" class="btn btn-primary">Continue Shopping</a>
+      <a routerLink="/gallery" class="btn">Continue Shopping</a>
     </div>
   
     <div *ngIf="cartItems.length > 0" class="cart-items">
@@ -17,15 +17,15 @@
         <div class="item-details">
           <p id="pictureID">{{item.pictureID}}</p>
           <p>Price: {{item.price | currency}}</p>
-          <button class="remove-btn" (click)="removeItem(item.pictureID)">Remove</button>
+          <button class=" btn remove-btn" (click)="removeItem(item.pictureID)">Remove</button>
         </div>
       </div>
     </div>
     <div class="cart-summary text-center">
       <h3>Total: {{total | currency}}</h3>
       <div class="cart-actions">
-        <button class="clear-btn" (click)="clearCart()">Clear Cart</button>
-        <button class="checkout-btn">Checkout</button>
+        <button class="btn clear-btn" (click)="clearCart()">Clear Cart</button>
+        <button class="btn checkout-btn">Checkout</button>
       </div>
     </div>
   </div>
