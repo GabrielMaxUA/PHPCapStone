@@ -77,7 +77,7 @@ export class ArchitectureComponent {
           // Case: Response is an array (e.g., loading all items)
           this.galleryItems = response.map((item: { pictureID: any; aGalleryImage: any; price: any }) => ({
             pictureID: item.pictureID,
-            aGalleryImage: `http://localhost/frameBase/${item.aGalleryImage}`,
+            aGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${item.aGalleryImage}`,
             price: parseFloat(parseFloat(item.price).toFixed(2)),
           }));
         } 
@@ -85,7 +85,7 @@ export class ArchitectureComponent {
           // Case: Response is a single object (e.g., after adding an item)
           const newItem = {
             pictureID: response.pictureID,
-            aGalleryImage: `http://localhost/frameBase/${response.archLow}`, // Use archLow as the main image
+            aGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.archLow}`, // Use archLow as the main image
             price: parseFloat(parseFloat(response.price).toFixed(2)),
           };
           this.galleryItems.push(newItem); // Add the new item to the list
@@ -118,7 +118,7 @@ export class ArchitectureComponent {
           this.galleryItems = response.map((item: { pictureID: any; price: any; aGalleryImage: any }) => ({
             pictureID: item.pictureID,
             price: parseFloat(parseFloat(item.price).toFixed(2)), // Correct: ensures `price` is a number
-            aGalleryImage: `http://localhost/frameBase/${item.aGalleryImage}`,
+            aGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${item.aGalleryImage}`,
           }));
           this.loadGalleryData();
         } else {
@@ -136,10 +136,10 @@ export class ArchitectureComponent {
     this.isUploading = true;
     this.service.getArchitectureContent().subscribe(
       (response) => {
-        this.galleryItems = response.map(item => {
+        this.galleryItems = response.map((item: { aGalleryImage: any; }) => {
           return {
             ...item,
-            aGalleryImage: `http://localhost/frameBase/${item.aGalleryImage}`
+            aGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${item.aGalleryImage}`
           };
         });
         this.isUploading = false;

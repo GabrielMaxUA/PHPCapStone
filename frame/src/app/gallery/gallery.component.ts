@@ -61,11 +61,11 @@ export class GalleryComponent {
     this.service.getMainGalleriesPageContent().subscribe(
       (response) => {
         this.sText = response.sText;
-        this.sImageUrl = `http://localhost/frameBase/${response.sImageMain}`;
+        this.sImageUrl = `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.sImageMain}`;
         this.nText = response.nText;
-        this.nImageUrl = `http://localhost/frameBase/${response.nImageMain}`;
+        this.nImageUrl = `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.nImageMain}`;
         this.aText = response.aText;
-        this.aImageUrl = `http://localhost/frameBase/${response.aImageMain}`;
+        this.aImageUrl = `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.aImageMain}`;
 
         // Pre-fill allChanges with initial data
         this.allChanges.nText = this.nText;

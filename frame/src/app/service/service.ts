@@ -1,7 +1,7 @@
-
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, map, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { User } from '../Models/user';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
@@ -13,260 +13,237 @@ import { MatDialog } from '@angular/material/dialog';
   providedIn: 'root',
 })
 export class Service {
-  // baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frameBase/';
-  baseUrl = 'http://localhost/frameBase';
-  cartItems: CartItem[] =[];
-  cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
-  cartCountSubject = new BehaviorSubject<number>(0);
-  showDialog = false;
-  dialogMessage = ''; 
+  private readonly baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase';
+  private readonly heartbeatInterval = 2 * 60 * 1000; // 2 minutes
+  
+  private cartItems: CartItem[] = [];
+  private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
+  private cartCountSubject = new BehaviorSubject<number>(0);
+  private heartbeatTimer: any;
 
-  cartItems$ = this.cartItemsSubject.asObservable();
-  cartCount$ = this.cartCountSubject.asObservable();
+  // Public observables
+  public readonly cartItems$ = this.cartItemsSubject.asObservable();
+  public readonly cartCount$ = this.cartCountSubject.asObservable();
 
-  private heartbeatInterval: any;
-  private readonly HEARTBEAT_INTERVAL = 2 * 60 * 1000;
-
-  constructor(private http: HttpClient, private dialog: MatDialog, 
-    private userService: UserService, private router: Router) {
-      console.log('Service constructor - checking session'); // Debug log
-
-      this.checkSession().subscribe({
-        next: (response) => {
-          console.log('Initial session check response:', response); // Debug log
-          if (response?.authenticated) {
-            this.userService.setUser({
-              email: response.email,
-              type: response.userType,
-              status: response.userStatus
-            });
-            this.startHeartbeat();
-          } else {
-            console.log('Not authenticated, clearing user'); // Debug log
-            this.userService.clearUser();
-          }
-        },
-        error: (error) => {
-          console.error('Session check error:', error); // Debug log
-          this.userService.clearUser();
-        }
-      });
-
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      this.cartItems = JSON.parse(savedCart);
-      this.updateCart(); // Update subjects with saved data
-    }
+  constructor(
+    private http: HttpClient,
+    private dialog: MatDialog,
+    private userService: UserService,
+    private router: Router
+  ) {
+    this.initializeService();
   }
 
-  login(data: { email: string; password: string }): Observable<any> {
-      const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    return this.http.post(`${this.baseUrl}/login`, data, {headers, withCredentials: true }).pipe(
-      map((response:any) =>{
-        console.log('Login response:', response); // Debugging
-        if(response.success){
+  private initializeService(): void {
+    // Initialize session check
+    this.checkSession().subscribe({
+      next: (response) => {
+        if (response?.authenticated) {
           this.userService.setUser({
-            email: data.email,
+            email: response.email,
+            type: response.userType,
+            status: response.userStatus
+          });
+          this.startHeartbeat();
+        } else {
+          this.userService.clearUser();
+        }
+      },
+      error: () => this.userService.clearUser()
+    });
+
+    // Initialize cart from localStorage
+    this.loadCartFromStorage();
+  }
+
+  // Authentication Methods
+  login(credentials: { email: string; password: string }): Observable<any> {
+    return this.postRequest('login.php', credentials, false, true).pipe(
+      tap((response: any) => {
+        if (response.success) {
+          this.userService.setUser({
+            email: credentials.email,
             type: response.userType,
             status: response.userStatus
           });
           this.startHeartbeat();
         }
-        return response;
+      })
+    );
+  }
+
+  logout(): Observable<any> {
+    return this.postRequest('logout.php', {}, false, true).pipe(
+      tap(() => {
+        this.stopHeartbeat();
+        this.userService.clearUser();
       })
     );
   }
 
   checkSession(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/check_session`, { withCredentials: true })
-      .pipe(
-        map((response: any) => {
-          console.log('Session check response:', response); // Debug log
-          // Ensure we always return an object with authenticated property
-          return {
-            authenticated: response?.authenticated ?? false,
-            userType: response?.userType,
-            userStatus: response?.userStatus,
-            email: response?.email
-          };
-        })
-      );
+    return this.getRequest('check_session.php', true);
   }
 
-    // Logout service
-  logout(): Observable<any> {
-    this.stopHeartbeat(); // Stop the heartbeat
-    console.log('Logging out'); // Log before making the HTTP call
-    return this.http.get(`${this.baseUrl}/logout`, { withCredentials: true, responseType: 'json' });
-  }    
-
-  register(user: User) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<User>(`${this.baseUrl}/register`, user, { headers });
+  register(user: User): Observable<any> {
+    return this.postRequest('register.php', user);
   }
-  
 
-  getCustomers(){
-    return this.http.get(`${this.baseUrl}/list`).pipe(
-      map((response:any) => {
-        return response['data'];
-      })
+  // User Management Methods
+  getCustomers(): Observable<any> {
+    return this.getRequest<{ data: any }>('list.php').pipe(
+      map(response => response.data)
     );
   }
 
   updateUserStatus(customerID: number, status: string): Observable<any> {
-    const payload = {
-      data: {
-        customerID: customerID,
-        status: status,
-      },
-    };
-    return this.postRequest(`cEdit`, payload, true);
+    return this.postRequest('cEdit.php', {
+      data: { customerID, status }
+    });
   }
 
-  // General method to handle GET requests
-  getRequest<T>(endpoint: string): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}/${endpoint}`);
+  // Gallery Management Methods
+  getMainGalleriesPageContent(): Observable<any> {
+    return this.getRequest('uploadData.php?action=mainGallery');
   }
-
-  deleteRequest<T>(endpoint: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${endpoint}`);
-  }
-  
-  // General method to handle POST requests
-  postRequest<T>(endpoint: string, payload: any, isFormData = false): Observable<T> {
-    let headers = new HttpHeaders();
-    if (!isFormData) {
-      headers = headers.set('Content-Type', 'application/json');
-    }
-    return this.http.post<T>(`${this.baseUrl}/${endpoint}`, payload, { headers });
-  }
-
-  // GET: Retrieve data for the Main Gallery
-  getMainGalleriesPageContent(): Observable<{
-    sText: string;
-    sImageMain: string;
-    nText: string;
-    nImageMain: string;
-    aText: string;
-    aImageMain: string;
-  }> {
-    return this.getRequest<{ 
-      sText: string; 
-      sImageMain: string; 
-      nText: string; 
-      nImageMain: string; 
-      aText: string; 
-      aImageMain: string 
-    }>('uploadData?action=mainGallery');
-  }//getgallery
 
   submitMainGalleryChanges(formData: FormData): Observable<any> {
-    return this.postRequest('uploadData?action=mainGallery', formData, true);
+    return this.postRequest('uploadData.php?action=mainGallery', formData, true);
+  }
+
+  getNatureContent(): Observable<any> {
+    return this.getRequest('galleriesData.php?action=natureGallery');
+  }
+
+  getArchitectureContent(): Observable<any> {
+    return this.getRequest('galleriesData.php?action=architectureGallery');
+  }
+
+  getStagedContent(): Observable<any> {
+    return this.getRequest('galleriesData.php?action=stagedGallery');
   }
 
   submitGalleriesData(formData: FormData, action: string): Observable<any> {
-    return this.postRequest(`galleriesData?action=${action}`, formData, true);
-  }  
+    return this.postRequest(`galleriesData.php?action=${action}`, formData, true);
+  }
 
   submitPriceChange(formData: FormData, action: string): Observable<any> {
-    return this.postRequest(`editGalleriesData?action=${action}`, formData, true);
-  } 
-
-
-  getNatureContent(): Observable<{pictureID: number, nGalleryImage: string; price: number }[]> {
-    return this.getRequest<{pictureID: number, nGalleryImage: string; price: number }[]>('galleriesData?action=natureGallery');
-  }
-
-  getStagedContent(): Observable<{pictureID: number, sGalleryImage: string; price: number, type: string }[]> {
-    return this.getRequest<{pictureID: number, sGalleryImage: string; price: number, type: string}[]>('galleriesData?action=stagedGallery');
-  }
-
-  getArchitectureContent(): Observable<{pictureID: number, aGalleryImage: string; price: number }[]> {
-    return this.getRequest<{pictureID: number, aGalleryImage: string; price: number }[]>('galleriesData?action=architectureGallery');
-  }
-  // GET: Retrieve bio and image for About Page
-  getBio(): Observable<{ bioText: string; mainImage: string }> {
-    return this.getRequest<{ bioText: string; mainImage: string }>('uploadData?action=aboutPage');
-  }
-
-  // POST: Save bio text for About Page
-  saveBio(bio: string): Observable<any> {
-    const payload = { bio };
-    return this.postRequest('uploadData?action=updateAboutPage', payload);
-  }
-
-  // POST: Upload main image for About Page
-  uploadMainImage(file: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('image', file);
-    return this.postRequest('uploadData?action=updateAboutPage', formData, true);
+    return this.postRequest(`editGalleriesData.php?action=${action}`, formData, true);
   }
 
   deleteImage(pictureID: number, action: string): Observable<any> {
-    console.log('passing to server:', pictureID, action);
-    return this.deleteRequest(`deleteImage?pictureID=${pictureID}&action=${action}`);
-}
-
-  addToCart(item: CartItem){
-    console.log("Adding item to the cart: ", item);
-    const existingItem = this.cartItems.find( i => i.pictureID === item.pictureID);
-
-    if (existingItem){
-      const message =
-        'The item is already in your cart';
-      const dialogRef = this.dialog.open(DialogOkComponent, {
-        width: '400px',
-        data: { message: message } // Pass the message dynamically
-      });}
-    else{
-      this.cartItems.push({...item, quantity: 1});
-    }
-
-    this.updateCart();
-    this.saveCartToStorage(); // Save to localStorage
+    return this.deleteRequest(`deleteImage.php?pictureID=${pictureID}&action=${action}`);
   }
 
+  // About Page Methods
+  getBio(): Observable<any> {
+    return this.getRequest('bio.php?action=aboutPage');
+  }
 
-  removeFromCart(pictureID: number){
+  saveBio(bio: string): Observable<any> {
+    return this.postRequest('uploadData.php?action=updateAboutPage', { bio });
+  }
+
+  uploadMainImage(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.postRequest('uploadData.php?action=updateAboutPage', formData, true);
+  }
+
+  // Cart Management Methods
+  addToCart(item: CartItem): void {
+    const existingItem = this.cartItems.find(i => i.pictureID === item.pictureID);
+    
+    if (existingItem) {
+      this.dialog.open(DialogOkComponent, {
+        width: '400px',
+        data: { message: 'The item is already in your cart' }
+      });
+    } else {
+      this.cartItems.push({ ...item, quantity: 1 });
+      this.updateCart();
+      this.saveCartToStorage();
+    }
+  }
+
+  removeFromCart(pictureID: number): void {
     this.cartItems = this.cartItems.filter(item => item.pictureID !== pictureID);
     this.updateCart();
+    this.saveCartToStorage();
   }
 
-  clearCart(){
+  clearCart(): void {
     this.cartItems = [];
     this.updateCart();
     this.saveCartToStorage();
   }
 
-  private updateCart(){
-    console.log('Updating cart. Items:', this.cartItems); // Debug log
-    this.cartItemsSubject.next(this.cartItems);
-    const totalItems = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    this.cartCountSubject.next(totalItems);
+  getCartItems(): CartItem[] {
+    return [...this.cartItems];
   }
 
-  private saveCartToStorage() {
-    localStorage.setItem('cart', JSON.stringify(this.cartItems));
-  }
-
-  getCartItems(){
-    return this.cartItems;
-  }
-
-  getCartCount(){
+  getCartCount(): number {
     return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
   }
 
-  startHeartbeat() {
-    // Clear any existing heartbeat
+  // Private Helper Methods
+  private getRequest<T>(endpoint: string, withCredentials = false): Observable<T> {
+    return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { withCredentials })
+      .pipe(catchError(this.handleError));
+  }
+
+  private postRequest<T>(
+    endpoint: string, 
+    data: any, 
+    isFormData = false, 
+    withCredentials = false
+  ): Observable<T> {
+    const headers = new HttpHeaders(
+      isFormData ? {} : { 'Content-Type': 'application/json' }
+    );
+    return this.http.post<T>(
+      `${this.baseUrl}/${endpoint}`, 
+      data, 
+      { headers, withCredentials }
+    ).pipe(catchError(this.handleError));
+  }
+
+  private deleteRequest<T>(endpoint: string): Observable<T> {
+    return this.http.delete<T>(`${this.baseUrl}/${endpoint}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An error occurred';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
+  }
+
+  private updateCart(): void {
+    this.cartItemsSubject.next([...this.cartItems]);
+    this.cartCountSubject.next(this.getCartCount());
+  }
+
+  private saveCartToStorage(): void {
+    localStorage.setItem('cart', JSON.stringify(this.cartItems));
+  }
+
+  private loadCartFromStorage(): void {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      this.cartItems = JSON.parse(savedCart);
+      this.updateCart();
+    }
+  }
+
+  private startHeartbeat(): void {
     this.stopHeartbeat();
-    console.log('Starting heartbeat');
-    // Start new heartbeat
-    this.heartbeatInterval = setInterval(() => {
+    this.heartbeatTimer = setInterval(() => {
       this.checkSession().subscribe({
         next: (response) => {
           if (!response.authenticated) {
@@ -279,13 +256,13 @@ export class Service {
           this.router.navigate(['/signin']);
         }
       });
-    }, this.HEARTBEAT_INTERVAL);
+    }, this.heartbeatInterval);
   }
 
-  stopHeartbeat() {
-    if (this.heartbeatInterval) {
-      clearInterval(this.heartbeatInterval);
+  public stopHeartbeat(): void {
+    if (this.heartbeatTimer) {
+      clearInterval(this.heartbeatTimer);
+      this.heartbeatTimer = null;
     }
   }
-  
 }

@@ -83,7 +83,7 @@ export class StagedComponent {
         if (Array.isArray(response)) {
           this.galleryItems = response.map((item) => ({
             pictureID: item.pictureID,
-            sGalleryImage: `http://localhost/frameBase/${item.sGalleryImage}`,
+            sGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${item.sGalleryImage}`,
             price: parseFloat(parseFloat(item.price).toFixed(2)),
             type: item.type
           }));
@@ -91,7 +91,7 @@ export class StagedComponent {
         } else if (response.pictureID && response.stagedLow && response.price && response.type) {
           const newItem = {
             pictureID: response.pictureID,
-            sGalleryImage: `http://localhost/frameBase/${response.stagedLow}`,
+            sGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.stagedLow}`,
             price: parseFloat(parseFloat(response.price).toFixed(2)),
             type: response.type
           };
@@ -148,7 +148,7 @@ export class StagedComponent {
             this.galleryItems = response.map((item: { pictureID: any; price: any; sGalleryImage: any, type: any}) => ({
               pictureID: item.pictureID,
               price: parseFloat(parseFloat(item.price).toFixed(2)), // Correct: ensures `price` is a number
-              sGalleryImage: `http://localhost/frameBase/${item.sGalleryImage}`,
+              sGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${item.sGalleryImage}`,
               type: item.type
             }));
             this.loadGalleryData();
@@ -169,10 +169,10 @@ export class StagedComponent {
       this.service.getStagedContent().subscribe(
         (response) => {
           console.log('Raw response:', response);
-          this.galleryItems = response.map(item => {
+          this.galleryItems = response.map((item: { sGalleryImage: any; }) => {
             return {
               ...item,
-              sGalleryImage: `http://localhost/frameBase/${item.sGalleryImage}`
+              sGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${item.sGalleryImage}`
             };
           });
           this.isUploading = false;

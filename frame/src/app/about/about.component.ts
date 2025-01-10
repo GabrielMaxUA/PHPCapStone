@@ -63,7 +63,7 @@ export class AboutComponent implements OnInit {
     this.service.getBio().subscribe(
       (response)=>{
         this.bioText = response.bioText,
-        this.imageUrl = `http://localhost/frameBase/${response.mainImage}`
+        this.imageUrl = `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.mainImage}`
       },
       (error: any) => {
         console.error('Error getting data:', error);

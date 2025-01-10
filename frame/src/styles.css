@@ -8,12 +8,12 @@
 }
 @font-face {
   font-family: 'Heading1-font';
-  src: url('../src/raleway/Raleway-SemiBold.ttf') format('truetype');
+  src: url('../public/raleway/Raleway-SemiBold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Heading2-font';
-  src: url('../src/raleway/Raleway-Light.ttf') format('truetype');
+  src: url('../public/raleway/Raleway-Light.ttf') format('truetype');
 }
 
 body {

@@ -1,6 +1,33 @@
-RewriteEngine On
-RewriteBase /~Max.Gabriel/frame/
-RewriteRule ^index\.html$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /~Max.Gabriel/frame/index.html [L]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # If an existing asset or directory is requested, serve it
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Handle Angular routes - redirect everything else to index.html
+    RewriteRule ^ index.html [L]
+
+    # Force HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Set MIME types properly
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType application/json .json
+    AddType text/css .css
+    AddType text/html .html
+</IfModule>
+
+# Headers for JavaScript modules
+<FilesMatch "\.(js|mjs)$">
+    Header set Content-Type "application/javascript"
+</FilesMatch>
+
+# CORS Headers
+Header add Access-Control-Allow-Origin "*"
+Header add Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+Header add Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"

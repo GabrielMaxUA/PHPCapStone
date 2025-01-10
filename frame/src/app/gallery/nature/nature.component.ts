@@ -76,7 +76,7 @@ export class NatureComponent {
           // Case: Response is an array (e.g., loading all items)
           this.galleryItems = response.map((item: { pictureID: any; nGalleryImage: any; price: any }) => ({
             pictureID: item.pictureID,
-            nGalleryImage: `http://localhost/frameBase/${item.nGalleryImage}`,
+            nGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${item.nGalleryImage}`,
             price: parseFloat(parseFloat(item.price).toFixed(2)),
           }));
         } 
@@ -84,7 +84,7 @@ export class NatureComponent {
         // Case: Response is a single object (e.g., after adding an item)
         const newItem = {
           pictureID: response.pictureID,
-          nGalleryImage: `http://localhost/frameBase/${response.natureLow}`, // Use archLow as the main image
+          nGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.natureLow}`, // Use archLow as the main image
           price: parseFloat(parseFloat(response.price).toFixed(2)),
         };
         this.galleryItems.push(newItem); // Add the new item to the list
@@ -115,7 +115,7 @@ export class NatureComponent {
           this.galleryItems = response.map((item: { pictureID: any; price: any; nGalleryImage: any }) => ({
             pictureID: item.pictureID,
             price: parseFloat(parseFloat(item.price).toFixed(2)), // Correct: ensures `price` is a number
-            nGalleryImage: `http://localhost/frameBase/${item.nGalleryImage}`,
+            nGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${item.nGalleryImage}`,
           }));
           this.loadGalleryData();
         } else {
@@ -133,10 +133,10 @@ export class NatureComponent {
     this.isUploading = true;
     this.service.getNatureContent().subscribe(
       (response) => {
-        this.galleryItems = response.map(item => {
+        this.galleryItems = response.map((item: { nGalleryImage: any; })=> {
           return {
             ...item,
-            nGalleryImage: `http://localhost/frameBase/${item.nGalleryImage}`
+            nGalleryImage: `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${item.nGalleryImage}`
           };
         });
         this.isUploading = false;

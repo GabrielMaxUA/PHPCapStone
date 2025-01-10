@@ -25,7 +25,7 @@ if ($method === 'GET') {
         $row = mysqli_fetch_assoc($result);
         echo json_encode([
             'bioText' => $row['bioText'],
-            'mainImage' => $row['mainImage']
+            'mainImage' =>  $row['mainImage']
         ]);
     } else {
         http_response_code(404);
@@ -83,7 +83,7 @@ if ($method === 'GET') {
             if (mysqli_query($con, $updateQuery)) {
                 echo json_encode([
                     'message' => 'Image uploaded successfully',
-                    'imageUrl' => $targetFilePath
+                    'imageUrl' =>  $targetFilePath
                 ]);
             } else {
                 error_log("Database error: " . mysqli_error($con));
