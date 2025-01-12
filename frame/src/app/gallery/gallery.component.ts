@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { User } from '../Models/user';
+import { User } from '../Models/interfaces';
 import { Service } from '../service/service';
 import { UserService } from '../service/user.service';
 import { DialogOkComponent } from '../dialog-ok/dialog-ok.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-gallery',
@@ -25,7 +25,8 @@ export class GalleryComponent {
   sImageUrl: string = '';
   nImageUrl: string = '';
   aImageUrl: string = '';
- 
+  baseUrl = 'http://localhost/frameBase'; // Add your base URL here
+  //baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; // Add your base URL here
   nText: string = '';
   sText: string = '';
   aText: string = '';
@@ -45,8 +46,9 @@ export class GalleryComponent {
     sText: '',
     sFile: null,
   };
-
-  constructor(private userService: UserService, private service: Service, private dialog: MatDialog,  private router: Router) {}
+  isChildRouteActive = false;
+  constructor(private userService: UserService, private service: Service, private dialog: MatDialog, 
+     private router: Router,  private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     // Subscribe to user changes
@@ -55,17 +57,22 @@ export class GalleryComponent {
       //console.log('User state updated:', user); // Debug log
       this.user = user;
     });
+
+    this.router.events.subscribe(() => {
+      const child = this.activatedRoute.firstChild;
+      this.isChildRouteActive = !!child; // True if a child route is active
+    });
   }
 
   loadGalleryData(): void {
     this.service.getMainGalleriesPageContent().subscribe(
       (response) => {
         this.sText = response.sText;
-        this.sImageUrl = `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.sImageMain}`;
+        this.sImageUrl = `${this.baseUrl}/${response.sImageMain}`;
         this.nText = response.nText;
-        this.nImageUrl = `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.nImageMain}`;
+        this.nImageUrl = `${this.baseUrl}/${response.nImageMain}`;
         this.aText = response.aText;
-        this.aImageUrl = `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.aImageMain}`;
+        this.aImageUrl = `${this.baseUrl}/${response.aImageMain}`;
 
         // Pre-fill allChanges with initial data
         this.allChanges.nText = this.nText;
@@ -151,12 +158,13 @@ export class GalleryComponent {
   
 
   handleLinkClick(event: MouseEvent): void {
+    event.preventDefault();
+
     this.userService.user$.subscribe((user) => {
       this.user = user; // Update the local `user` property whenever the user changes
       console.log('User updated in GalleryComponent:', user);
     });
-    // Prevent default link behavior
-    event.preventDefault();
+    
     // Log user details for debugging
     console.log('User:', this.user);
   
@@ -170,7 +178,7 @@ export class GalleryComponent {
     } 
     // Active users
     else if (this.user.status === 'active') {
-      this.router.navigate(['/staged']); // Navigate programmatically
+      this.router.navigate(['/gallery/staged']); // Navigate programmatically
     } 
     // Fallback for unexpected cases
     else {

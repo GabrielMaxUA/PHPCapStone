@@ -1,104 +1,249 @@
-.about {
-  display: flex;
-  align-items: center;
-  margin-top: 60px;
-  top: 10;
-  font-size: 1.4em;
+.flex-media{
+  width: fit-content;
 }
 
-.about img {
-  width: 400px;
-  margin-right: 20px;
-  border-radius: 8px;
-  border: 1px solid hsl(0, 4%, 79%);
-  box-shadow: 4px 4px 15px hsl(0, 1%, 72%), -4px -4px 15px hsl(0, 1%, 72%);
+.about {
+  position: relative;
+  overflow: hidden; /* This ensures proper wrapping */
+  width: 100%;
+  padding: 25px;
+  margin: 0 auto;
+}
+
+.image-wrapper{
+  padding: 30px;
+  float: left;
+  width: 75vw;
+  max-width: 800px;
+  height: auto;
+  margin: 0 40px 30px 0;
+  background: hsla(0, 0%, 100%, 0.836);
+  box-shadow: 4px 4px 25px hsl(0, 0%, 16%);
+  border-radius: 0;
+  border: 20px solid hsla(0, 0%, 0%, 0.836);
+}
+
+img {
+  padding: 30px;
+  float: left;
+  width: 100%;
+  height: auto;
+  background: hsl(0, 0%, 100%);shape-outside: margin-box; /* This helps text wrap naturally around the image */
+  border-radius: 0;
 }
 
 .bio {
-  max-width: 600px;
+  margin: 0;
   text-align: center;
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: #333;
 }
 
-textarea{
-  width: 80%;
-  height: 400px;
-  margin-right: 11%;
+/* Admin section */
+.admin {
+  clear: both; /* Ensures admin section appears below the wrapped content */
+  width: 100%;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.loading-icon {
+.admin textarea.bio {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.filePick {
   display: flex;
-  justify-content: center;
+  gap: 10px;
   align-items: center;
-  height: 100px; /* Adjust height to match your layout */
+  margin-top: 15px;
 }
 
-.loading-icon::after {
-  content: "";
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.filePick input[type="file"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.filePick button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.admin{
-  text-align: center;
-}
-.filePick{
-  margin: 30px;
-  text-align: center;
+.filePick button:hover {
+  background-color: #0056b3;
 }
 
-@media screen and (max-width: 768px) {
-  .flex-media{
-    display: inline-block;
-  }
 
-  .about{
-    margin-top: 0;
-  }
-
-  section{
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  .bio{
-    margin-top: 30px;
-    width: 80%;
-  }
-
-  .admin{
-    display: block;
-    float: left;
-    text-align: center;
-    width: 100%;
-    margin-top: 20px;
-  }
-
-  .filePick{
+@media (min-width: 1025px) and (max-width: 1299px){
+  .about {
+    position: relative;
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-flow: column nowrap;
+    width: 90vw;
+    padding: 25px;
+    margin: 0 auto;
   }
   
-  input{
-    width: 60%;
-    margin-bottom: 20px;
+  .image-wrapper{
+    padding: 15px;
+    float: left;
+    width: fit-content;
+    height: auto;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    background: hsla(0, 0%, 100%, 0.836);
+    box-shadow: 4px 4px 25px hsl(0, 0%, 16%);
+    shape-outside: margin-box; /* This helps text wrap naturally around the image */
+    border: 20px solid hsla(0, 0%, 0%, 0.836);
   }
-
-  button{
-    width: 90px;
+  
+  img {
+    padding: 20px;
+    float: none;
+    width: 60vw;
+    height: auto;
+    background: hsl(0, 0%, 100%);shape-outside: margin-box; /* This helps text wrap naturally around the image */
+    border-radius: 0;
   }
-
+  
+  .bio {
+    margin: 0;
+    text-align: center;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  /* Admin section */
+  .admin {
+    clear: both; /* Ensures admin section appears below the wrapped content */
+    width: 100%;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .admin textarea.bio {
+    width: 100%;
+    min-height: 90vw;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
 }
+
+@media (min-width: 769px) and (max-width: 1024px){
+  .about {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    flex-flow: column nowrap;
+    width: 90vw;
+    padding: 38px;
+    margin: 0 auto;
+  }
+
+  .image-wrapper{
+    padding: 15px;
+    float: left;
+    max-width: 100%;
+    width: fit-content;
+    height: auto;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    background: hsla(0, 0%, 100%, 0.836);
+    box-shadow: 4px 4px 25px hsl(0, 0%, 16%);
+    shape-outside: margin-box; /* This helps text wrap naturally around the image */
+    border: 20px solid hsla(0, 0%, 0%, 0.836);
+  }
+}
+
+@media screen and (max-width: 768px){
+  .about {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-flow: column nowrap;
+    width: 90vw;
+    margin: 20px auto;
+  }
+  
+  .image-wrapper{
+    padding: 15px;
+    float: none;
+    width: fit-content;
+    max-width: fit-content;
+    height: auto;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    background: hsla(0, 0%, 100%, 0.836);
+    box-shadow: 4px 4px 25px hsl(0, 0%, 16%);
+    shape-outside: margin-box; 
+    border: 20px solid hsla(0, 0%, 0%, 0.836);
+  }
+  
+  img {
+    padding: 15px;
+    width: 60vw;
+    height: auto;
+    background: hsl(0, 0%, 100%);
+    border-radius: 0;
+  }
+  
+  .bio {
+    margin: 0;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #333;
+  }
+  
+  .admin {
+    clear: both; 
+    width: 90vw;
+    padding: 20px;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-size: 1rem;
+  }
+  
+  .admin textarea.bio {
+    width: 100%;
+    min-height: 90vw;
+    padding: 6px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    resize: vertical;
+    
+  }
+  
+}
+

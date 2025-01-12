@@ -1,46 +1,46 @@
 <nav>
   <div class="border border-black"></div>
   <div class="navbar" [class.show-dropdown]="isDropdownOpen">
-
-    <a routerLink="/about" 
-       routerLinkActive="active" 
-       [routerLinkActiveOptions]="{ exact: true }"
-       (click)="toggleDropdown($event)">About</a>
-
-    <a routerLink="/gallery" 
-       routerLinkActive="active" 
-       [routerLinkActiveOptions]="{ exact: true }"
-       (click)="toggleDropdown($event)">Gallery
-      
+    <div class="linkholder">
+      <a routerLink="/about" 
+         routerLinkActive="active" 
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="toggleDropdown($event)">About</a>
+    </div>
+    
+    <div class="linkholder">
+      <a [routerLink]="isChildGalleryActive ? '/gallery' : '/gallery'" 
+         routerLinkActive="active" 
+         [routerLinkActiveOptions]="{ exact: false }"
+         (click)="toggleDropdown($event)">
+        {{ isResponsiveMode && isChildGalleryActive ? '\< Back' : 'Gallery' }}
       </a>
-
-    <a class="cartLink" 
-       *ngIf="!user || user?.type === 'customer'" 
-       routerLink="/cart" 
-       routerLinkActive="active"
-       (click)="toggleDropdown($event)">Cart
-      <span class="counter" *ngIf="cartCount > 0">{{cartCount}}</span>
-    </a>
-
-    <a *ngIf="!user" 
-       routerLink="/signin" 
-       routerLinkActive="active"
-       (click)="toggleDropdown($event)">SignIn/Register</a>
-       
-
-    <a *ngIf="user?.type === 'admin'" 
-       routerLink="/orders" 
-       routerLinkActive="active"
-       (click)="toggleDropdown($event)">Orders</a>
-
-    <a *ngIf="user?.type === 'admin'" 
-       routerLink="/customers" 
-       routerLinkActive="active"
-       (click)="toggleDropdown($event)">Customers</a>
-
-    <a *ngIf="user" 
-       class="social" 
-       (click)="logout()">Logout</a>
-
+    </div>
+    
+    <div class="linkholder" *ngIf="user?.type === 'customer'">
+      <a class="cartLink" 
+         routerLink="/cart" 
+         routerLinkActive="active"
+         (click)="toggleDropdown($event)">Cart
+        <span class="counter" *ngIf="cartCount > 0">{{cartCount}}</span>
+      </a>
+    </div>
+    
+    <div class="linkholder" *ngIf="!user">
+      <a routerLink="/signin" 
+         routerLinkActive="active"
+         (click)="toggleDropdown($event)">SignIn/Register</a>
+    </div>
+    
+    <div class="linkholder" *ngIf="user?.type === 'admin'">
+      <a routerLink="/customers" 
+         routerLinkActive="active"
+         (click)="toggleDropdown($event)">Customers</a>
+    </div>
+    
+    <div class="linkholder" *ngIf="user">
+      <a class="social" 
+         (click)="logout()">Logout</a>
+    </div>
   </div>
 </nav>

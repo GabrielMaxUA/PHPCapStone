@@ -2,7 +2,7 @@
   <div id="pictureID">
     Picture ID: {{ item.pictureID }}
   </div>
-  <div class=" p-2">
+  <div>
     <img 
       [src]="getImageSrc()" 
       alt="Image"
@@ -23,9 +23,7 @@
     </div>
   </div>
   <div *ngIf="!isAdmin">
-    <div>
       <button (click)="onAddtoCart()">Add to cart</button>
-    </div>
   </div>
 </div>
 

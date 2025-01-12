@@ -1,12 +1,11 @@
 <?php
-
 header('Content-Type: application/json');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require 'connection.php'; 
+require 'connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -16,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     // Parse parameters
     $pictureID = isset($_GET['pictureID']) ? intval($_GET['pictureID']) : null;
-    $action = isset($_GET['action']) ? $_GET['action'] : '';
+    $action = $_GET['action'] ?? '';
 
     // Validate inputs
     if (!$pictureID || $pictureID < 1) {
@@ -24,34 +23,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         echo json_encode(['message' => 'Invalid or missing pictureID']);
         exit;
     }
+
     if (empty($action)) {
         http_response_code(400);
         echo json_encode(['message' => 'Action is required']);
         exit;
     }
 
-    // Determine table and file columns based on action
-    if ($action === 'natureGallery') {
-        $table = 'nature_gallery';
-        $fileLowColumn = 'natureLow';
-        $fileHighColumn = 'natureHigh';
-    } elseif ($action === 'architectureGallery') {
-        $table = 'architecture_gallery';
-        $fileLowColumn = 'archLow';
-        $fileHighColumn = 'archHigh';
-    } 
-    elseif ($action === 'stagedGallery') {
-        $table = 'staged_gallery';
-        $fileLowColumn = 'stagedLow';
-        $fileHighColumn = 'stagedHigh';
-    }else {
+    // Ensure valid action
+    $validActions = ['natureGallery', 'architectureGallery', 'stagedGallery'];
+    if (!in_array($action, $validActions)) {
         http_response_code(400);
         echo json_encode(['message' => 'Invalid action']);
         exit;
     }
 
     // Fetch file paths from the database
-    $query = "SELECT $fileLowColumn AS fileLow, $fileHighColumn AS fileHigh FROM $table WHERE pictureID = ?";
+    $query = "SELECT imageLow, imageHigh FROM gallery WHERE pictureID = ?";
     $stmt = $con->prepare($query);
     $stmt->bind_param('i', $pictureID);
     $stmt->execute();
@@ -64,33 +52,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     }
 
     $row = $result->fetch_assoc();
-    $filePathLow = $row['fileLow'];
-    $filePathHigh = $row['fileHigh'];
+    $filePathLow = $row['imageLow'];
+    $filePathHigh = $row['imageHigh'];
 
     // Delete the record from the database
-    $deleteQuery = "DELETE FROM $table WHERE pictureID = ? LIMIT 1";
-    $stmt = $con->prepare($deleteQuery);
-    $stmt->bind_param('i', $pictureID);
+    $deleteQuery = "DELETE FROM gallery WHERE pictureID = ? LIMIT 1";
+    $deleteStmt = $con->prepare($deleteQuery);
+    $deleteStmt->bind_param('i', $pictureID);
 
-    if ($stmt->execute()) {
+    if ($deleteStmt->execute()) {
         // Delete files if they exist
-        if (file_exists($filePathLow)) {
-            unlink($filePathLow);
+        $fileErrors = [];
+        if ($filePathLow && file_exists($filePathLow)) {
+            if (!unlink($filePathLow)) {
+                $fileErrors[] = "Failed to delete low-resolution image: $filePathLow";
+            }
         }
-        if (file_exists($filePathHigh)) {
-            unlink($filePathHigh);
+        if ($filePathHigh && file_exists($filePathHigh)) {
+            if (!unlink($filePathHigh)) {
+                $fileErrors[] = "Failed to delete high-resolution image: $filePathHigh";
+            }
         }
 
-        echo json_encode(['message' => 'Image deleted successfully']);
+        if (empty($fileErrors)) {
+            echo json_encode(['message' => 'Image deleted successfully']);
+        } else {
+            echo json_encode([
+                'message' => 'Image deleted from database, but some files could not be removed',
+                'errors' => $fileErrors
+            ]);
+        }
     } else {
         http_response_code(500);
-        echo json_encode(['message' => 'Failed to delete image']);
+        echo json_encode(['message' => 'Failed to delete image from database']);
     }
 } else {
     http_response_code(405);
     echo json_encode(['message' => 'Method not allowed']);
 }
-
-
-
 ?>

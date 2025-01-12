@@ -1,0 +1,123 @@
+<!-- nature.component.html -->
+<h1 class="text-center mt-4">Architecture</h1>
+<h3 class="text-center">Enjoy the lines and urban lifeview</h3>
+
+<!-- Admin section -->
+<div *ngIf="user?.type === 'admin'" class="text-center admin-section">
+  <div *ngIf="isUploading" class="loading-overlay">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+  <form #form="ngForm" (ngSubmit)="submitChanges()" novalidate>
+    <!-- Table-like header -->
+    <div class="form-header">
+      <div class="header-item">Entry #</div>
+      <div class="header-item">Image Upload</div>
+      <div class="header-item">Price</div>
+      <div class="header-item">Actions</div>
+      <div class="header-item">Status</div>
+    </div>
+
+    <!-- Dynamic product entries in rows -->
+    <div class="entries-container">
+      <div *ngFor="let entry of productEntries; let i = index" class="entry-row"
+      [class.filled]="entry.file && entry.price">
+        <!-- Entry number -->
+        <div class="entry-cell entry-number">
+          {{i + 1}}
+        </div>
+
+        <!-- File Input -->
+        <div class="entry-cell">
+          <input
+            class="file-input"
+            type="file"
+            [id]="'fileInput' + i"
+            required
+            (change)="onFileSelected($event, i)"
+            [name]="'fileInput' + i"
+          />
+        </div>
+
+        <!-- Price Input -->
+        <div class="entry-cell">
+          <input
+            class="price-input"
+            type="number"
+            [id]="'priceInput' + i"
+            required
+            [name]="'priceInput' + i"
+            [(ngModel)]="productEntries[i].price"
+            (ngModelChange)="onPriceChange(i, $event)"
+            placeholder="Enter price"
+          />
+        </div>
+
+        <!-- Actions -->
+        <div class="entry-cell">
+          <button 
+            type="button" 
+            *ngIf="i !== productEntries.length - 1" 
+            (click)="removeProductEntry(i)"
+            class="remove-btn">
+            Remove
+          </button>
+        </div>
+
+        <!-- Entry status -->
+        <div class="entry-cell status-cell">
+          <span *ngIf="entry.file && entry.price" class="valid-entry">✓</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button 
+      type="submit" 
+      class="submit-btn mt-4">
+      Upload Products
+    </button>
+  </form>
+</div>
+
+<!--user Section -->
+<div class="gallery-container">   
+  <div *ngIf="galleryItems.length === 0" class="empty-cart">
+    <h3 class="text-center">
+      There are no images in the gallery. Please check back later.
+    </h3>
+  </div>
+  <div *ngIf="galleryItems.length > 0" id="Gallery">
+    <div *ngFor="let item of galleryItems; let i = index" class="text-center">
+      <app-card 
+        [item]="item"
+        [isAdmin]="user?.type === 'admin'"
+        galleryType="architecture"
+        (imageClick)="openImageOverlay(i)"
+        (priceChange)="submitPriceChange($event.pictureID, $event.price)"
+        (deleteImage)="delete(+$event)"
+        (cartAdd)="handleLinkClick(item.pictureID)">
+      </app-card>
+    </div>
+  </div>
+</div>
+
+<!-- Image Overlay -->
+<div
+  class="image-overlay"
+  *ngIf="selectedImageIndex !== null"
+  (click)="closeImageOverlay()"
+>
+  <div class="image-container" (click)="$event.stopPropagation()">
+    <img
+      [src]="galleryItems[selectedImageIndex].aGalleryImage"
+      alt="Enlarged Nature Image"
+    />
+    <!-- Navigation Arrows -->
+    <button class="nav-arrow left-arrow" (click)="navigateGallery(-1)">
+      &#8249;
+    </button>
+    <button class="nav-arrow right-arrow" (click)="navigateGallery(1)">
+      &#8250;
+    </button>
+  </div>
+</div>

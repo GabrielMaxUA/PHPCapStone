@@ -1,16 +1,19 @@
 <div class="flex-media">
   <section class="about">
-    <div class="text-center">
-      <img [src]="imageUrl" alt="" *ngIf="imageUrl">
-      <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
-        <div class="spinner-border text-primary" role="status"></div>
+    
+      <div class="image-wrapper">
+        <img [src]="imageUrl" alt="" *ngIf="imageUrl" class="float-image">
       </div>
-    </div>
-    <div class="bio" [innerHTML]="bioText"></div>
+      <p class="bio" [innerHTML]="bioText"></p>
+      
+      <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+  
   </section>
 
   <!-- Bio Edit -->
-   <div *ngIf="user?.type === 'admin'" class=" admin text-end me-5">
+   <div *ngIf="user?.type === 'admin'" class=" admin text-end">
     <textarea [(ngModel)]="bioText" class="bio"></textarea>
     <div *ngIf="user?.type === 'admin'" class="filePick">
       <input type="file" (change)="onFileSelected($event)" />

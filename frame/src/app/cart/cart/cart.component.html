@@ -1,6 +1,55 @@
-
 <div class="cart-container">
-    <h2 class="text-center mb-4">Shopping Cart</h2>
+  <h1 class="text-center mb-5">Shopping Cart</h1>
+  
+  <div *ngIf="cartItems.length === 0" class="empty-cart">
+    <p>Your cart is empty</p>
+    <button routerLink="/gallery" class="clear-btn">Continue Shopping</button>
+  </div>
+  
+  <div *ngIf="cartItems.length > 0" class="cart-items">
+    <div *ngFor="let item of cartItems" class="cart-item">
+      <div class="item-image">
+        <img [src]="item.nGalleryImage || item.sGalleryImage || item.aGalleryImage"
+             alt="Product Image"
+             class="thumbnail">
+      </div>
+      <div class="item-details">
+        <p id="pictureID">{{item.pictureID}}</p>
+        <p>Price: {{item.price | currency}}</p>
+        
+        <!-- Show Download button for purchased items, otherwise show Remove button -->
+        <ng-container *ngIf="purchasedItems.has(item.pictureID); else removeButton">
+          <button class="btn download-btn" (click)="downloadImage(item.pictureID)">
+            Download
+          </button>
+        </ng-container>
+        <ng-template #removeButton>
+          <button class="btn remove-btn" (click)="removeItem(item.pictureID)">
+            Remove
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-summary text-center">
+    <h3>Total: {{total | currency}}</h3>
+    <div class="cart-actions">
+      <button class="btn clear-btn" (click)="clearCart()">Clear Cart</button>
+      <div id="paypal-button-container" *ngIf="cartItems.length > 0">
+        <button (click)="checkOut()" 
+                [disabled]="isProcessingCheckout" 
+                class="checkout-btn">
+          Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 
+<div class="cart-container">
+    <h1 class="text-center mb-5">Shopping Cart</h1>
   
     <div *ngIf="cartItems.length === 0" class="empty-cart">
       <p>Your cart is empty</p>
@@ -17,15 +66,22 @@
         <div class="item-details">
           <p id="pictureID">{{item.pictureID}}</p>
           <p>Price: {{item.price | currency}}</p>
+          
           <button class=" btn remove-btn" (click)="removeItem(item.pictureID)">Remove</button>
         </div>
       </div>
+      
     </div>
     <div class="cart-summary text-center">
       <h3>Total: {{total | currency}}</h3>
       <div class="cart-actions">
-        <button class="btn clear-btn" (click)="clearCart()">Clear Cart</button>
-        <button class="btn checkout-btn">Checkout</button>
+        <button class="btn clear-btn" (click)="clearCart()" >Clear Cart</button>
+        <div id="paypal-button-container" *ngIf="cartItems.length > 0"><button 
+          (click)="checkOut()" [disabled]="isProcessingCheckout" class="checkout-btn">
+          Checkout
+        </button></div>
+        
+      </div>
       </div>
     </div>
-  </div>
+   -->

@@ -1,18 +1,16 @@
 .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
     margin: 0.5rem ;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1) , 0 -2px 4px ;
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.1) , 0 -2px 4px ; */
     max-width: 250px;
     height: fit-content;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    border: 1px solid #ddd;
+    border: none;
     padding: 5px;
-    border-radius: 8px;
-    background: white;
+    border-radius: 0;
+    background: none;
   }
   
   .img{
@@ -28,8 +26,9 @@
     height: auto;
     cursor: pointer;
     transition: transform 0.2s;
-    border-radius: 8px;
-    border: 1px solid hsl(39, 29%, 81%);
+    border: 10px solid hsla(0, 0%, 0%, 0.836);
+    padding: 10px;
+    background: white;
   }
 
   .thumbnail:hover {
@@ -55,6 +54,18 @@
 
    @media screen and (max-width: 768px) {
     .card{
-      max-width: 350px;
+      max-width: 30vw;
+      padding: 0;
+      margin: 5px;
+    }
+    .card img{
+      max-width: 100%;
+      height: auto;
+      border: none;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    button{
+      font-size:0.6rem
     }
    }

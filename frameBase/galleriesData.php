@@ -22,347 +22,304 @@ if (!in_array($action, $validActions)) {
     exit;
 }
 
+// GET method handling
 if ($method === 'GET') {
-  if ($action === 'natureGallery') {
-      // Fetch data from the main_gallery table
-      $query = "SELECT natureLow, price, pictureID FROM nature_gallery";
+    if ($action === 'natureGallery') {
+        // Fetch nature gallery data by filtering image names ending with natureLow
+        $query = "SELECT imageLow, price, pictureID FROM gallery WHERE imageLow LIKE '%natureLow.%' AND status = 'active'";
+        $result = mysqli_query($con, $query);
+  
+        if ($result) {
+          if (mysqli_num_rows($result) > 0) {
+              $response = [];
+              while($row = mysqli_fetch_assoc($result)){
+                  $response[] = [
+                      'pictureID' => $row['pictureID'],
+                      'nGalleryImage' => $row['imageLow'],
+                      'price' => $row['price'],
+                  ];
+              }
+              http_response_code(200);
+              echo json_encode($response);
+          } else {
+              http_response_code(200);
+              echo json_encode([]);
+          }
+      } else {
+          http_response_code(500);
+          echo json_encode(['message' => 'Database error: ' . mysqli_error($con)]);
+      }
+    }
+    elseif ($action === 'architectureGallery') {
+      $query = "SELECT imageLow, price, pictureID FROM gallery WHERE imageLow LIKE '%archLow.%' AND status = 'active'";
       $result = mysqli_query($con, $query);
-
+  
+      if ($result) {
+          if (mysqli_num_rows($result) > 0) {
+              $response = [];
+              while($row = mysqli_fetch_assoc($result)){
+                  $response[] = [
+                      'pictureID' => $row['pictureID'],
+                      'aGalleryImage' => $row['imageLow'],
+                      'price' => $row['price'],
+                  ];
+              }
+              http_response_code(200);
+              echo json_encode($response);
+          } else {
+              http_response_code(200);
+              echo json_encode([]);
+          }
+      } else {
+          http_response_code(500);
+          echo json_encode(['message' => 'Database error: ' . mysqli_error($con)]);
+      }
+    }
+    elseif ($action === 'stagedGallery') {
+      $query = "SELECT imageLow, price, pictureID FROM gallery WHERE imageLow LIKE '%stagedLow%' AND status = 'active'";
+      $result = mysqli_query($con, $query);
+  
       if ($result) {
         if (mysqli_num_rows($result) > 0) {
             $response = [];
             while($row = mysqli_fetch_assoc($result)){
+                // Extract type from filename (color or black)
+                $type = (strpos($row['imageLow'], 'Color') !== false) ? 'color' : 'black';
                 $response[] = [
                     'pictureID' => $row['pictureID'],
-                    'nGalleryImage' => $row['natureLow'],
+                    'sGalleryImage' => $row['imageLow'],
                     'price' => $row['price'],
+                    'type' => $type,
                 ];
             }
             http_response_code(200);
             echo json_encode($response);
         } else {
-            // Table is empty - return empty array with 200 status
             http_response_code(200);
             echo json_encode([]);
         }
-    } else {
-        // Only send error response if there's an actual database error
-        http_response_code(500);
-        echo json_encode(['message' => 'Database error: ' . mysqli_error($con)]);
-    }
-  }
-  elseif ($action === 'architectureGallery') {
-    // Fetch data from the main_gallery table
-    $query = "SELECT archLow, price, pictureID FROM architecture_gallery";
-    $result = mysqli_query($con, $query);
-
-    if ($result) {
-        if (mysqli_num_rows($result) > 0) {
-            $response = [];
-            while($row = mysqli_fetch_assoc($result)){
-                $response[] = [
-                    'pictureID' => $row['pictureID'],
-                    'aGalleryImage' => $row['archLow'],
-                    'price' => $row['price'],
-                ];
-            }
-            http_response_code(200);
-            echo json_encode($response);
-        } else {
-            // Table is empty - return empty array with 200 status
-            http_response_code(200);
-            echo json_encode([]);
-        }
-    } else {
-        // Only send error response if there's an actual database error
-        http_response_code(500);
-        echo json_encode(['message' => 'Database error: ' . mysqli_error($con)]);
-    }
-}
-  elseif ($action === 'stagedGallery') {
-    // Fetch data from the main_gallery table
-    $query = "SELECT stagedLow, price, pictureID, type FROM staged_gallery";
-    $result = mysqli_query($con, $query);
-
-    if ($result) {
-      if (mysqli_num_rows($result) > 0) {
-          $response = [];
-          while($row = mysqli_fetch_assoc($result)){
-              $response[] = [
-                  'pictureID' => $row['pictureID'],
-                  'sGalleryImage' => $row['stagedLow'],
-                  'price' => $row['price'],
-                  'type' => $row['type']
-              ];
-          }
-          http_response_code(200);
-          echo json_encode($response);
       } else {
-          // Table is empty - return empty array with 200 status
-          http_response_code(200);
-          echo json_encode([]);
+        http_response_code(500);
+        echo json_encode(['message' => 'Database error: ' . mysqli_error($con)]);
       }
-  } else {
-      // Only send error response if there's an actual database error
-      http_response_code(500);
-      echo json_encode(['message' => 'Database error: ' . mysqli_error($con)]);
+    }
   }
-  }
-}//GET if 
+  // POST method handling
   elseif ($method === 'POST') {
-  if ($action === 'natureGallery') {
-    $response = [];
-    $errors = [];
-
-    // Step 1: Validate and Sanitize Input
-    $price = isset($_POST['price']) ? mysqli_real_escape_string($con, $_POST['price']) : null;
-
-    if ($price === null) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Price is required']);
-        exit;
+    if ($action === 'natureGallery') {
+      $response = [];
+      $errors = [];
+  
+      $price = isset($_POST['price']) ? mysqli_real_escape_string($con, $_POST['price']) : null;
+  
+      if ($price === null) {
+          http_response_code(400);
+          echo json_encode(['message' => 'Price is required']);
+          exit;
+      }
+  
+      if (isset($_FILES['nGallery']) && $_FILES['nGallery']['error'] === UPLOAD_ERR_OK) {
+          $uploadDir = 'uploads/nature/';
+          $fileName = basename($_FILES['nGallery']['name']);
+          $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+  
+          if (!in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+              http_response_code(400);
+              echo json_encode(['message' => 'Invalid file type']);
+              exit;
+          }
+  
+          $newFileNameHigh = uniqid() . '_natureHigh.' . $fileExtension;
+          $targetFilePathHigh = $uploadDir . $newFileNameHigh;
+  
+          if (!move_uploaded_file($_FILES['nGallery']['tmp_name'], $targetFilePathHigh)) {
+              http_response_code(500);
+              echo json_encode(['message' => 'Failed to upload image']);
+              exit;
+          }
+  
+          $newFileNameLow = uniqid() . '_natureLow.' . $fileExtension;
+          $targetFilePathLow = $uploadDir . $newFileNameLow;
+  
+          if (!resizeImage($targetFilePathHigh, $targetFilePathLow, 842, 375)) {
+              http_response_code(500);
+              echo json_encode(['message' => 'Failed to resize image']);
+              exit;
+          }
+  
+          $query = "INSERT INTO gallery (imageHigh, imageLow, price, status) 
+                   VALUES ('$targetFilePathHigh', '$targetFilePathLow', '$price', 'active')";
+  
+          if (!mysqli_query($con, $query)) {
+              http_response_code(500);
+              echo json_encode(['message' => 'Failed to insert data into database']);
+              exit;
+          }
+  
+          $pictureID = mysqli_insert_id($con);
+          $response['pictureID'] = $pictureID;
+          $response['natureHigh'] = $targetFilePathHigh;
+          $response['natureLow'] = $targetFilePathLow;
+          $response['price'] = $price;
+  
+          echo json_encode($response);
+          exit;
+      } else {
+          http_response_code(400);
+          echo json_encode(['message' => 'No file uploaded']);
+          exit;
+      }
     }
-
-    // Step 2: Handle File Upload
-    if (isset($_FILES['nGallery']) && $_FILES['nGallery']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'uploads/nature/'; 
-        $fileName = basename($_FILES['nGallery']['name']);
-        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-        if (!in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-            http_response_code(400);
-            echo json_encode(['message' => 'Invalid file type']);
-            exit;
-        }
-
-        $newFileNameHigh = time() . '_natureHigh.' . $fileExtension;
-        $targetFilePathHigh = $uploadDir . $newFileNameHigh;
-
-        if (!move_uploaded_file($_FILES['nGallery']['tmp_name'], $targetFilePathHigh)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to upload image']);
-            exit;
-        }
-
-        $newFileNameLow = time() . '_natureLow.' . $fileExtension;
-        $targetFilePathLow = $uploadDir . $newFileNameLow;
-
-        if (!resizeImage($targetFilePathHigh, $targetFilePathLow, 842, 375)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to resize image']);
-            exit;
-        }
-
-        $query = "INSERT INTO `nature_gallery` (`natureHigh`, `natureLow`, `price`) 
-                  VALUES ('$targetFilePathHigh', '$targetFilePathLow', '$price')";
-
-        if (!mysqli_query($con, $query)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to insert data into database']);
-            exit;
-        }
-
-        // Fetch the ID of the newly inserted record
-        $pictureID = mysqli_insert_id($con);
-
-        // Prepare and Return Response
-        $response['pictureID'] = $pictureID; // Corrected typo
-        $response['natureHigh'] = $targetFilePathHigh;
-        $response['natureLow'] = $targetFilePathLow;
-        $response['price'] = $price;
-
-        echo json_encode($response);
-        exit;
-    } else {
-        http_response_code(400);
-        echo json_encode(['message' => 'No file uploaded']);
-        exit;
+    elseif ($action === 'stagedGallery') {
+      $response = [];
+      $colorCount = isset($_POST['colorCount']) ? intval($_POST['colorCount']) : 0;
+      $blackCount = isset($_POST['blackCount']) ? intval($_POST['blackCount']) : 0;
+  
+      // Process color images
+      for ($i = 0; $i < $colorCount; $i++) {
+          if (isset($_FILES["colorImage_$i"]) && $_FILES["colorImage_$i"]['error'] === UPLOAD_ERR_OK) {
+              $colorPrice = isset($_POST["colorImagePrice_$i"]) ? 
+                  mysqli_real_escape_string($con, $_POST["colorImagePrice_$i"]) : null;
+  
+              $uploadDir = 'uploads/staged/';
+              $fileName = basename($_FILES["colorImage_$i"]['name']);
+              $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+  
+              if (!in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                  continue; // Skip invalid file types
+              }
+  
+              $newFileNameHigh = uniqid() . '_stagedHighColor.' . $fileExtension;
+              $targetFilePathHigh = $uploadDir . $newFileNameHigh;
+  
+              if (move_uploaded_file($_FILES["colorImage_$i"]['tmp_name'], $targetFilePathHigh)) {
+                  $newFileNameLow = uniqid() . '_stagedLowColor.' . $fileExtension;
+                  $targetFilePathLow = $uploadDir . $newFileNameLow;
+  
+                  if (resizeImage($targetFilePathHigh, $targetFilePathLow, 842, 375)) {
+                      $query = "INSERT INTO gallery (imageHigh, imageLow, price, status) 
+                               VALUES ('$targetFilePathHigh', '$targetFilePathLow', '$colorPrice', 'active')";
+  
+                      if (mysqli_query($con, $query)) {
+                          $response['color'][] = [
+                              'pictureID' => mysqli_insert_id($con),
+                              'stagedHigh' => $targetFilePathHigh,
+                              'stagedLow' => $targetFilePathLow,
+                              'price' => $colorPrice,
+                              'type' => 'color'
+                          ];
+                      }
+                  }
+              }
+          }
+      }
+  
+      // Process black images
+      for ($i = 0; $i < $blackCount; $i++) {
+          if (isset($_FILES["blackImage_$i"]) && $_FILES["blackImage_$i"]['error'] === UPLOAD_ERR_OK) {
+              $blackPrice = isset($_POST["blackImagePrice_$i"]) ? 
+                  mysqli_real_escape_string($con, $_POST["blackImagePrice_$i"]) : null;
+  
+              $uploadDir = 'uploads/staged/';
+              $fileName = basename($_FILES["blackImage_$i"]['name']);
+              $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+  
+              if (!in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                  continue;
+              }
+  
+              $newFileNameHigh = uniqid() . '_stagedHighBlack.' . $fileExtension;
+              $targetFilePathHigh = $uploadDir . $newFileNameHigh;
+  
+              if (move_uploaded_file($_FILES["blackImage_$i"]['tmp_name'], $targetFilePathHigh)) {
+                  $newFileNameLow = uniqid() . '_stagedLowBlack.' . $fileExtension;
+                  $targetFilePathLow = $uploadDir . $newFileNameLow;
+  
+                  if (resizeImage($targetFilePathHigh, $targetFilePathLow, 842, 375)) {
+                      $query = "INSERT INTO gallery (imageHigh, imageLow, price, status) 
+                               VALUES ('$targetFilePathHigh', '$targetFilePathLow', '$blackPrice', 'active')";
+  
+                      if (mysqli_query($con, $query)) {
+                          $response['black'][] = [
+                              'pictureID' => mysqli_insert_id($con),
+                              'stagedHigh' => $targetFilePathHigh,
+                              'stagedLow' => $targetFilePathLow,
+                              'price' => $blackPrice,
+                              'type' => 'black'
+                          ];
+                      }
+                  }
+              }
+          }
+      }
+  
+      echo json_encode($response);
+  }
+    elseif ($action === 'architectureGallery') {
+      $response = [];
+      $errors = [];
+  
+      $price = isset($_POST['price']) ? mysqli_real_escape_string($con, $_POST['price']) : null;
+  
+      if ($price === null) {
+          http_response_code(400);
+          echo json_encode(['message' => 'Price is required']);
+          exit;
+      }
+  
+      if (isset($_FILES['aGallery']) && $_FILES['aGallery']['error'] === UPLOAD_ERR_OK) {
+          $uploadDir = 'uploads/architecture/';
+          $fileName = basename($_FILES['aGallery']['name']);
+          $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+  
+          if (!in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+              http_response_code(400);
+              echo json_encode(['message' => 'Invalid file type']);
+              exit;
+          }
+  
+          $newFileNameHigh = uniqid() . '_archHigh.' . $fileExtension;
+          $targetFilePathHigh = $uploadDir . $newFileNameHigh;
+  
+          if (!move_uploaded_file($_FILES['aGallery']['tmp_name'], $targetFilePathHigh)) {
+              http_response_code(500);
+              echo json_encode(['message' => 'Failed to upload image']);
+              exit;
+          }
+  
+          $newFileNameLow = uniqid() . '_archLow.' . $fileExtension;
+          $targetFilePathLow = $uploadDir . $newFileNameLow;
+  
+          if (!resizeImage($targetFilePathHigh, $targetFilePathLow, 842, 375)) {
+              http_response_code(500);
+              echo json_encode(['message' => 'Failed to resize image']);
+              exit;
+          }
+  
+          $query = "INSERT INTO gallery (imageHigh, imageLow, price, status) 
+                   VALUES ('$targetFilePathHigh', '$targetFilePathLow', '$price', 'active')";
+  
+          if (!mysqli_query($con, $query)) {
+              http_response_code(500);
+              echo json_encode(['message' => 'Failed to insert data into database']);
+              exit;
+          }
+  
+          $pictureID = mysqli_insert_id($con);
+          $response['pictureID'] = $pictureID;
+          $response['archHigh'] = $targetFilePathHigh;
+          $response['archLow'] = $targetFilePathLow;
+          $response['price'] = $price;
+  
+          echo json_encode($response);
+          exit;
+      } else {
+          http_response_code(400);
+          echo json_encode(['message' => 'No file uploaded']);
+          exit;
+      }
     }
-}
-  elseif ($action === 'stagedGallery') {
-    
-    $response = [];
-    $errors = [];
-
-    // Step 1: Validate inputs
-    $colorPrice = isset($_POST['colorPrice']) ? mysqli_real_escape_string($con, $_POST['colorPrice']) : null;
-    $blackPrice = isset($_POST['blackPrice']) ? mysqli_real_escape_string($con, $_POST['blackPrice']) : null;
-
-    // Check if at least one file is uploaded
-    if (!isset($_FILES['colorImage']) && !isset($_FILES['blackImage'])) {
-        http_response_code(400);
-        echo json_encode(['message' => 'At least one image must be uploaded']);
-        exit;
-    }
-
-    // Step 2: Process Color Image
-    if (isset($_FILES['colorImage']) && $_FILES['colorImage']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'uploads/staged/';
-        $fileName = basename($_FILES['colorImage']['name']);
-        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-        if (!in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-            http_response_code(400);
-            echo json_encode(['message' => 'Invalid file type for color image']);
-            exit;
-        }
-
-        $newFileNameHigh = time() . '_stagedHighColor.' . $fileExtension;
-        $targetFilePathHigh = $uploadDir . $newFileNameHigh;
-
-        if (!move_uploaded_file($_FILES['colorImage']['tmp_name'], $targetFilePathHigh)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to upload color image']);
-            exit;
-        }
-
-        $newFileNameLow = time() . '_stagedLowColor.' . $fileExtension;
-        $targetFilePathLow = $uploadDir . $newFileNameLow;
-
-        if (!resizeImage($targetFilePathHigh, $targetFilePathLow, 842, 375)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to resize color image']);
-            exit;
-        }
-
-        $query = "INSERT INTO `staged_gallery` (`stagedHigh`, `stagedLow`, `price`, `type`) 
-                  VALUES ('$targetFilePathHigh', '$targetFilePathLow', '$colorPrice', 'color')";
-
-        if (!mysqli_query($con, $query)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to insert color image data into database']);
-            exit;
-        }
-        $response['color'] = [
-            'pictureID' => mysqli_insert_id($con),
-            'stagedHigh' => $targetFilePathHigh,
-            'stagedLow' => $targetFilePathLow,
-            'price' => $colorPrice,
-            'type' => 'color'
-        ];
-        
-    }
-
-    // Step 3: Process Black/White Image
-    if (isset($_FILES['blackImage']) && $_FILES['blackImage']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'uploads/staged/';
-        $fileName = basename($_FILES['blackImage']['name']);
-        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-        if (!in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-            http_response_code(400);
-            echo json_encode(['message' => 'Invalid file type for black/white image']);
-            exit;
-        }
-
-        $newFileNameHigh = time() . '_stagedHighBlack.' . $fileExtension;
-        $targetFilePathHigh = $uploadDir . $newFileNameHigh;
-
-        if (!move_uploaded_file($_FILES['blackImage']['tmp_name'], $targetFilePathHigh)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to upload black/white image']);
-            exit;
-        }
-
-        $newFileNameLow = time() . '_stagedLowBlack.' . $fileExtension;
-        $targetFilePathLow = $uploadDir . $newFileNameLow;
-
-        if (!resizeImage($targetFilePathHigh, $targetFilePathLow, 842, 375)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to resize black/white image']);
-            exit;
-        }
-
-        $query = "INSERT INTO `staged_gallery` (`stagedHigh`, `stagedLow`, `price`, `type`) 
-                  VALUES ('$targetFilePathHigh', '$targetFilePathLow', '$blackPrice', 'black')";
-
-        if (!mysqli_query($con, $query)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to insert black/white image data into database']);
-            exit;
-        }
-
-        $response['black'] = [
-            'pictureID' => mysqli_insert_id($con),
-            'stagedHigh' => $targetFilePathHigh,
-            'stagedLow' => $targetFilePathLow,
-            'price' => $blackPrice,
-            'type' => 'black'
-        ];
-    }
-    echo json_encode($response);
-}
-  elseif ($action === 'architectureGallery') {
-    $response = [];
-    $errors = [];
-  
-    // Step 1: Validate and Sanitize Input
-    $price = isset($_POST['price']) ? mysqli_real_escape_string($con, $_POST['price']) : null;
-  
-    if ($price === null) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Price is required']);
-        exit;
-    }
-  
-    // Step 2: Handle File Upload
-    if (isset($_FILES['aGallery']) && $_FILES['aGallery']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'uploads/architecture/'; 
-        $fileName = basename($_FILES['aGallery']['name']);
-        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-  
-        if (!in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-            http_response_code(400);
-            echo json_encode(['message' => 'Invalid file type']);
-            exit;
-        }
-  
-        $newFileNameHigh = time() . '_archHigh.' . $fileExtension;
-        $targetFilePathHigh = $uploadDir . $newFileNameHigh;
-  
-        if (!move_uploaded_file($_FILES['aGallery']['tmp_name'], $targetFilePathHigh)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to upload image']);
-            exit;
-        }
-  
-        $newFileNameLow = time() . '_archLow.' . $fileExtension;
-        $targetFilePathLow = $uploadDir . $newFileNameLow;
-  
-        if (!resizeImage($targetFilePathHigh, $targetFilePathLow, 842, 375)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to resize image']);
-            exit;
-        }
-  
-        $query = "INSERT INTO `architecture_gallery` (`archHigh`, `archLow`, `price`) 
-                  VALUES ('$targetFilePathHigh', '$targetFilePathLow', '$price')";
-  
-        if (!mysqli_query($con, $query)) {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to insert data into database']);
-            exit;
-        }
-  
-        // Fetch the ID of the newly inserted record
-        $pictureID = mysqli_insert_id($con);
-  
-        // Prepare and Return Response
-        $response['pictureID'] = $pictureID; // Corrected typo
-        $response['archHigh'] = $targetFilePathHigh;
-        $response['archLow'] = $targetFilePathLow;
-        $response['price'] = $price;
-  
-        echo json_encode($response);
-        exit;
-    }
-    else {
-      http_response_code(400);
-      echo json_encode(['message' => 'No file uploaded']);
-      exit;
-    }
-    }
-}
+  }
 
 
 
@@ -434,3 +391,4 @@ function resizeImage($sourcePath, $targetPath, $maxWidth, $maxHeight)
 
     return $success;
 }
+?>

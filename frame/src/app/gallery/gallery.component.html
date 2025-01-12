@@ -1,63 +1,59 @@
-
-<div id="Main_Gallery" class="m-4 d-flex ">
- 
-  <div class="gallery_option text-center">
-    <div class="p-3"><img [src]="nImageUrl" alt="" *ngIf="nImageUrl"></div>
+<!-- Main Gallery Section -->
+<div id="Main_Gallery" *ngIf="!isChildRouteActive">
+  <div class="gallery_option">
+    <div class="p-3 image-wrapper"><img [src]="nImageUrl" alt="" *ngIf="nImageUrl"></div>
     
     <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
-      <div class="spinner-border text-primary" role="status"></div>
+      <app-loading-spinner></app-loading-spinner>
     </div>
 
     <div *ngIf="user?.type === 'admin'" class="filePick m-2">
       <input type="file" (change)="onFileSelected($event, 'n')" />
     </div>
 
-    <a class="text-center p-3" routerLink="/nature">Nature</a>
+    <a class="text-center p-3" routerLink="nature">Nature</a>
 
-    <div class="nText text-center p-3" [innerHTML]="nText"></div>
+    <div class="nText" [innerHTML]="nText"></div>
     <textarea *ngIf="user?.type === 'admin'" class="text-center" [(ngModel)]="nText"></textarea>
   </div>
 
- 
   <div class="gallery_option">
-    <div class="p-3"><img [src]="aImageUrl" alt="" *ngIf="aImageUrl"></div>
+    <div class="p-3 image-wrapper"><img [src]="aImageUrl" alt="" *ngIf="aImageUrl"></div>
 
     <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
-      <div class="spinner-border text-primary" role="status"></div>
+      <app-loading-spinner></app-loading-spinner>
     </div>
 
     <div *ngIf="user?.type === 'admin'" class="filePick m-2">
       <input type="file" (change)="onFileSelected($event, 'a')" />
     </div>
 
-    <a class="text-center p-3" routerLink="/architecture">Architecture</a>
+    <a class="text-center p-3" routerLink="architecture">Architecture</a>
 
-    <div class="aText text-center p-3" [innerHTML]="aText"></div>
+    <div class="aText" [innerHTML]="aText"></div>
     <textarea *ngIf="user?.type === 'admin'" [(ngModel)]="aText"></textarea>
   </div>
 
   <!-- Staged Section -->
   <div class="gallery_option">
-    <div class="p-3"><img [src]="sImageUrl" alt="" *ngIf="sImageUrl"></div>
+    <div class="p-3 image-wrapper"><img [src]="sImageUrl" alt="" *ngIf="sImageUrl"></div>
     <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
-      <div class="spinner-border text-primary" role="status"></div>
+      <app-loading-spinner></app-loading-spinner>
     </div>
     <div *ngIf="user?.type === 'admin'" class="filePick m-2">
       <input type="file" (change)="onFileSelected($event, 's')" />
     </div>
-    <a
-      class="text-center p-3" 
-      href="#"
-      (click)="handleLinkClick($event)">
-    Staged
-    </a>
+    <a class="text-center p-3" (click)="handleLinkClick($event)">Staged</a>
 
-    <div class="sText text-center p-3" [innerHTML]="sText"></div>
+    <div class="sText" [innerHTML]="sText"></div>
     <textarea *ngIf="user?.type === 'admin'" [(ngModel)]="sText"></textarea>
   </div>
 </div>
 
-<!-- Single Submit Button -->
-<div *ngIf="user?.type === 'admin'" class="text-center">
-  <button (click)="submitAllChanges()">Submit All Changes</button>
+<!-- Child Routes -->
+<router-outlet></router-outlet>
+
+<!-- Admin Submit Button -->
+<div *ngIf="user?.type === 'admin' && !isChildRouteActive" class="text-center">
+  <button class="submit-btn mt-5" (click)="submitAllChanges()">Submit All Changes</button>
 </div>

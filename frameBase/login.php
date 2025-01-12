@@ -45,13 +45,14 @@ if (isset($postdata) && !empty($postdata)) {
             $token = bin2hex(random_bytes(16)); // Example token generation
             $userType = $user['type'];
             $userStatus = $user['status'];
+            $customerID = $user['customerID'];
 
             // After successful login validation...
             $_SESSION['userType'] = $userType;
             $_SESSION['userStatus'] = $userStatus;
             $_SESSION['email'] = $email;
             $_SESSION['last_activity'] = time();
-
+            $_SESSION['customerID'] = $customerID;
             setcookie('authToken', $token, [
               'expires' => 0, // Expires when the browser is closed
               'path' => '/',
@@ -65,7 +66,8 @@ if (isset($postdata) && !empty($postdata)) {
                 'success' => true,
                 'token' => $token,
                 'userType' => $userType,
-                'userStatus' => $userStatus
+                'userStatus' => $userStatus,
+                'customerID' => $user['customerID']
             ]);
         } else {
             http_response_code(401);

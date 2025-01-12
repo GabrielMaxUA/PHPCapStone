@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
-import { User } from '../../Models/user';
+import { User } from '../../Models/interfaces';
 import { Service } from '../../service/service';
 import { NavigationEnd, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,7 +20,8 @@ export class NavBarComponent implements OnInit {
   cartCount: number = 1;
   isDropdownOpen = false;
   isInGalleryRoute = false;
-
+  isChildGalleryActive = false;
+  isResponsiveMode = false;
 
   constructor(
     private dialog: MatDialog,
@@ -33,20 +34,36 @@ export class NavBarComponent implements OnInit {
       ).subscribe(() => {
         this.isInGalleryRoute = this.checkIfGalleryRoute();
         this.cdr.detectChanges();
+        this.isDropdownOpen = false;
       });
     }
 
   ngOnInit(): void {
     // Subscribe to user changes
     this.service.cartCount$.subscribe(count => {
-      console.log("count updated: ", count);
+      console.log("Cart count updated: ", count);
       this.cartCount = count;
       this.cdr.detectChanges()
     });
 
-    this.cartCount = this.service.getCartCount();
-    this.userService.user$.subscribe((user) => {this.user = user;
+    this.checkResponsiveMode();
 
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Check if the current route is a child of "/gallery"
+        this.isChildGalleryActive = this.router.url.startsWith('/gallery/') && this.router.url !== '/gallery';
+      }
+    });
+
+    this.cartCount = this.service.getCartCount();
+    this.userService.user$.subscribe((user) => {
+      this.user = user;
+      if (user) {
+        // Refresh cart count when user logs in
+        this.service.getCartItems(); // This will trigger cartCount$ update
+      } else {
+        this.cartCount = 0;
+      }
     });
 
     this.isInGalleryRoute = this.checkIfGalleryRoute();
@@ -106,6 +123,15 @@ export class NavBarComponent implements OnInit {
     if (navbar && !navbar.contains(event.target as Node)) {
       this.closeDropdown();
     }
+  }
+  
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkResponsiveMode();
+  }
+
+  private checkResponsiveMode(): void {
+    this.isResponsiveMode = window.innerWidth <= 1024; // Match media query max-width
   }
   
   logout(): void {

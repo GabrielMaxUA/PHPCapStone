@@ -2,11 +2,13 @@ header {
   width: 80%;
   display: flex;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .signature{
   height: 12vw;
-  max-height: 120px;
+  min-height: 60px;
+  max-height: 100px;
   width: auto;
   margin: 20px auto;
 }
@@ -66,7 +68,7 @@ header {
   transform-origin: left;
   transform: rotate(0deg);
   width: 40px;
-  height: 2.5px;
+  height: 2px;
 }
 
 .menu:not(.active) .bar:nth-child(1) {
@@ -104,7 +106,7 @@ aside.active {
   flex-flow: column nowrap;
   justify-content: center;
   width: 100%;
-  margin-top: 150px;
+  margin-top: 110px;
 }
 
 .social img {
@@ -114,9 +116,40 @@ aside.active {
   margin: 20px auto;
 }
 
-.social:hover{
-  width: 85px;
-  margin-right: 20px;
+.social img:hover{
+  width: 40px;
 }
 
+@media screen and (max-width: 768px) {
+  .social img {
+    width: 25px;
+    border-radius: 8px;
+    transition: width 0.4s ease-in-out;
+    margin: 20px auto;
+  }
+  
+  .social img:hover{
+    width: 30px;
+  }
+
+  aside {
+    position: fixed;  
+    right: -130px;
+    width: 40px;
+    height: 100vh;
+    transition: right 0.4s ease-in-out; 
+    z-index: 5;
+    /* font-size: 1em; */
+  }
+
+  aside.active {
+    right: 14px;
+    top: 0;
+    z-index: 5;
+  }
+
+  .nav_social {
+    margin-top: 90px;
+  }
+}
 

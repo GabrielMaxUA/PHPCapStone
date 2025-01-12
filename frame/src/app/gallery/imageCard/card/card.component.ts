@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { UserService } from '../../../service/user.service';
+import { User } from '../../../Models/interfaces';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-card',
@@ -14,9 +17,12 @@ export class CardComponent {
   @Input() galleryType: 'nature' | 'staged' | 'architecture' = 'nature';
   selectedImageIndex: number | null = null;
   @Output() imageClick = new EventEmitter<void>();
-  @Output() priceChange = new EventEmitter<{pictureID: string, price: number}>();
+  @Output() priceChange = new EventEmitter<{pictureID: number, price: number}>();
   @Output() deleteImage = new EventEmitter<string>();
   @Output() cartAdd = new EventEmitter<number>();
+  user: User | null = null;
+
+  constructor(private userService: UserService){}
 
   getImageSrc(): string {
     // console.log('Gallery Type:', this.galleryType); // Debug log
@@ -53,4 +59,5 @@ export class CardComponent {
     console.log('Card component: Emitting pictureID:', this.item.pictureID);
     this.cartAdd.emit(this.item.pictureID);
   }
+
 }

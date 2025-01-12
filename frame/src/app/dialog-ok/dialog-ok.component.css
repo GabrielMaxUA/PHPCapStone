@@ -1,28 +1,51 @@
 
 .dialog-box {
+  font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
   padding: 20px;
   width: 300px;
   margin: 0 auto;
   text-align: center;
-  color: hsl(0, 3%, 21%);
+  color: #151414;
 }
 
-button {
+.buttons {
+  padding: 20px;
+  margin: 0 auto;
+}
+
+button:first-child {
+  font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
+  background-color: #ff1201;
+  color: white;
+}
+
+::ng-deep .cdk-overlay-container{
+  background-color: rgba(0, 0, 0, 0.755);
+}
+
+button:last-child {
+  font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
   background-color: #ed7a21;
   color: white;
-  padding: 10px 20px;
-  border: 1px solid #e2a919;
-  border-radius: 4px ;
-  cursor: pointer;
-  margin: 0 auto;
-  margin-bottom: 30px;
+}
+
+.dialog-window{
+  display: flex;
+  flex-flow: column nowrap;
+  width: fit-content;
+  position: static;
+  border: 1px solid black;
+  padding: 20px;
+  background: hsl(51, 73%, 93%);
 }
 
 ::ng-deep .mat-mdc-dialog-surface {
-  color: #333; /* Dark text */
-  border-radius: 8px;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25), -4px -4px 10px rgba(0, 0, 0, 0.25);
-  background-color: hsl(42, 50%, 82%);
-  border: 2px solid hsl(42, 62%, 70%);; /* Apply background color globally */
+  color: hsl(0, 0%, 0%); /* Dark text */
+  background-color: hsl(0, 0%, 100%);
+  border: 10px solid  hsl(0, 0%, 8%);
+  border-radius: 0;
+  padding: 20px;
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
 }
+
 

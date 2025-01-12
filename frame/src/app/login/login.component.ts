@@ -29,6 +29,7 @@ login(f: NgForm): void {
         token: string; 
         userType: string;
         userStatus: string;
+        customerID: number;
 }) => {
         console.log('Login successful:', response);
         this.success = 'Login successful';
@@ -38,7 +39,8 @@ login(f: NgForm): void {
         const user = {
           email: f.value.email,
           type: response.userType,
-          status: response.userStatus
+          status: response.userStatus,
+          customerID: response.customerID
         };
         this.userService.setUser(user);
         localStorage.setItem('token', response.token);

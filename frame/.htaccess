@@ -1,33 +1,49 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    
-    # If an existing asset or directory is requested, serve it
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
-
-    # Handle Angular routes - redirect everything else to index.html
-    RewriteRule ^ index.html [L]
-
-    # Force HTTPS
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteEngine On
+  RewriteBase /~Max.Gabriel/frame/
+  
+  # Serve static files if they exist
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  
+  # Redirect all other requests to Angular's index.html
+  RewriteRule ^index\.html$ - [L]
+  RewriteRule . /~Max.Gabriel/frame/index.html [L]
 </IfModule>
 
-# Set MIME types properly
+# Handle MIME Types properly
 <IfModule mod_mime.c>
-    AddType application/javascript .js
-    AddType application/json .json
-    AddType text/css .css
-    AddType text/html .html
+  AddType application/javascript .js
+  AddType text/javascript .js
+  AddType application/json .json
+  AddType text/css .css
+  AddType image/svg+xml .svg
+  AddType image/png .png
+  AddType image/jpeg .jpg .jpeg
+  AddType image/gif .gif
+  AddType application/x-font-ttf .ttf
+  AddType application/x-font-opentype .otf
+  AddType application/font-woff .woff
+  AddType application/font-woff2 .woff2
+  AddType application/x-font-truetype .ttf
+  DirectoryIndex index.html
 </IfModule>
 
-# Headers for JavaScript modules
-<FilesMatch "\.(js|mjs)$">
-    Header set Content-Type "application/javascript"
-</FilesMatch>
+<IfModule mod_headers.c>
+  # Prevent Mixed Content Errors
+  Header always set Content-Security-Policy "upgrade-insecure-requests"
+  
+  # CORS Headers
+  Header set Access-Control-Allow-Origin "*"
+  Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+  Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
+  
+  # Cache Control
+  <FilesMatch "\.(jpg|jpeg|png|gif|js|css|svg|ttf|woff|woff2)$">
+    Header set Cache-Control "max-age=31536000, public"
+  </FilesMatch>
+</IfModule>
 
-# CORS Headers
-Header add Access-Control-Allow-Origin "*"
-Header add Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
-Header add Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
+# Disable MultiViews to prevent routing issues
+Options -MultiViews

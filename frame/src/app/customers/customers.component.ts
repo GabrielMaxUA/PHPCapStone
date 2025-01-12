@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { User } from '../Models/user';
+import { User } from '../Models/interfaces';
 import { MatDialog } from '@angular/material/dialog';
 import { Service } from '../service/service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { DialogOkComponent } from '../dialog-ok/dialog-ok.component';
+import { first } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-customers',
@@ -17,8 +19,9 @@ export class CustomersComponent {
   showDialog = false; // Whether the dialog is visible
   dialogMessage = ''; // Message to display in the dialog
   selectedItem: any; // Selected item for confirmation
-
-  constructor(private service: Service, private dialog: MatDialog) {}
+  filteredCustomers: User[] = []; // Holds filtered results
+  searchQuery: string = ''; // Binds to search input
+  constructor(private service: Service, private dialog: MatDialog, private router: Router) {}
 
   ngOnInit(): void {
     this.getCustomers();
@@ -28,6 +31,8 @@ export class CustomersComponent {
     this.service.getCustomers().subscribe(
       (data: User[]) => {
         this.customers = data;
+        this.filteredCustomers = data; // Initialize filtered list
+
       },
       (error) => {
         console.error('Error fetching customers:', error);
@@ -39,22 +44,29 @@ export class CustomersComponent {
     const newStatus = item.status === 'active' ? 'blocked' : 'active';
     const message =
       item.status === 'active'
-        ? 'Are you sure you want to block this user?'
-        : 'Are you sure you want to activate this user?';
+        ? `Are you sure you want to block ${item.firstName} ${item.lastName}?`
+        : `Are you sure you want to activate ${item.firstName} ${item.lastName}?`;
   
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
-      data: { message: message } // Pass the message dynamically
+      data: { 
+        message: message,
+        firstName: item.firstName, // Pass first name
+        lastName: item.lastName    // Pass last name
+      } 
     });
   
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
         item.status = newStatus;
-        this.service.updateUserStatus(item.customerID, item.status).subscribe(
+        this.service.updateUserStatus(item.customerID, item.status, item.firstName, item.lastName).subscribe(
           (response) => {
             const dialogRef = this.dialog.open(DialogOkComponent, {
               width: '400px',
-              data: { message: `Status updated to '${newStatus}' for user:`, item } // Pass the message dynamically
+              data: { 
+                message: `Status updated to '${newStatus}' for user:
+               ${item.firstName} ${item.lastName} `   // Display the  name
+              }
             });
             console.log(`Status updated to '${newStatus}' for user:`, item.customerID);
           },
@@ -69,37 +81,27 @@ export class CustomersComponent {
     });
   }
   
+  filterCustomers(): void {
+    const query = this.searchQuery.trim().toLowerCase(); // Trim whitespace and normalize query
+    if (!query) {
+      // If search query is empty, reset to show all customers
+      this.filteredCustomers = [...this.customers];
+      return;
+    }
+  
+    this.filteredCustomers = this.customers.filter((customer) => {
 
-  // toggleStatus(item: any): void {
-  //   this.selectedItem = item; // Save the selected item
-  //   this.dialogMessage =
-  //     item.status === 'active'
-  //       ? 'Are you sure you want to block this user?'
-  //       : 'Are you sure you want to activate this user?';
-  //   this.showDialog = true; // Show the dialog
-  // }
+      // if (customer.email?.toLowerCase() === query) {
+      //   return true;
+      // }
 
-  // handleDialogResult(confirmed: boolean): void {
-  //   this.showDialog = false; // Hide the dialog
-
-  //   if (confirmed) {
-  //     // Proceed with the status update
-  //     const newStatus = this.selectedItem.status === 'active' ? 'blocked' : 'active';
-  //     this.selectedItem.status = newStatus;
-
-  //     this.service.updateUserStatus(this.selectedItem.customerID, this.selectedItem.status).subscribe(
-  //       (response) => {
-  //         console.log('Status updated successfully:', response);
-  //         alert('Status updated successfully.');
-  //       },
-  //       (error) => {
-  //         console.error('Error updating status:', error);
-  //         alert('Failed to update status. Please try again.');
-  //       }
-  //     );
-  //   } else {
-  //     console.log('Action canceled.');
-  //   }
-  // }
+      return (
+        customer.firstName?.toLowerCase().includes(query) ||
+        customer.lastName?.toLowerCase().includes(query) ||
+        customer.email?.toLowerCase().includes(query)
+      );
+    });
+  }
+  
 
 }

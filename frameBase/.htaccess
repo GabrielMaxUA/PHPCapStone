@@ -9,35 +9,19 @@ RewriteRule ^ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
+
 <IfModule mod_headers.c>
-    # Allow CORS for a specific domain
-    SetEnvIf Origin "^https://triosdevelopers.com$" AccessControlAllowOrigin=$0
-    Header always set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
-
-    # Enable credentials for cross-origin requests
+    # Set Access-Control-Allow-Origin based on Origin header
+    SetEnvIf Origin "^http://localhost:5173$" AccessControlAllowOrigin=$0
+    SetEnvIf Origin "^http://localhost:4200$" AccessControlAllowOrigin=$0
+    Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+    
     Header always set Access-Control-Allow-Credentials "true"
-
-    # Allow specific HTTP methods
-    Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
-
-    # Specify allowed headers in cross-origin requests
+    Header always set Access-Control-Max-Age "1000"
     Header always set Access-Control-Allow-Headers "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding"
-
-    # Cache preflight responses for 24 hours
-    Header always set Access-Control-Max-Age "86400"
-</IfModule>
-
-<IfModule mod_rewrite.c>
-    # Handle preflight OPTIONS requests for CORS
-    RewriteCond %{REQUEST_METHOD} OPTIONS
-    RewriteRule ^(.*)$ $1 [R=200,L]
-</IfModule>
-
-# Prevent directory listing and enforce access
-<IfModule mod_autoindex.c>
-    Options -Indexes
+    Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
 </IfModule>
 
 # Directory permissions
-Options FollowSymLinks
+Options Indexes FollowSymLinks
 Require all granted

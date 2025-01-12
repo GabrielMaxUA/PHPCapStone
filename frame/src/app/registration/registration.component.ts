@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Service } from '../service/service';
-import { FormsModule, Form } from '@angular/forms';
-import { User } from '../Models/user';
+import { User } from '../Models/interfaces';
 import { HttpClientModule } from '@angular/common/http';
 import { format, isValid, parse } from 'date-fns';
 

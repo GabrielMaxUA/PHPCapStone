@@ -7,10 +7,8 @@ import { LoginComponent } from './login/login.component';
 import { AboutComponent } from './about/about.component';
 import { FooterComponent } from './base/footer/footer.component';
 import { HeaderComponent } from './base/header/header.component';
-import { LogoutComponent } from './logout/logout.component';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { ListComponent } from './list/list.component';
 import { NavBarComponent } from './base/navbar/navbar.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { NatureComponent } from './gallery/nature/nature.component';
@@ -22,10 +20,13 @@ import { DialogComponent } from './dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import { DialogOkComponent } from './dialog-ok/dialog-ok.component';
-import { ArchitectureComponent } from './gallery/architechture/architecture.component';
+import { ArchitectureComponent } from './gallery/architecture/architecture.component';
 import { CardComponent } from './gallery/imageCard/card/card.component';
 import { CartComponent } from './cart/cart/cart.component';
 import { AuthInterceptor } from './service/auth.interceptor';
+import { OrdersComponent } from './orders/orders.component';
+import { OrderDetailsComponent } from './order-details/order-details.component';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -35,9 +36,7 @@ import { AuthInterceptor } from './service/auth.interceptor';
     FooterComponent,
     AboutComponent,
     RegistrationComponent,
-    LogoutComponent,
     LoginComponent,
-    ListComponent,
     GalleryComponent,
     NatureComponent,
     ArchitectureComponent,
@@ -47,6 +46,9 @@ import { AuthInterceptor } from './service/auth.interceptor';
     DialogOkComponent,
     CardComponent,
     CartComponent,
+    OrdersComponent,
+    OrderDetailsComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     BrowserModule,

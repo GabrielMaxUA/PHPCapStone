@@ -1,0 +1,39 @@
+<div class="container mt-4 text-center">
+  <h2>Orders for {{customerInfo?.firstName}} {{customerInfo?.lastName}}</h2>
+  <input
+    type="text"
+    placeholder="Search by order number, date, or total"
+    [(ngModel)]="searchQuery"
+    (input)="filterOrders()"
+    class="search-input"
+  />
+  <div class="table-responsive">
+    <table class="table table-bordered" *ngIf="filteredOrders.length > 0; else noResults">
+      <thead>
+        <tr>
+          <th>Order Number</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders">
+          <td>{{order.orderNumber}}</td>
+          <td>{{order.date | date:'short'}}</td>
+          <td>${{order.total}}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="showOrderDetails(order.orderNumber)">
+              View Details
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  <!-- No Results Message -->
+  <ng-template #noResults>
+    <h3>No Results found</h3>
+  </ng-template>
+  </div>
+</div>

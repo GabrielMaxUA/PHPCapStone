@@ -57,20 +57,22 @@ a{
 
 a:hover{
   color: hsl(0, 85%, 60%);
-  text-shadow: 5px 5px 10px hsl(0, 0%, 100%), -5px -5px 10px hsl(0, 0%, 100%);
+  text-shadow: 5px 5px 10px hsl(0, 54%, 76%), -5px -5px 10px hsl(0, 54%, 76%);
 }
 
 .btn:disabled{
-  background: hsl(0, 0%, 89%);
+  background: hsl(0, 2%, 60%);
 }
 
 .btn {
   padding: 10px 20px;
-  background: hsl(32, 7%, 59%);
+  background: hsl(225, 99%, 49%);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-family: Heading1-font;
+  letter-spacing: 0.1rem;
 }
 
 .error {

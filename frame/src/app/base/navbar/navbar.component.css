@@ -2,13 +2,14 @@
 
 nav {
   max-width: calc(100vw - 20px);
-  max-height: 30px;
+  max-height: auto;
+  margin: 0 auto;
 }
 
 .border {
   background-color: #000000;
   width: 80%;
-  text-align: center;
+  margin: 0 auto;
 }
 
 .navbar {
@@ -17,17 +18,24 @@ nav {
   margin: 0 auto;
 }
 
+.linkholder{
+  width: 160px;
+  text-align: center;
+}
 a {
   font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
   float: left;
   font-size: 1.4em;
   cursor: pointer;
-  max-width: 160px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin:0;
   background: none;
   color: #000000;
   text-decoration: none;
+}
+
+a:hover {
+  color: hsl(6, 73%, 47%); /* Optional hover effect */
+  text-decoration: underline; /* Optional hover underline */
 }
 
 .active {
@@ -42,17 +50,19 @@ a {
 }
 
 .counter {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: black;
-  color: white;
-  font-size: 1.2rem;
-  margin: 5px;
+  display: inline-flex; /* Use flexbox for centering */
+  align-items: center; /* Vertically center the content */
+  justify-content: center; /* Horizontally center the content */
+  width: 20px; /* Width of the circle */
+  height: 20px; /* Height of the circle */
+  border-radius: 50%; /* Make it circular */
+  background-color: black; /* Black background for the circle */
+  color: white; /* White text color */
+  font-size: 1.2rem; /* Adjust font size */
+  margin: 5px; /* Add some spacing around the circle */
+  padding-bottom: 4px;
 }
+
 
 /* Media query for smaller screens */
 @media screen and (max-width: 768px) {
@@ -66,12 +76,13 @@ a {
     width: 100%;
   }
 
+  /* Hide all links by default */
   a, .cartLink {
     width: 100%;
     text-align: center;
     padding: 15px;
     margin: 0;
-    display: none; /* Hide by default */
+    display: none;
   }
 
   /* Only show the currently active link */
@@ -80,22 +91,30 @@ a {
     text-decoration: underline;
   }
 
-  a[routerLink="/nature"].active ~ a[routerLink="/gallery"],
-  a[routerLink="/architecture"].active ~ a[routerLink="/gallery"],
-  a[routerLink="/staged"].active ~ a[routerLink="/gallery"],
-  a[routerLink="/gallery"].active {
+  /* Show gallery link only when in gallery routes */
+  a[routerLink="/gallery"].active,
+  .active[routerLink^="/gallery/"] ~ a[routerLink="/gallery"] {
     display: block;
   }
 
-  /* Show all links when dropdown is open */
- .navbar.show-dropdown a,
-  .navbar.show-dropdown .cartLink {
+  /* When in gallery child route, style the gallery link */
+  .active[routerLink^="/gallery/"] ~ a[routerLink="/gallery"] {
     display: block;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+
+  /* Show all links when dropdown is open */
+  .navbar.show-dropdown a,
+  .navbar.show-dropdown .cartLink {
+    display: flex;
+    justify-content: center;
     animation: slideDown 0.3s ease forwards;
   }
 
   .navbar.show-dropdown {
-    background-color: #d8d0a3b0;
+    background: hsla(51, 72%, 93%, 0.862);
+    z-index: 1000;
   }
 
   @keyframes slideDown {
@@ -109,7 +128,30 @@ a {
     }
   }
 
+  /* Cart styling */
   .cartLink {
+    width: 100%;
+    display: none;
+  }
+
+  /* Only show cart when dropdown is open or cart is active */
+  .navbar.show-dropdown .cartLink,
+  .cartLink.active {
+    display: inline-flex;
     justify-content: center;
+    align-items: center;
+  }
+
+  .counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    font-size: 1.2rem;
+    margin: 5px;
   }
 }

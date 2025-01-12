@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../service/user.service';
-import { User } from '../Models/user';
+import { User } from '../Models/interfaces';
 import { Service } from '../service/service';
 
 @Component({
@@ -16,7 +16,8 @@ export class AboutComponent implements OnInit {
   imageUrl: string = '';
   selectedFile: File | null = null;
   isUploading: boolean = false;
-
+baseUrl = 'http://localhost/frameBase'; // Add your base URL here
+//baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; // Add your base URL here
   constructor(private userService: UserService, private service: Service) {}
 
   ngOnInit(): void {
@@ -63,7 +64,8 @@ export class AboutComponent implements OnInit {
     this.service.getBio().subscribe(
       (response)=>{
         this.bioText = response.bioText,
-        this.imageUrl = `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.mainImage}`
+        this.imageUrl = `${this.baseUrl}/${response.mainImage}`
+        //this.imageUrl = `https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/${response.mainImage}`
       },
       (error: any) => {
         console.error('Error getting data:', error);

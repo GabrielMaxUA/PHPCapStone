@@ -44,7 +44,6 @@
             "outputPath": "dist/frame",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "baseHref": "/",
             "polyfills": [
               "zone.js"
             ],
@@ -63,13 +62,11 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/~Max.Gabriel/frame/",
-              "deployUrl": "/~Max.Gabriel/frame/",
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2MB",
-                  "maximumError": "5MB"
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -77,18 +74,12 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all",
-              "optimization": true,
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "baseHref": "/~Max.Gabriel/frame/",
-              "deployUrl": "/~Max.Gabriel/frame/"
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"

@@ -1,6 +1,16 @@
+<div class="text-center  p-2">
+  <!-- Search Input -->
+   <h1>Customers List</h1>
+  <input
+    type="text"
+    placeholder="Search by name or email"
+    [(ngModel)]="searchQuery"
+    (input)="filterCustomers()"
+    class="search-input"
+  />
 
-<div class="border text-center border-black p-2">
-  <table class="table table-bordered">
+  <!-- Customers Table -->
+  <table class="table table-bordered" *ngIf="filteredCustomers.length > 0; else noResults">
     <thead>
       <tr>
         <th id="itemID">Customer ID</th>
@@ -16,17 +26,25 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of customers">
+      <tr *ngFor="let item of filteredCustomers">
         <td id="itemID">{{ item.customerID }}</td>
-        <td>{{ item.firstName }}</td>
-        <td>{{ item.lastName }}</td>
-        <td>{{ item.email }}</td>
-        <td>{{ item.phone }}</td>
-        <td>{{ item.orderDetailsID }}</td>
-        <td>{{ item.created_at }}</td>
-        <td>{{ item.dob }}</td>
-        <td>{{ item.type }}</td>
-        <td *ngIf="item.type === 'customer'" class ='d-flex flex-row justify-content-start'>
+        <td data-label="Firtt name:">{{ item.firstName }}</td>
+        <td data-label="Last name:">{{ item.lastName }}</td>
+        <td data-label="Email:">{{ item.email }}</td>
+        <td data-label="Phone:">{{ item.phone }}</td>
+        <td data-label="Orders:">
+          <button 
+            *ngIf="item.orderDetailsID !== undefined && item.orderDetailsID > 0"
+            class="btn btn-primary btn-m p-2" 
+            [routerLink]="['/orders']" 
+            [queryParams]="{ customerID: item.customerID }">
+            Orders
+          </button>
+        </td>
+        <td data-label="Created at:">{{ item.created_at }}</td>
+        <td data-label="DOB">{{ item.dob }}</td>
+        <td data-label="Type:">{{ item.type }}</td>
+        <td data-label="Status" *ngIf="item.type === 'customer'" class="d-flex flex-row justify-content-start">
           <label>
             <input
               type="radio"
@@ -44,79 +62,12 @@
             /> Blocked
           </label>
         </td>
-        
       </tr>
     </tbody>
   </table>
+
+  <!-- No Results Message -->
+  <ng-template #noResults>
+    <h3>No Results found</h3>
+  </ng-template>
 </div>
-
-
-
-
-<!-- <p>customers works!</p>
-<div class="border text-center m-5 border-black d-flex flex-column">
-  <div *ngFor="let item of customers" class="m-1 d-flex flex-row align-items-center">
-    <div id="itemID">{{item.customerID}}</div>
-    <div class="firstName">first name</div>
-    <div class="lastName">last name</div>
-    <div class="email">email</div>
-    <div class="phone">phone</div>
-    <div class="dob">DOB</div>
-    <div class="type">type</div>
-    <div class="status">status</div>
-    <div>
-      <label>
-        <input 
-          type="radio" 
-          [checked]="item.status === 'active'" 
-          (change)="toggleStatus(item)" 
-          value="Active"> Active
-      </label>
-      <label>
-        <input 
-          type="radio" 
-          [checked]="item.status === 'blocked'" 
-          (change)="toggleStatus(item)" 
-          value="Blocked"> Blocked
-      </label>
-    </div>
-    <button 
-      class="btn btn-m btn-warning" 
-      (click)="editUser(item.customerID)">Edit</button>
-    <button 
-      class="btn btn-m btn-danger" 
-      (click)="deleteUser(item.customerID)">Delete</button>
-  </div>
-  <div *ngFor="let item of customers" class="m-1 d-flex flex-row align-items-center">
-    <div id="itemID">{{item.customerID}}</div>
-    <div class="firstName">{{item.firstName}}</div>
-    <div class="lastName">{{item.lastName}}</div>
-    <div class="email">{{item.email}}</div>
-    <div class="phone">{{item.phone}}</div>
-    <div class="dob">{{item.dob}}</div>
-    <div class="type">{{item.type}}</div>
-    <div class="status">{{item.status}}</div>
-    <div>
-      <label>
-        <input 
-          type="radio" 
-          [checked]="item.status === 'active'" 
-          (change)="toggleStatus(item)" 
-          value="Active"> Active
-      </label>
-      <label>
-        <input 
-          type="radio" 
-          [checked]="item.status === 'blocked'" 
-          (change)="toggleStatus(item)" 
-          value="Blocked"> Blocked
-      </label>
-    </div>
-    <button 
-      class="btn btn-m btn-warning" 
-      (click)="editUser(item.customerID)">Edit</button>
-    <button 
-      class="btn btn-m btn-danger" 
-      (click)="deleteUser(item.customerID)">Delete</button>
-  </div>
-</div> -->

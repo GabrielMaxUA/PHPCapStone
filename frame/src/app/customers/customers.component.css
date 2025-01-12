@@ -1,13 +1,8 @@
-#itemID{
-  display: none;
+.search-input{
+  margin: 40px auto;
+  width: 30vw;
 }
 
-.border{
-  width: 90%;
-}
-
-table{
-  border: 2px solid #000000;
+h2{
   margin: 0 auto;
-  width: 90%;
 }

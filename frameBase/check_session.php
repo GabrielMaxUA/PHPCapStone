@@ -44,7 +44,8 @@ if (isset($_COOKIE['authToken']) && isset($_SESSION['userType'])) {
         'authenticated' => true,
         'userType' => $_SESSION['userType'],
         'userStatus' => $_SESSION['userStatus'],
-        'email' => $_SESSION['email'] ?? null
+        'email' => $_SESSION['email'] ?? null,
+        'customerID' => $_SESSION['customerID'] ?? null
     ]);
 } else {
     http_response_code(401);

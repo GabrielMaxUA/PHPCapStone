@@ -1,6 +1,5 @@
-
-<h1 class="text-center mt-4">Staged models</h1>
-<h3 class="text-center">Enjoy the perfection of body lines and game of light and shapes</h3>
+<h1 class="text-center mt-4">Staged Models</h1>
+<h3 class="text-center">Enjoy the perfection of body lines and the game of light and shapes</h3>
 
 <!-- Filter Buttons -->
 <div class="filter-buttons text-center mt-4">
@@ -9,63 +8,154 @@
   <button (click)="resetFilter()" class="btn-reset m-2">Reset Filter</button>
 </div>
 
-<div *ngIf="user?.type === 'admin'" class="text-center">
-  <form #form="ngForm" (ngSubmit)="submitGalleryChanges()" novalidate>
-    <div class="filePick m-2">
-      <!-- Color Image Upload -->
-      <div class="imageInput m-4">
-        <label for="fileInputColor">Upload new color image:</label>
-        <input
-          class="uploadImage"
-          type="file"
-          id="fileInputColor"
-          (change)="onFileSelected($event, 'color')"
-          name="fileInputColor"
-        />
-      </div>
-      <div class="priceInput m-4">
-        <label for="priceInputColor">Price for Color Image:</label>
-        <input
-          type="number"
-          id="priceInputColor"
-          [(ngModel)]="colorPrice"
-          name="priceInputColor"
-        />
+<!-- Admin section with two-column row-based layout -->
+<div *ngIf="user?.type === 'admin'" class="admin-section">
+  <div *ngIf="isUploading" class="loading-overlay">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <form (ngSubmit)="submitGalleryChanges()" novalidate>
+    <div class="columns-container">
+      <!-- Color Images Column -->
+      <div class="upload-column">
+        <h3 class="column-title">Color Images</h3>
+        
+        <!-- Table-like header -->
+        <div class="form-header">
+          <div class="header-item">#</div>
+          <div class="header-item">Image</div>
+          <div class="header-item">Price</div>
+          <div class="header-item">Actions</div>
+        </div>
+
+        <!-- Color entries container -->
+        <div class="entries-container">
+          <div *ngFor="let entry of colorUploads; let i = index" class="entry-row"
+          [class.filled]="entry.file && entry.price">
+            <!-- Entry number -->
+            <div class="entry-cell entry-number">{{i + 1}}</div>
+
+            <!-- File Input -->
+            <div class="entry-cell">
+              <input
+                class="file-input"
+                type="file"
+                [id]="'colorInput' + i"
+                (change)="onFileSelected($event, 'color', i)"
+              />
+            </div>
+
+            <!-- Price Input -->
+            <div class="entry-cell">
+              <input
+                class="price-input"
+                type="number"
+                [id]="'colorPrice' + i"
+                [(ngModel)]="entry.price"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="onPriceChange('color', i, $event)"
+                placeholder="Price"
+              />
+            </div>
+
+            <!-- Actions -->
+            <div class="entry-cell">
+              <button 
+                type="button" 
+                class="remove-btn"
+                *ngIf="colorUploads.length > 1"
+                (click)="removeUploadEntry('color', i)">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button 
+          type="button" 
+          class="add-btn"
+          (click)="addUploadEntry('color')">
+          Add Color Image
+        </button>
       </div>
 
-      <!-- Black & White Image Upload -->
-      <div class="imageInput m-4">
-        <label for="fileInputBlack">Upload new Black/White image:</label>
-        <input
-          class="uploadImage"
-          type="file"
-          id="fileInputBlack"
-          (change)="onFileSelected($event, 'black')"
-          name="fileInputBlack"
-        />
-      </div>
-      <div class="priceInput m-4">
-        <label for="priceInputBlack">Price for Black/White Image:</label>
-        <input
-          type="number"
-          id="priceInputBlack"
-          [(ngModel)]="blackPrice"
-          name="priceInputBlack"
-        />
+      <!-- Black & White Images Column -->
+      <div class="upload-column">
+        <h3 class="column-title">Black & White Images</h3>
+        
+        <!-- Table-like header -->
+        <div class="form-header">
+          <div class="header-item">#</div>
+          <div class="header-item">Image</div>
+          <div class="header-item">Price</div>
+          <div class="header-item">Actions</div>
+        </div>
+
+        <!-- Black & White entries container -->
+        <div class="entries-container">
+          <div *ngFor="let entry of blackUploads; let i = index" class="entry-row"
+          [class.filled]="entry.file && entry.price">
+            <!-- Entry number -->
+            <div class="entry-cell entry-number">{{i + 1}}</div>
+
+            <!-- File Input -->
+            <div class="entry-cell">
+              <input
+                class="file-input"
+                type="file"
+                [id]="'blackInput' + i"
+                (change)="onFileSelected($event, 'black', i)"
+              />
+            </div>
+
+            <!-- Price Input -->
+            <div class="entry-cell">
+              <input
+                class="price-input"
+                type="number"
+                [id]="'blackPrice' + i"
+                [(ngModel)]="entry.price"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="onPriceChange('black', i, $event)"
+                placeholder="Price"
+              />
+            </div>
+
+            <!-- Actions -->
+            <div class="entry-cell">
+              <button 
+                type="button" 
+                class="remove-btn"
+                *ngIf="blackUploads.length > 1"
+                (click)="removeUploadEntry('black', i)">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button 
+          type="button" 
+          class="add-btn"
+          (click)="addUploadEntry('black')">
+          Add B&W Image
+        </button>
       </div>
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" [disabled]="!isFormValid()">Upload</button>
+    <button 
+      type="submit" 
+      [disabled]="isUploading"
+      class="submit-btn">
+      Upload All Images
+    </button>
   </form>
 </div>
-
 <!-- Gallery Section -->
-<div class="gallery-container">   
+<div class="gallery-container" >
   <div *ngIf="filteredGalleryItems.length === 0" class="empty-cart">
-    <h3 class="text-center">
-      There are no images in the gallery. Please check back later.
-    </h3>
+    <h3 class="text-center">There are no images in the gallery. Please check back later.</h3>
   </div>
   <div *ngIf="filteredGalleryItems.length > 0" id="Gallery">
     <div *ngFor="let item of filteredGalleryItems; let i = index" class="text-center">
@@ -76,7 +166,7 @@
         (imageClick)="openImageOverlay(i)"
         (priceChange)="submitPriceChange($event.pictureID, $event.price)"
         (deleteImage)="delete(+$event)"
-        (cartAdd)="addToCart(+$event)">
+        (cartAdd)="handleLinkClick(item.pictureID)">
       </app-card>
     </div>
   </div>
@@ -90,9 +180,10 @@
 >
   <div class="image-container" (click)="$event.stopPropagation()">
     <img
-      [src]="filteredGalleryItems[selectedImageIndex].sGalleryImage"
-      alt="Enlarged Image"
+      [src]="galleryItems[selectedImageIndex].sGalleryImage"
+      alt="Enlarged Nature Image"
     />
+    <!-- Navigation Arrows -->
     <button class="nav-arrow left-arrow" (click)="navigateGallery(-1)">
       &#8249;
     </button>

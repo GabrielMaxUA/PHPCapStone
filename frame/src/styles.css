@@ -1,120 +1,40 @@
-/* You can add global styles to this file, and also import other style files */
-
-* {
-  box-sizing: border-box;
-  margin: 0 auto;
-  padding: 0;
-  scroll-behavior: smooth;
-}
 @font-face {
   font-family: 'Heading1-font';
-  src: url('../public/raleway/Raleway-SemiBold.ttf') format('truetype');
+  src: url('../src/raleway/Raleway-SemiBold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Heading2-font';
-  src: url('../public/raleway/Raleway-Light.ttf') format('truetype');
+  src: url('../src/raleway/Raleway-Light.ttf') format('truetype');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0; 
+  padding: 0;
   font-family: 'Heading2-font', "Helvetica Neue", sans-serif;
   width: 100vw;
   min-height: 100vh; /* Ensures body height covers the full viewport */
   background: hsl(51, 73%, 93%);
+  
 }
 
-#Main_Gallery{
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-evenly;
-  align-items: start;
-}
-
-.gallery_option{
-  max-width: 30vw;
-  height: auto;
-  font-size: 1.4em;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  margin: 0 20px;
-  text-align: center;
-  text-decoration: none;
-  color: #000000;
-}
-
-img{
-  width: 25vw;
-  height: auto;
-  border-radius: 8px;
-}
-
-a{
-  text-decoration: none;
-  color: #000000;
-} 
-
-.nText, .aText, .sText{
-  width: 80%;
-  font-family: Heading2-font;
-  line-height: 2rem;
-  word-spacing: 0.2rem;
-}
-
-#Gallery{
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-left: 80px;
-  padding-right: 80px;
-}
-
-textarea{
-  text-align: center;
-  width: 90%;
-  margin: auto;
-  margin-top: 20px;
-}
-
-.gallery_option img{
-  max-width: 400px;
-  margin: 10px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.gallery-container{
-  margin-top: 40px;
-  display: flex;
-  flex-flow: row wrap;
-}
-
-input{
-  max-width: 300px;
-  margin: 0 auto;
-}
-
-.uploadImage{
-  width: fit-content;
-  text-align: center;
-}
-
+/* Loading spinner */
 .loading-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px; 
-}
-
-button, .btn{
-  border-radius: 4px;
-  padding: 8px;
-  border: 1px solid #000000;
-  margin: 5px;
-  font-family: Heading1-font, 'Arial Narrow', Arial, sans-serif;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 10;
 }
 
 .loading-icon::after {
@@ -136,7 +56,7 @@ button, .btn{
   }
 }
 
-/* Image overlay styling */
+/* Image overlay styling in galleries*/
 .image-overlay {
   position: fixed;
   top: 0;
@@ -150,15 +70,21 @@ button, .btn{
   z-index: 1000;
 }
 
+.image-container{
+  width: fit-content;
+  padding: 30px;
+  border: 20px solid hsl(0, 2%, 10%);
+  background: white;
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
+}
+
 .image-overlay img {
-  max-width: 80vw; 
-  max-height: 90vh; 
-  height: auto; 
   width: auto; 
+  height: 80vw; 
+  max-height: 80vh;
   object-fit: contain; 
   border-radius: 0;
   border: 1px solid rgb(239, 238, 235);
-  box-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
 }
 
 /* Navigation Arrow Styling */
@@ -166,18 +92,19 @@ button, .btn{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
+  background: none;
   color: #fff;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   z-index: 1001;
-  font-size: 1.5em;
+  font-size: 4.8rem;
+  line-height: 1;
 }
 
 .left-arrow {
@@ -189,50 +116,190 @@ button, .btn{
 }
 
 .nav-arrow:hover {
-  background: rgba(0, 0, 0, 0.8);
+  font-size: 5.5rem;
+  color: hsl(211, 81%, 63%);
 }
 
-@media screen and (max-width: 768px) {
-  .gallery-container{
-    margin-top: 40px;
+#Gallery{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+h1{
+  font-family: 'Heading1-font';
+  font-size: 40px;
+  color: #000;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+h3{
+    font-family: 'Heading2-font';
+    font-size: 30px;
+    color: #000;
     text-align: center;
-  }
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 
-  #Gallery{
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-    max-width: fit-content;
-    margin: 40px auto;
-    padding: 0;
-  }
 
-  #Gallery img{
-    max-width: 150px;
-  }
+/* Upload Section for ADMIN USE IN GALLERIES*/
+.admin-section {
+  margin: 2rem auto;
+  max-width: 1400px;
+  padding: 0 1rem;
+}
 
-  #Gallery{
-    flex-flow: row wrap;
-    align-items: center;
-  }
-  .gallery_option{
-    max-width: 80vw;
-    margin: 20px 0;
-  }
-  img{
-    width: 80%;
-  }
-  .nText, .aText, .sText{
-    font-size: 1.1rem;
-    width: 60vw;
-  }
-  textarea{
-    width: 80vw;
-    text-align: center;
-  }
+.columns-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
 
-  input{
-    width: 80%;
-  }
+.upload-column {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.column-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.form-header {
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 1fr 1fr;
+  gap: 1rem;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.entries-container {
+  max-height: 400px;
+  height: auto; /* Added fixed height */
+  overflow-y: scroll; /* Changed from auto to scroll */
+  border: 1px solid #dee2e6; /* Optional: adds a border to make the container more visible */
+  margin-bottom: 1rem;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #007bff #f0f0f0; /* For Firefox */
+  scroll-behavior: smooth;
+  padding-bottom: 20px; 
+}
+
+/* Styling the scrollbar for Webkit browsers (Chrome, Safari, etc.) */
+.entries-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.entries-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.entries-container::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+  border-radius: 4px;
+}
+
+.entry-row:last-child {
+  margin-bottom: 20px;
+}
+
+.entry-row {
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 1fr 1fr;
+  gap: 1rem;
+  padding: 0.75rem;
+  align-items: center;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.entry-row:hover {
+  background-color: #f8f9fa;
+}
+
+.entry-cell {
+  display: flex;
+  align-items: center;
+}
+
+.entry-number {
+  justify-content: center;
+  font-weight: 500;
+  color: #666;
+}
+
+.file-input {
+  width: 100%;
+  max-width: 250px;
+}
+
+.price-input {
+  width: 100%;
+  max-width: 120px;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.remove-btn {
+  padding: 0.375rem 0.75rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background-color: #c82333;
+}
+
+.add-btn {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+}
+
+.submit-btn {
+  display: block;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
