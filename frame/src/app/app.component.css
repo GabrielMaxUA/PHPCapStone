@@ -1,8 +1,6 @@
 .content-wrapper {
   position: relative;
-  width: 90vw;
-  margin: 0 auto; 
-  margin-top: 40px;
+  margin: 45px;
   min-height: calc(100vh - 80px);
 }
 

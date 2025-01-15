@@ -2,7 +2,6 @@
 .dialog-box {
   font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
   padding: 20px;
-  width: 300px;
   margin: 0 auto;
   text-align: center;
   color: #151414;
@@ -43,9 +42,24 @@ button:last-child {
   color: hsl(0, 0%, 0%); /* Dark text */
   background-color: hsl(0, 0%, 100%);
   border: 10px solid  hsl(0, 0%, 8%);
+  width: fit-content;
   border-radius: 0;
   padding: 20px;
   box-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
 }
 
+@media screen and (max-width: 1280px){
+  .heading{
+    width: 90%;
+    font-size: 1rem;
+  }
+  .message{
+    width: 100%;
+    font-size: 0.9rem;
+  }
+ 
+  ::ng-deep .mat-mdc-dialog-surface {
+    width: fit-content;
+  }
 
+}

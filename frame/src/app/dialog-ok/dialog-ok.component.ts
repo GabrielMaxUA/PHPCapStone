@@ -10,7 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class DialogOkComponent {
   constructor(public dialogRef: MatDialogRef<DialogOkComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { message: string }) {}
+    @Inject(MAT_DIALOG_DATA) public data: {header: string, message: string }) {}
 
   onConfirm(): void {
     this.dialogRef.close(true);

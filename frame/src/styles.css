@@ -56,6 +56,14 @@ body {
   }
 }
 
+.gallery-container{
+  margin: 0 auto;
+  margin-top: 40px;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+
 /* Image overlay styling in galleries*/
 .image-overlay {
   position: fixed;
@@ -71,7 +79,8 @@ body {
 }
 
 .image-container{
-  width: fit-content;
+  width: 90vh;
+  margin: 5vw;
   padding: 30px;
   border: 20px solid hsl(0, 2%, 10%);
   background: white;
@@ -79,9 +88,7 @@ body {
 }
 
 .image-overlay img {
-  width: auto; 
-  height: 80vw; 
-  max-height: 80vh;
+  width: 100%;
   object-fit: contain; 
   border-radius: 0;
   border: 1px solid rgb(239, 238, 235);
@@ -132,7 +139,7 @@ body {
 
 h1{
   font-family: 'Heading1-font';
-  font-size: 40px;
+  font-size: 2rem;
   color: #000;
   text-align: center;
   margin-top: 20px;
@@ -141,7 +148,7 @@ h1{
 
 h3{
     font-family: 'Heading2-font';
-    font-size: 30px;
+    font-size: 1.7rem;
     color: #000;
     text-align: center;
     margin-top: 20px;
@@ -302,4 +309,43 @@ h3{
 .submit-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+  border:1px solid hsla(0, 1%, 38%, 0.836); 
+}
+
+@media screen and (max-width: 1280px){
+  h1{
+    font-size: 1.9rem;
+  }
+  h3{
+    font-size: 1.5rem;
+}
+}
+
+@media screen and (max-width: 1024px){
+  h1{
+    font-size: 1.7rem;
+  }
+  
+  h3{
+      font-size: 1.4rem;
+  }
+  #Gallery{
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media screen and (max-width: 768px){
+  h1{
+    font-size: 1.6rem;
+  }
+  h3{
+    font-size: 1.2rem;
+    width: 65vw;
+    margin: 10px auto;
+  }
+  #Gallery{
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }

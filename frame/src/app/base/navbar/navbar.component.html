@@ -5,7 +5,10 @@
       <a routerLink="/about" 
          routerLinkActive="active" 
          [routerLinkActiveOptions]="{ exact: true }"
-         (click)="toggleDropdown($event)">About</a>
+         (click)="toggleDropdown($event)">
+        Home
+      </a>
+      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && isActive('/about')">▼</span>
     </div>
     
     <div class="linkholder">
@@ -15,27 +18,34 @@
          (click)="toggleDropdown($event)">
         {{ isResponsiveMode && isChildGalleryActive ? '\< Back' : 'Gallery' }}
       </a>
+      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && !isChildGalleryActive && isActive('/gallery')">▼</span>
     </div>
     
-    <div class="linkholder" *ngIf="user?.type === 'customer'">
+    <div class="text-center" *ngIf="user?.type === 'customer'">
       <a class="cartLink" 
          routerLink="/cart" 
          routerLinkActive="active"
          (click)="toggleDropdown($event)">Cart
         <span class="counter" *ngIf="cartCount > 0">{{cartCount}}</span>
       </a>
+      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && isActive('/cart')">▼</span>
     </div>
     
     <div class="linkholder" *ngIf="!user">
-      <a routerLink="/signin" 
+      <a 
+         routerLink="/signin" 
          routerLinkActive="active"
-         (click)="toggleDropdown($event)">SignIn/Register</a>
+         (click)="toggleDropdown($event)">SignIn/Register
+      </a>  
+      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && isActive('/signin')">▼</span>
     </div>
     
     <div class="linkholder" *ngIf="user?.type === 'admin'">
       <a routerLink="/customers" 
          routerLinkActive="active"
-         (click)="toggleDropdown($event)">Customers</a>
+         (click)="toggleDropdown($event)">Customers
+      </a>
+      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && isActive('/customers')">▼</span>
     </div>
     
     <div class="linkholder" *ngIf="user">

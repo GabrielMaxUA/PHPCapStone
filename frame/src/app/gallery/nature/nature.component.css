@@ -1,9 +1,4 @@
-.gallery-container{
-  margin-top: 40px;
-  display: flex;
-  flex-flow: row wrap;
-}
-
+/* 
 input{
   max-width: 300px;
   margin: 0 auto;
@@ -31,11 +26,11 @@ input{
   animation: spin 1s linear infinite;
 } */
 
- .btn{
+ /* .btn{
   border-radius: 4px;
   padding: 8px;
   border: 1px solid #000000;
   margin: 5px;
   font-family: Heading1-font, 'Arial Narrow', Arial, sans-serif;
-}
+} */ 
 

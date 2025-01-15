@@ -5,32 +5,45 @@
     
     <div class="labs">
       <label for="email">Email:</label>
-      <input
-        type="email"
+      <div class="login_error">
+        <input
+        type="email" 
         class="form-control"
         name="email"
         ngModel
         #email="ngModel"
+        placeholder="Email"
         required
-      /> 
-      <div *ngIf="status === 'blocked'" class="error text-center">{{ success }}</div>
-      <div *ngIf="email.invalid && email.touched" class="error">Email is required</div>
+        email 
+      />
+      <!-- Validation messages -->
+      <div *ngIf="email.invalid && email.touched" class="error">
+        <!-- Required validation -->
+        <span *ngIf="email.errors?.['required']">Email is required</span>
+        <!-- Invalid email format validation -->
+        <span *ngIf="email.errors?.['email']">Invalid email format</span>
+      </div>
       <div *ngIf="formErrors.email" class="error">{{ formErrors.email }}</div>
-    </div>
+      </div>
+   </div>
+    
 
     <div class="labs">
       <label for="password">Password:</label>
-      <input
+      <div class="login_error">
+        <input
         type="password"
         class="form-control"
         name="password"
         ngModel
         #password="ngModel"
+        placeholder="Password"
         required
       />
       <div *ngIf="password.invalid && password.touched" class="error">Password is required</div>
       <div *ngIf="formErrors.password" class="error">{{ formErrors.password }}</div>
-    </div>
+      </div>
+   </div>
 
       <button class="btn" type="submit" [disabled]="f.invalid">Login</button>
       

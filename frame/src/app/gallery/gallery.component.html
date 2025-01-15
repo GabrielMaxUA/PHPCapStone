@@ -1,7 +1,7 @@
 <!-- Main Gallery Section -->
 <div id="Main_Gallery" *ngIf="!isChildRouteActive">
   <div class="gallery_option">
-    <div class="p-3 image-wrapper"><img [src]="nImageUrl" alt="" *ngIf="nImageUrl"></div>
+    <div class="image-wrapper"> <a class="text-center" routerLink="architecture"><img [src]="nImageUrl" alt="" *ngIf="nImageUrl"></a></div>
     
     <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
       <app-loading-spinner></app-loading-spinner>
@@ -18,7 +18,7 @@
   </div>
 
   <div class="gallery_option">
-    <div class="p-3 image-wrapper"><img [src]="aImageUrl" alt="" *ngIf="aImageUrl"></div>
+    <div class="image-wrapper"> <a class="text-center" routerLink="architecture"><img [src]="aImageUrl" alt="" *ngIf="aImageUrl"></a></div>
 
     <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
       <app-loading-spinner></app-loading-spinner>
@@ -35,8 +35,8 @@
   </div>
 
   <!-- Staged Section -->
-  <div class="gallery_option">
-    <div class="p-3 image-wrapper"><img [src]="sImageUrl" alt="" *ngIf="sImageUrl"></div>
+  <div class="gallery_option staged">
+    <div class="image-wrapper"><a class="text-center image_link" (click)="handleLinkClick($event)"><img [src]="sImageUrl" alt="" *ngIf="sImageUrl"></a></div>
     <div *ngIf="isUploading" class="loading-icon d-flex justify-content-center align-items-center">
       <app-loading-spinner></app-loading-spinner>
     </div>

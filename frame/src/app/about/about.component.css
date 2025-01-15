@@ -1,22 +1,25 @@
 .flex-media{
-  width: fit-content;
+  width: 100%;
 }
 
 .about {
   position: relative;
   overflow: hidden; /* This ensures proper wrapping */
-  width: 100%;
-  padding: 25px;
+  width: 85%;
   margin: 0 auto;
 }
 
 .image-wrapper{
   padding: 30px;
   float: left;
-  width: 75vw;
+  display: flex;
+  justify-content: center;
+  width: fit-content;
   max-width: 800px;
   height: auto;
-  margin: 0 40px 30px 0;
+  margin: 0 auto;
+  margin-right: 40px;
+  margin-bottom: 40px;
   background: hsla(0, 0%, 100%, 0.836);
   box-shadow: 4px 4px 25px hsl(0, 0%, 16%);
   border-radius: 0;
@@ -24,9 +27,10 @@
 }
 
 img {
-  padding: 30px;
   float: left;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   height: auto;
   background: hsl(0, 0%, 100%);shape-outside: margin-box; /* This helps text wrap naturally around the image */
   border-radius: 0;
@@ -96,18 +100,17 @@ img {
     overflow: hidden;
     display: flex;
     flex-flow: column nowrap;
+    justify-content: center;
     width: 90vw;
     padding: 25px;
     margin: 0 auto;
   }
   
   .image-wrapper{
-    padding: 15px;
-    float: left;
     width: fit-content;
     height: auto;
     margin: 0 auto;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     background: hsla(0, 0%, 100%, 0.836);
     box-shadow: 4px 4px 25px hsl(0, 0%, 16%);
     shape-outside: margin-box; /* This helps text wrap naturally around the image */
@@ -115,9 +118,8 @@ img {
   }
   
   img {
-    padding: 20px;
     float: none;
-    width: 60vw;
+    width: 100%;
     height: auto;
     background: hsl(0, 0%, 100%);shape-outside: margin-box; /* This helps text wrap naturally around the image */
     border-radius: 0;
@@ -168,47 +170,36 @@ img {
 
   .image-wrapper{
     padding: 15px;
-    float: left;
-    max-width: 100%;
-    width: fit-content;
-    height: auto;
-    margin: 0 auto;
-    margin-bottom: 30px;
-    background: hsla(0, 0%, 100%, 0.836);
-    box-shadow: 4px 4px 25px hsl(0, 0%, 16%);
     shape-outside: margin-box; /* This helps text wrap naturally around the image */
-    border: 20px solid hsla(0, 0%, 0%, 0.836);
+    border: 15px solid hsla(0, 0%, 0%, 0.836);
+    margin: 0 auto;
+    margin-bottom: 40px;
+  }
+
+  img {
+    width: calc(50vw - 20px);
+    height: auto;
+    background: hsl(0, 0%, 100%);
+    border-radius: 0;
   }
 }
 
 @media screen and (max-width: 768px){
   .about {
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
     display: flex;
     flex-flow: column nowrap;
-    width: 90vw;
-    margin: 20px auto;
   }
   
   .image-wrapper{
     padding: 15px;
-    float: none;
-    width: fit-content;
     max-width: fit-content;
-    height: auto;
+    border: 10px solid hsla(0, 0%, 0%, 0.836);
     margin: 0 auto;
-    margin-bottom: 30px;
-    background: hsla(0, 0%, 100%, 0.836);
-    box-shadow: 4px 4px 25px hsl(0, 0%, 16%);
-    shape-outside: margin-box; 
-    border: 20px solid hsla(0, 0%, 0%, 0.836);
+    margin-bottom: 40px;
   }
   
   img {
-    padding: 15px;
-    width: 60vw;
+    width: calc(50vw - 20px);
     height: auto;
     background: hsl(0, 0%, 100%);
     border-radius: 0;

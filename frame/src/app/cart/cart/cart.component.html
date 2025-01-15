@@ -3,7 +3,7 @@
   
   <div *ngIf="cartItems.length === 0" class="empty-cart">
     <p>Your cart is empty</p>
-    <button routerLink="/gallery" class="clear-btn">Continue Shopping</button>
+    <button routerLink="/gallery" class="continue-btn">Back to Shopping</button>
   </div>
   
   <div *ngIf="cartItems.length > 0" class="cart-items">
@@ -39,7 +39,8 @@
       <div id="paypal-button-container" *ngIf="cartItems.length > 0">
         <button (click)="checkOut()" 
                 [disabled]="isProcessingCheckout" 
-                class="checkout-btn">
+                class="checkout-btn" 
+                id="paypal-button-container">
           Checkout
         </button>
       </div>
@@ -47,41 +48,3 @@
   </div>
 </div>
 
-<!-- 
-<div class="cart-container">
-    <h1 class="text-center mb-5">Shopping Cart</h1>
-  
-    <div *ngIf="cartItems.length === 0" class="empty-cart">
-      <p>Your cart is empty</p>
-      <a routerLink="/gallery" class="btn">Continue Shopping</a>
-    </div>
-  
-    <div *ngIf="cartItems.length > 0" class="cart-items">
-      <div *ngFor="let item of cartItems" class="cart-item">
-        <div class="item-image">
-          <img [src]="item.nGalleryImage || item.sGalleryImage || item.aGalleryImage" 
-               alt="Product Image" 
-               class="thumbnail">
-        </div>
-        <div class="item-details">
-          <p id="pictureID">{{item.pictureID}}</p>
-          <p>Price: {{item.price | currency}}</p>
-          
-          <button class=" btn remove-btn" (click)="removeItem(item.pictureID)">Remove</button>
-        </div>
-      </div>
-      
-    </div>
-    <div class="cart-summary text-center">
-      <h3>Total: {{total | currency}}</h3>
-      <div class="cart-actions">
-        <button class="btn clear-btn" (click)="clearCart()" >Clear Cart</button>
-        <div id="paypal-button-container" *ngIf="cartItems.length > 0"><button 
-          (click)="checkOut()" [disabled]="isProcessingCheckout" class="checkout-btn">
-          Checkout
-        </button></div>
-        
-      </div>
-      </div>
-    </div>
-   -->

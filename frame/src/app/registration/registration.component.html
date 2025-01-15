@@ -1,90 +1,111 @@
-<p>registration works!</p>
+
   <div class="form-content">
     <form  #f="ngForm" (submit)="register(f)">
       <div class="labs">
         <label for="firstName">First Name:</label>
-        <input
+        <div class="input_error">
+          <input
           type="text"
           class="form-control"
           name="firstName"
           ngModel
           #firstName="ngModel"
+          placeholder="Name"
           required
         />
         <div *ngIf="firstName.invalid && firstName.touched" class="error">Name is required</div>
         <div *ngIf="formErrors.firstName" class="error">{{ formErrors.firstName }}</div>
       </div>
+        </div>
+    
   
       <div class="labs">
         <label for="lastName">Last Name:</label>
-        <input
+        <div class="input_error">
+          <input
           type="text"
           class="form-control"
           name="lastName"
           ngModel
           #lastName="ngModel"
+          placeholder="Last Name"
           required
         />
         <div *ngIf="lastName.invalid && lastName.touched" class="error">Last Name is required</div>
         <div *ngIf="formErrors.lastName" class="error">{{ formErrors.lastName }}</div>
+        </div>
       </div>
   
       <div class="labs">
         <label for="email">Email:</label>
-        <input
+        <div class="input_error">
+          <input
           type="text"
           class="form-control"
           name="email"
           ngModel
           #email="ngModel"
+          placeholder="Email"
           required
         />
         <div *ngIf="email.invalid && email.touched" class="error">Email is required</div>
         <div *ngIf="formErrors.email" class="error">{{ formErrors.email }}</div>
+        </div>
       </div>
   
       <div class="labs">
         <label for="phone">Phone:</label>
+        <div class="input_error">
         <input
           type="text"
           class="form-control"
           name="phone"
           ngModel
           #phone="ngModel"
+          placeholder="Phone number"
         />
         <div *ngIf="phone.invalid && phone.touched" class="error">Phone format to be 1(234)5675656</div>
         <div *ngIf="formErrors.phone" class="error">{{ formErrors.phone }}</div>
       </div>
+      </div>
 
       <div class="labs">
         <label for="password">Password:</label>
+        <div class="input_error">
         <input
           type="password"
           class="form-control"
           name="password"
           ngModel
           #password="ngModel"
+          placeholder="Password"
           required
         />
         <div *ngIf="password.invalid && password.touched" class="error">Password is required</div>
         <div *ngIf="formErrors.password" class="error">{{ formErrors.password }}</div>
       </div>
+      </div>
   
       <div class="labs">
         <label for="rPassword">Repeat Password:</label>
+        <div class="input_error">
         <input
           type="password"
           class="form-control"
           name="rPassword"
           ngModel
           #rPassword="ngModel"
+          placeholder="Re-enter Password"
           required
         />
         <div *ngIf="rPassword.touched && rPassword.value !== password.value " class="error">Password isn't msatching</div>
         <div *ngIf="formErrors.rPassword" class="error">{{ formErrors.rPassword }}</div>
       </div>
+    </div>
+
       <div class="labs">
         <label for="dob">DOB:</label>
+        <div class="input_error">
         <input
           type="date"
           class="form-control"
@@ -96,10 +117,11 @@
         <div *ngIf="dob.invalid && dob.touched" class="error">DOB is required</div>
         <div *ngIf="formErrors.dob" class="error">{{ formErrors.dob }}</div>
       </div>
+      </div>
   
   
-  <div class="text-center mt-2 ">
-    <button  type="submit" [disabled]="f.invalid">Register</button>
+  <div class="text-center mt-2">
+    <button  class="register-btn" type="submit" [disabled]="f.invalid">Register</button>
   </div>
   <a routerLink="/signin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Login</a>
       

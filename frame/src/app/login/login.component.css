@@ -1,7 +1,7 @@
 .form-content{
   margin: 40px auto;
+  width: fit-content;
   padding: 15px;
-  width: 80vw;
   border: 2px #000000 solid;
   background: #e1dcbd;
   border-radius: 12px;
@@ -12,10 +12,13 @@
 }
 
 form{
+  display: flex;
+  flex-flow: column nowrap;
+  width: 60vw;
+  max-width: 800px;
   margin: 0 auto;
-  width: 80%;
   text-align: center;
-}
+  }
 
 form .labs{
   float: left;
@@ -24,6 +27,7 @@ form .labs{
 .labs{
   margin: 10px;
   width: 100%;
+
 }
 
 label{
@@ -48,15 +52,18 @@ label{
 
 .link h3{
   font-family: 'Heading2-font', 'Arial Narrow', Arial, sans-serif;
+  font-size: 1.3rem;
+  margin: 0;
 }
 
 a{
   font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
-  font-size: 2em;
+  font-size: 1.4em;
+  color:hsl(0, 2%, 60%);
 }
 
 a:hover{
-  color: hsl(0, 85%, 60%);
+  color: hsl(0, 76%, 60%);
   text-shadow: 5px 5px 10px hsl(0, 54%, 76%), -5px -5px 10px hsl(0, 54%, 76%);
 }
 
@@ -66,13 +73,18 @@ a:hover{
 
 .btn {
   padding: 10px 20px;
-  background: hsl(225, 99%, 49%);
-  color: white;
+  background: hsl(203, 99%, 49%);
+  color: hsl(0, 0%, 100%);
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-family: Heading1-font;
   letter-spacing: 0.1rem;
+  margin: 20px auto;
+}
+
+.btn.active{
+  background: hsl(212, 99%, 49%);
 }
 
 .error {
@@ -80,4 +92,59 @@ a:hover{
   width: 300px;
   margin-left: 20px;
   float: left;
+}
+
+@media screen and (max-width: 768px) {
+  .form-content{
+    padding: 10px;
+    width: 75vw;
+  }
+
+  form{
+    width: 65vw;
+  }
+
+  .labs{
+    width: 60vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  label{
+    width: 60vw;
+    justify-content: start;
+    margin-right: 0;
+  }
+  
+  .input_error{
+    display: flex;
+    width: 60vw;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+  }
+  
+  .labs input{
+    width: 60vw;
+    min-width: 170px;
+    text-align: left;
+    margin-right: 0;
+  }
+
+  .error{
+    width: 60vw;
+    margin: 0 auto;
+  }
+
+  a{
+    width: 60vw;
+    text-align: right;
+    font-size: 1.1rem;
+  }
+  .link h3{
+    font-size: 0.9rem;
+  }
 }

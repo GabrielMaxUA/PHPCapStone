@@ -9,7 +9,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrl: './dialog.component.css'
 })
 export class DialogComponent {
-  constructor(public dialogRef: MatDialogRef<DialogComponent>,@Inject(MAT_DIALOG_DATA) public data: { message: string }) {}
+  constructor(public dialogRef: MatDialogRef<DialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { heading: string, message: string }) {}
 
   onConfirm(): void {
     this.dialogRef.close(true);

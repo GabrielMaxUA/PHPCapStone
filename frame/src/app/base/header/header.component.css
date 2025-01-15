@@ -88,7 +88,8 @@ header {
 aside {
   position: fixed;  
   right: -130px;
-  width: 45px;
+  width: 40px;
+  text-align: center;
   height: 100vh;
   transition: right 0.4s ease-in-out; 
   z-index: 5;
@@ -99,6 +100,7 @@ aside.active {
   right: 20px;
   top: 0;
   z-index: 5;
+  background: none;
 }
 
 .nav_social {
@@ -132,24 +134,56 @@ aside.active {
     width: 30px;
   }
 
-  aside {
-    position: fixed;  
-    right: -130px;
-    width: 40px;
-    height: 100vh;
-    transition: right 0.4s ease-in-out; 
-    z-index: 5;
-    /* font-size: 1em; */
-  }
-
   aside.active {
-    right: 14px;
-    top: 0;
-    z-index: 5;
+    right: 10px;
+    text-align: center;
   }
 
   .nav_social {
     margin-top: 90px;
+  }
+
+  .menu {
+    position: fixed;
+    top: 8px;
+    right: -18px;
+    width: 70px;
+  }
+  
+  .bar {
+    margin: 4.5px auto;
+  }
+  
+  .menu.active .bar:nth-child(1) {
+    width: 31px;
+  }
+  
+  .menu.active .bar:nth-child(2) {
+    width: 30px;  /* Keep consistent width */
+  }
+  
+  .menu.active .bar:nth-child(3) {
+    width: 31px;
+  }
+  
+  .menu:not(.active) {
+    margin-right: 10px;
+  }
+  
+  .menu.active {
+    margin-right: 10px;
+  }
+  
+  .menu:not(.active) .bar:nth-child(3){
+    width: 30px;
+  }
+  
+  .menu:not(.active) .bar:nth-child(1) {
+    width: 30px;
+  }
+  
+  .menu:not(.active) .bar:nth-child(2) {
+    width: 30px;
   }
 }
 

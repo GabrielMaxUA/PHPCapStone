@@ -88,7 +88,7 @@ try {
             // Insert into orderDetails once we have the first orderID
             $stmtDetails = $con->prepare("
                 INSERT INTO orderDetails (orderNumber, date, total, orderID) 
-                VALUES (?, CURDATE(), ?, ?)
+                VALUES (?, NOW(), ?, ?)
             ");
             
             $stmtDetails->bind_param('sdi', $orderNumber, $totalAmount, $orderID);

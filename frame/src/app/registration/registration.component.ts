@@ -16,8 +16,7 @@ export class RegistrationComponent {
 
   constructor(private service: Service, private router: Router, private http: HttpClientModule){}
 
-  formErrors = { firstName: '', lastName: '', email: '', password: '', rPassword: '',
-    phone: '', dob: ''};
+  formErrors = { firstName: '', lastName: '', email: '', password: '', rPassword: '', phone: '', dob: ''};
   users: User[] = [];
   user: User = {firstName: '', lastName: '', email: '', password: '', dob: undefined, phone: ''}
   success = '';
@@ -25,8 +24,13 @@ export class RegistrationComponent {
   register(f: NgForm): void {
     // Reset form errors
     this.formErrors = { firstName: '', lastName: '', email: '', password: '', rPassword: '', phone: '', dob: '' };
-  
+    
     if (f.valid) {
+      if (!this.isValidEmail(f.value['email'])) {
+        this.formErrors['email'] = 'Invalid email format';
+        return;
+      }
+  
       this.user = {
         firstName: f.value['firstName'],
         lastName: f.value['lastName'],
@@ -41,7 +45,7 @@ export class RegistrationComponent {
       this.service.register(this.user).subscribe(
         (response: User) => {
           this.users.push(response);
-          console.log('Registration successful')
+          console.log('Registration successful');
           this.success = 'Registration successful';
           this.router.navigate(['signin']);
         },
@@ -52,5 +56,10 @@ export class RegistrationComponent {
       );
     }
   }
-
+  
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  }
+  
 }

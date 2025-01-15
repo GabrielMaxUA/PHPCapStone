@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Service } from '../../service/service';
 import { CartItem } from '../../Models/interfaces';
 import { DialogComponent } from '../../dialog/dialog.component';
@@ -20,584 +20,332 @@ export class CartComponent implements OnInit {
   private customerID: number | null = null;
   purchasedItems: Set<number> = new Set();
   isDownloading: boolean = false;
-  baseUrl = 'http://localhost/frameBase';
-  //baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; 
+  //baseUrl = 'http://localhost/frameBase';
+  baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; 
 
   constructor(
     private service: Service, 
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private cdRef: ChangeDetectorRef // Inject ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadCartItems();
+    // Initial setup for the cart component
+
     console.log('Items in cart:', this.cartItems);
-    // Subscribe to cart items for real-time updates
+
+    // Subscribe to cart items for real-time updates from the service
     this.service.cartItems$.subscribe((items: CartItem[]) => {
-      this.cartItems = items;
-      this.calculateTotal();
+      this.cartItems = items; // Update the local cart items array
+      this.calculateTotal(); // Recalculate the total price
+      this.cdRef.detectChanges(); // Trigger change detection for updates
+      console.log('Cart items updated:', items);
     });
-    // Load purchased items
-    this.loadPurchasedItems();
-  }
 
-  loadCartItems(): void {
+    // Load purchased items and check session authentication
+    this.service.checkSession().subscribe((sessionData) => {
+      if (sessionData.authenticated) { // If user is authenticated
+        this.service.loadCartFromStorage(); // Load cart items from storage
+        this.loadPurchasedItems(); // Load purchased items
+      }
+    });
+}
+
+loadCartItems(): void {
+    // Load cart items from the service
     this.cartItems = this.service.getCartItems();
-    this.calculateTotal();
-  }
+    this.calculateTotal(); // Calculate the total price of the items in the cart
+}
 
-  private checkIfPurchased(pictureID: number): void {
+private checkIfPurchased(pictureID: number): void {
+    // Check if a specific picture has been purchased
     this.service.checkPurchaseStatus(pictureID).subscribe({
       next: (response) => {
         if (response.success) {
-          // Update the status in cartItems array
+          // Find the cart item and update its status
           const cartItem = this.cartItems.find(item => item.pictureID === pictureID);
           if (cartItem) {
-            cartItem.status = response.status;
+            cartItem.status = response.status; // Update the item's status
           }
           if (response.isPurchased || response.isDownloaded) {
-            this.purchasedItems.add(pictureID);
+            this.purchasedItems.add(pictureID); // Mark the item as purchased
           }
-          this.calculateTotal(); // Recalculate total after status update
+          this.calculateTotal(); // Recalculate the total price
         }
       },
       error: (error) => {
-        console.error('Error checking purchase status:', error);
+        console.error('Error checking purchase status:', error); // Log errors
       }
     });
-  }
-  
-  private calculateTotal(): void {
+}
+
+private calculateTotal(): void {
+    // Calculate the total price of active items in the cart
     this.total = this.cartItems.reduce((sum, item) => {
-      if (item.status === 'active') { // Only include active items in total
+      if (item.status === 'active') { // Only include active items
         const itemPrice = typeof item.price === 'string' ? parseFloat(item.price) : item.price;
-        return sum + itemPrice;
+        return sum + itemPrice; // Add the item's price to the total
       }
       return sum;
     }, 0);
-    this.total = Math.round(this.total * 100) / 100;
-  }
 
-  private loadPurchasedItems(): void {
+    this.total = Math.round(this.total * 100) / 100; // Round to two decimal places
+}
+
+private loadPurchasedItems(): void {
+    // Load purchased items for the authenticated user
     this.service.checkSession().subscribe({
       next: (sessionData) => {
         if (sessionData.authenticated && sessionData.customerID) {
-          this.customerID = sessionData.customerID;
+          this.customerID = sessionData.customerID; // Set the customer ID
           this.cartItems.forEach(item => {
-            this.checkIfPurchased(item.pictureID);
+            this.checkIfPurchased(item.pictureID); // Check purchase status for each item
           });
         }
       },
       error: (error) => {
-        console.error('Session check failed:', error);
+        console.error('Session check failed:', error); // Log errors
       }
     });
-  }
+}
 
-  removeItem(pictureID: number): void {
+removeItem(pictureID: number): void {
+    // Remove an item from the cart by picture ID
     this.service.removeFromCart(pictureID);
-    this.loadCartItems();
-  }
+    this.loadCartItems(); // Reload the cart items
+}
 
-  clearCart(): void {
+clearCart(): void {
+    // Clear all items from the cart
     this.service.clearCart();
-    this.loadCartItems();
-  }
+    this.loadCartItems(); // Reload the cart items
+}
 
-  downloadImage(pictureID: number): void {
-    if (this.isDownloading) return;
-  
+downloadImage(pictureID: number): void {
+    if (this.isDownloading) return; // Prevent multiple simultaneous downloads
+
     if (!this.customerID) {
-      this.showDialog('Please log in to download your purchased images.');
+      // Show a dialog if the user is not logged in
+      this.showDialog('Attention', 'Please log in to download your purchased images.');
       return;
     }
-  
-    this.isDownloading = true;
-  
+
+    // Show a confirmation dialog before downloading
+    const message = "Please be aware that after downloading, your purchased image will be removed from the cart and you won't be able to retrieve it again.";
+
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px', // Set dialog width
+      data: { heading: 'WARNING', message }, // Pass the warning message
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.startDownload(pictureID); // Start the download process if confirmed
+      } else {
+        console.log('Download canceled by the user.');
+      }
+    });
+}
+
+private startDownload(pictureID: number): void {
+    this.isDownloading = true; // Flag to indicate the download is in progress
+    if (this.customerID === null) {
+      console.error('Customer ID is null. Cannot proceed with the download.');
+      return;
+    }
+
     this.service.downloadProduct(pictureID, this.customerID).subscribe({
       next: (blob: Blob) => {
         try {
-          // Check if the response is an error message in JSON format
-          const reader = new FileReader();
-          reader.onload = () => {
-            try {
-              const jsonResponse = JSON.parse(reader.result as string);
-              this.calculateTotal();
-              if (!jsonResponse.success) {
-                this.showDialog(jsonResponse.error || 'Download failed');
-                return;
-              }
-            } catch {
-              // Not JSON, proceed with download
-              const url = window.URL.createObjectURL(blob);
-              const link = document.createElement('a');
-              link.href = url;
-              
-              // Get the filename from Content-Disposition header if available
-              const contentDisposition = blob.type;
-              const filename = `high_quality_image_${pictureID}.png`;
-              
-              link.download = filename;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              window.URL.revokeObjectURL(url);
-              
-              this.service.removeFromCart(pictureID);
-              this.showDialog('Download completed successfully!');
-              this.updateImageStatus(pictureID);
-              
-            }
-          };
-          reader.readAsText(blob);
+          // Create a URL for the downloaded Blob
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `high_quality_image_${pictureID}.png`; // Default filename
+          document.body.appendChild(link);
+          link.click(); // Trigger download
+          document.body.removeChild(link); // Remove the link element
+          window.URL.revokeObjectURL(url); // Revoke the Blob URL
+
+          this.service.removeFromCart(pictureID); // Remove the item from the cart
+          this.showDialog('Thank you', 'Download completed successfully!');
+          this.updateImageStatus(pictureID); // Update the item's status to 'downloaded'
         } catch (error) {
-          console.error('Error processing download:', error);
-          this.showDialog('Failed to process download');
+          console.error('Error during download:', error);
+          this.showDialog('OOPS', 'Failed to process download.');
         }
       },
       error: (error) => {
-        console.error('Download error:', error);
-        if (error.error instanceof Blob) {
-          // Try to read error message from blob
-          const reader = new FileReader();
-          reader.onload = () => {
-            try {
-              const errorResponse = JSON.parse(reader.result as string);
-              this.showDialog(errorResponse.error || 'Download failed');
-            } catch {
-              this.showDialog('Failed to download image');
-            }
-          };
-          reader.readAsText(error.error);
-        } else {
-          this.showDialog('Failed to download image');
-        }
+        console.error('Download error:', error); // Log errors
+        this.showDialog('OOPS', 'Failed to process download.');
       },
       complete: () => {
-        this.isDownloading = false;
-      }
+        this.isDownloading = false; // Reset the downloading flag
+      },
     });
-  }
-
-  // New method to update image status
-private updateImageStatus(pictureID: number): void {
-  this.service.updateImageStatus(pictureID, 'downloaded').subscribe({
-    next: (response) => {
-      console.log('Image status updated successfully');
-    },
-    error: (error) => {
-      console.error('Failed to update image status:', error);
-    }
-  });
 }
 
-  checkOut(): void {
-    if (this.isProcessingCheckout) return;
-    this.isProcessingCheckout = true;
-
-    // First verify session
-    this.service.checkSession().subscribe({
-      next: (sessionData) => {
-        if (!sessionData.authenticated) {
-          this.showDialog('Please log in to complete your purchase');
-          this.isProcessingCheckout = false;
-          return;
-        }
-
-        this.customerID = sessionData.customerID;
-
-        if (this.customerID === null) {
-          this.showDialog('Customer ID is missing. Please try again.');
-          this.isProcessingCheckout = false;
-          return;
-        }
-
-        // Initiate payment process
-        this.initiatePayment();
+private updateImageStatus(pictureID: number): void {
+    // Update the status of the image to 'downloaded'
+    this.service.updateImageStatus(pictureID, 'downloaded').subscribe({
+      next: () => {
+        console.log('Image status updated successfully');
       },
       error: (error) => {
-        console.error('Session check failed:', error);
-        this.showDialog('Failed to verify session. Please try again.');
-        this.isProcessingCheckout = false;
+        console.error('Failed to update image status:', error); // Log errors
       }
     });
-  }
+}
 
-  private initiatePayment(): void {
-    // Filter only active items
+checkOut(): void {
+    if (this.isProcessingCheckout) return; // Prevent multiple simultaneous checkouts
+
+    this.isProcessingCheckout = true; // Set the checkout processing flag
+
+    // Verify the user's session
+    this.service.checkSession().subscribe({
+      next: (sessionData) => {
+        if (!sessionData.authenticated) { // If not authenticated, show a dialog
+          this.showDialog('Sorry', 'Please log in to complete your purchase');
+          this.isProcessingCheckout = false; // Reset the flag
+          return;
+        }
+
+        this.customerID = sessionData.customerID; // Set the customer ID
+
+        if (this.customerID === null) {
+          this.showDialog('Customer ID is missing.', 'Please try again.');
+          this.isProcessingCheckout = false; // Reset the flag
+          return;
+        }
+
+        this.initiatePayment(); // Proceed to initiate payment
+      },
+      error: (error) => {
+        console.error('Session check failed:', error); // Log errors
+        this.showDialog('Error', 'Failed to verify session. Please try again.');
+        this.isProcessingCheckout = false; // Reset the flag
+      }
+    });
+}
+
+private initiatePayment(): void {
+    // Filter only active cart items for payment
     const activeItems = this.cartItems.filter(item => item.status === 'active');
-    
+
     console.log('Initiating payment with:', {
-        items: activeItems,  // Send only active items
-        total: this.total,
-        customerID: this.customerID
+      items: activeItems, // Active items to be paid for
+      total: this.total, // Total price
+      customerID: this.customerID // Customer ID for reference
     });
 
-    // Check if we have any active items
     if (activeItems.length === 0) {
-        this.showDialog('No active items to purchase.');
-        this.isProcessingCheckout = false;
+        this.showDialog('Sorry', 'No active items to purchase.');
+        this.isProcessingCheckout = false; // Reset the flag
         return;
     }
 
+    // Call the service to initiate payment
     this.service.initiatePayment({
-        items: activeItems,  // Send only active items
-        total: this.total,
-        customerID: this.customerID
+        items: activeItems, // Active items
+        total: this.total, // Total price
+        customerID: this.customerID // Customer ID
     }).subscribe({
         next: (paymentResponse) => {
-            console.log('Payment response:', paymentResponse);
-            console.log('Items in cart:', this.cartItems);
             if (paymentResponse.success) {
-                this.orderNumber = paymentResponse.orderNumber;
-                this.renderPayPalButton(paymentResponse.paypalClientId);
+                this.orderNumber = paymentResponse.orderNumber; // Store the order number
+                this.renderPayPalButton(paymentResponse.paypalClientId); // Render PayPal button
             } else {
-                this.showDialog(paymentResponse.error || 'Payment initiation failed');
-                this.isProcessingCheckout = false;
+                this.showDialog('Error', paymentResponse.error || 'Payment initiation failed.');
+                this.isProcessingCheckout = false; // Reset the flag
             }
         },
         error: (error) => {
-            console.error('Payment initiation failed:', error);
-            let errorMessage = 'Failed to initiate payment.';
-            if (error.error && error.error.error) {
-                errorMessage += ' ' + error.error.error;
-            }
-            this.showDialog(errorMessage);
-            this.isProcessingCheckout = false;
+            console.error('Payment initiation failed:', error); // Log errors
+            this.showDialog('', 'Failed to initiate payment. Please try again.');
+            this.isProcessingCheckout = false; // Reset the flag
         }
     });
 }
 
-  private renderPayPalButton(clientId: string): void {
+private renderPayPalButton(clientId: string): void {
     const paypal = (window as any).paypal;
     if (!paypal) {
       console.error('PayPal SDK not loaded');
-      this.isProcessingCheckout = false;
+      this.isProcessingCheckout = false; // Reset the flag
       return;
     }
 
-    // Clear existing buttons
     const container = document.getElementById('paypal-button-container');
-    if (container) container.innerHTML = '';
+    if (container) container.innerHTML = ''; // Clear existing buttons
 
     paypal.Buttons({
       createOrder: (data: any, actions: any) => {
         return actions.order.create({
           purchase_units: [{
             amount: {
-              value: this.total.toFixed(2)
+              value: this.total.toFixed(2) // Set the total price
             }
           }]
         });
       },
       onApprove: async (data: any, actions: any) => {
         try {
-          const orderData = await actions.order.capture();
-          this.processSuccessfulPayment();
+          const orderData = await actions.order.capture(); // Capture the payment
+          this.processSuccessfulPayment(); // Handle successful payment
         } catch (error) {
-          console.error('PayPal capture error:', error);
-          this.showDialog('Payment processing failed. Please try again.');
+          console.error('PayPal capture error:', error); // Log errors
+          this.showDialog('Error', 'Payment processing failed. Please try again.');
         }
       },
       onError: (err: any) => {
-        console.error('PayPal error:', err);
-        this.showDialog('Payment processing failed. Please try again.');
-        this.isProcessingCheckout = false;
+        console.error('PayPal error:', err); // Log errors
+        this.showDialog('Oops...', 'Payment processing failed. Please try again.');
+        this.isProcessingCheckout = false; // Reset the flag
       }
-    }).render('#paypal-button-container');
-  }
+    }).render('#paypal-button-container'); // Render the PayPal button
+}
 
-  private processSuccessfulPayment(): void {
+processSuccessfulPayment(): void {
     if (!this.customerID || !this.orderNumber) {
-      this.showDialog('Missing customer ID or order number');
+      this.showDialog('Error', 'Missing customer ID or order number');
       return;
     }
 
+    // Finalize checkout with the service
     this.service.checkout(this.orderNumber, this.cartItems, this.customerID).subscribe({
       next: (response) => {
         if (response.success) {
-          // Update purchased items
           this.cartItems.forEach(item => {
-            this.purchasedItems.add(item.pictureID);
+            this.purchasedItems.add(item.pictureID); // Mark items as purchased
           });
-          
-          this.showDialog('Thank you for your purchase! You can now download your images.');
-          // Don't clear cart immediately to allow downloads
+          this.service.loadCartFromStorage(); // Reload the cart
+          this.showDialog('Thank you for your purchase!', 'You can now download your images.');
         } else {
           throw new Error(response.error || 'Unknown error occurred');
         }
       },
       error: (error) => {
-        console.error('Checkout error:', error);
-        this.showDialog(`There was an error processing your order: ${error.message}. Please contact support.`);
+        console.error('Checkout error:', error); // Log errors
+        this.showDialog('Attention!', `There was an error processing your order: ${error.message}. Please contact support.`);
       },
       complete: () => {
-        this.isProcessingCheckout = false;
+        this.isProcessingCheckout = false; // Reset the flag
       }
     });
-  }
-
-  private showDialog(message: string): void {
-    const dialogRef = this.dialog.open(DialogOkComponent, {
-      width: '400px',
-      data: { message }
-    });
-  }
-
-  // Navigate to gallery
-  continueShopping(): void {
-    this.router.navigate(['/gallery']);
-  }
 }
 
+private showDialog(header: string, message: string): void {
+    // Open a dialog with the provided header and message
+    const dialogRef = this.dialog.open(DialogOkComponent, {
+      width: '400px',
+      data: { header, message }
+    });
+}
 
-// import { Component } from '@angular/core';
-// import { Service } from '../../service/service';
-// import { CartItem } from '../../Models/interfaces';
-// import { DialogComponent } from '../../dialog/dialog.component';
-// import { MatDialog } from '@angular/material/dialog';
-// import { DialogOkComponent } from '../../dialog-ok/dialog-ok.component';
-
-// @Component({
-//   selector: 'app-cart',
-//   templateUrl: './cart.component.html',
-//   styleUrls: ['./cart.component.css'],
-//   standalone: false
-// })
-// export class CartComponent {
-//   cartItems: CartItem[] = [];
-//   total: number = 0;
-//   isProcessingCheckout: boolean = false;
-//   orderNumber: string | null = null;
-//   private customerID: number | null = null;  // Add this to store customerID
-//   purchasedItems: Set<number> = new Set();
-//   isDownloading: boolean = false;
-
-//   constructor(private service: Service, private dialog: MatDialog,) {}
-
-//   ngOnInit(): void {
-//     this.loadCartItems();
-//     this.calculateTotal();
-//   }
-
-//   loadCartItems(): void {
-//     this.cartItems = this.service.getCartItems();
-//     this.calculateTotal();
-//   }
-
-//   removeItem(pictureID: number): void {
-//     this.service.removeFromCart(pictureID);
-//     this.loadCartItems();
-//   }
-
-//   clearCart(): void {
-//     this.service.clearCart();
-//     this.loadCartItems();
-//   }
-
-//   private calculateTotal(): void {
-//     this.total = this.cartItems.reduce((sum, item) => {
-//       const itemPrice = typeof item.price === 'string' ? parseFloat(item.price) : item.price;
-//       return sum + itemPrice;
-//     }, 0);
-//     this.total = Math.round(this.total * 100) / 100;
-//   }
-
-//   checkOut(): void {
-//     if (this.isProcessingCheckout) return;
-//     this.isProcessingCheckout = true;
-
-//     // First verify session
-//     this.service.checkSession().subscribe({
-//       next: (sessionData) => {
-//         if (!sessionData.authenticated) {
-//           alert('Please log in to complete your purchase');
-//           this.isProcessingCheckout = false;
-//           return;
-//         }
-
-//         this.customerID = sessionData.customerID; // Store customerID
-
-//         if (this.customerID === null) {
-//           alert('Customer ID is missing. Please try again.');
-//           this.isProcessingCheckout = false;
-//           return;
-//         }
-
-//         // Initiate payment process
-//         this.service.initiatePayment({
-//           items: this.cartItems,
-//           total: this.total,
-//           customerID: this.customerID
-//         }).subscribe({
-//           next: (paymentResponse) => {
-//             if (paymentResponse.success) {
-//               this.orderNumber = paymentResponse.orderNumber;
-//               this.renderPayPalButton(paymentResponse.paypalClientId);
-//             } else {
-//               throw new Error(paymentResponse.error);
-//             }
-//           },
-//           error: (error) => {
-//             console.error('Payment initiation failed:', error);
-//             const dialogRef = this.dialog.open(DialogOkComponent, {
-//               width: '400px',
-//               data: { message: 'Failed to initiate payment. Please try again.' }
-//             });
-//             this.isProcessingCheckout = false;
-//           }
-//         });
-//       },
-//       error: (error) => {
-//         console.error('Session check failed:', error);
-//         alert('Failed to verify session. Please try again.');
-//         this.isProcessingCheckout = false;
-//       }
-//     });
-//   }
-
-//   private renderPayPalButton(clientId: string): void {
-//     const paypal = (window as any).paypal;
-//     if (!paypal) {
-//       console.error('PayPal SDK not loaded');
-//       this.isProcessingCheckout = false;
-//       return;
-//     }
-
-//     // Clear existing buttons
-//     const container = document.getElementById('paypal-button-container');
-//     if (container) container.innerHTML = '';
-
-//     paypal.Buttons({
-//       createOrder: (data: any, actions: any) => {
-//         return actions.order.create({
-//           purchase_units: [{
-//             amount: {
-//               value: this.total.toFixed(2)
-//             }
-//           }]
-//         });
-//       },
-//       onApprove: async (data: any, actions: any) => {
-//         try {
-//           const orderData = await actions.order.capture();
-          
-//           if (!this.customerID || !this.orderNumber) {
-//             throw new Error('Missing customer ID or order number');
-//           }
-
-//           // Process the completed order
-//           this.service.checkout(this.orderNumber, this.cartItems, this.customerID).subscribe({
-//             next: (response) => {
-//               if (response.success) {
-//                 const dialogRef = this.dialog.open(DialogOkComponent, {
-//                   width: '400px',
-//                   data: { message: 'Thank you for your purchase!' }
-//                 });
-//                 this.clearCart();
-//               } else {
-//                 throw new Error(response.error || 'Unknown error occured');
-//               }
-//             },
-//             error: (error) => {
-//               console.error('Checkout error: ', error)
-//               const errorMessage = error.error?.error || error.message || 'Unknown error occurred';
-//               const dialogRef = this.dialog.open(DialogOkComponent, {
-//                     width: '400px',
-//                     data: { message: 'There was an error processing your order. Please contact support.', error }
-//                   });
-             
-//             }
-//           });
-//         } catch (error) {
-//           console.error('PayPal capture error:', error);
-//           alert('Payment processing failed. Please try again.');
-//         }
-//       },
-//       onError: (err: any) => {
-//         console.error('PayPal error:', err);
-//         alert('Payment processing failed. Please try again.');
-//         this.isProcessingCheckout = false;
-//       }
-//     }).render('#paypal-button-container');
-//   }
-
-//   downloadImage(pictureID: number): void {
-//         if (this.isDownloading) return;
-      
-//         if (!this.customerID) {
-//           this.showDialog('Please log in to download your purchased images.');
-//           return;
-//         }
-      
-//         this.isDownloading = true;
-      
-//         this.service.downloadProduct(pictureID, this.customerID).subscribe({
-//           next: (blob: Blob) => {
-//             try {
-//               // Check if the response is an error message in JSON format
-//               const reader = new FileReader();
-//               reader.onload = () => {
-//                 try {
-//                   const jsonResponse = JSON.parse(reader.result as string);
-//                   if (!jsonResponse.success) {
-//                     this.showDialog(jsonResponse.error || 'Download failed');
-//                     return;
-//                   }
-//                 } catch {
-//                   // Not JSON, proceed with download
-//                   const url = window.URL.createObjectURL(blob);
-//                   const link = document.createElement('a');
-//                   link.href = url;
-                  
-//                   // Get the filename from Content-Disposition header if available
-//                   const contentDisposition = blob.type;
-//                   const filename = `high_quality_image_${pictureID}.png`;
-                  
-//                   link.download = filename;
-//                   document.body.appendChild(link);
-//                   link.click();
-//                   document.body.removeChild(link);
-//                   window.URL.revokeObjectURL(url);
-                  
-//                   this.showDialog('Download completed successfully!');
-//                 }
-//               };
-//               reader.readAsText(blob);
-//             } catch (error) {
-//               console.error('Error processing download:', error);
-//               this.showDialog('Failed to process download');
-//             }
-//           },
-//           error: (error) => {
-//             console.error('Download error:', error);
-//             if (error.error instanceof Blob) {
-//               // Try to read error message from blob
-//               const reader = new FileReader();
-//               reader.onload = () => {
-//                 try {
-//                   const errorResponse = JSON.parse(reader.result as string);
-//                   this.showDialog(errorResponse.error || 'Download failed');
-//                 } catch {
-//                   this.showDialog('Failed to download image');
-//                 }
-//               };
-//               reader.readAsText(error.error);
-//             } else {
-//               this.showDialog('Failed to download image');
-//             }
-//           },
-//           complete: () => {
-//             this.isDownloading = false;
-//           }
-//         });
-//       }
-
-
-//   private showDialog(message: string): void {
-//     const dialogRef = this.dialog.open(DialogOkComponent, {
-//       width: '400px',
-//       data: { message }
-//     });
-//   }
-// }
+continueShopping(): void {
+    // Navigate back to the gallery
+    this.router.navigate(['/gallery']);
+}
+}
