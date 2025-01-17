@@ -139,8 +139,7 @@
 #paypal-button-container{
   margin: 20px auto;
   width: fit-content;
-  width: 30vw;
-  max-width: 170px;
+  max-width: 200px;
 }
 
 .download-btn {
@@ -222,22 +221,19 @@
     font-size: 0.7rem;
   }
 
-  #paypal-button-container{
-    margin: 20px auto;
-    margin-top: 10px;
-    max-width: fit-content;
+  /* #paypal-button-container{
     font-size: 0.9rem;
-  }
+  } */
 
   h3{
     font-size: 1.5rem;
     margin-bottom: 0;
   }
 
-  /* .chechout-btn{
+  .chechout-btn{
     width: 20vw;
-    font-size: 0.7rem;
-  } */
+    margin: 0 auto;
+  }
 
   
 
