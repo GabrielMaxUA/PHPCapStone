@@ -53,4 +53,5 @@ if ($result = mysqli_query($con, $sql)) {
     http_response_code(404); // Not Found
     echo json_encode(['error' => 'Failed to fetch data']);
 }
+$con->close();
 ?>

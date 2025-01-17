@@ -98,4 +98,5 @@ function fetchUpdatedData($con, $action) {
         echo json_encode(['message' => 'No data found']);
     }
 }
+$con->close();
 ?>

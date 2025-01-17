@@ -10,8 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
-
-require 'connection.php';
+require 'baseUrl.php';
+require_once 'connection.php';
 
 // Determine the request method
 $method = $_SERVER['REQUEST_METHOD'];
@@ -24,9 +24,10 @@ if ($method === 'GET') {
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         echo json_encode([
-            'bioText' => $row['bioText'],
-            'mainImage' => $row['mainImage']
-        ]);
+          'bioText' => $row['bioText'],
+          'mainImage' => $baseUrl . '/' . $row['mainImage'] // Concatenate the base URL with the image path
+      ]);
+      
     } else {
         http_response_code(404);
         echo json_encode(['message' => 'Failed to fetch data']);
@@ -52,7 +53,7 @@ if ($method === 'GET') {
 
     // Handle image upload
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'uploads/';
+        $uploadDir = 'uploads/main/';
         $originalFileName = basename($_FILES['image']['name']);
         $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
 

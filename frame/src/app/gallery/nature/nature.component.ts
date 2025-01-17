@@ -19,8 +19,6 @@ export class NatureComponent {
   user: User | null = null;
   galleryItems: { pictureID: number, nGalleryImage: string; price: number, status?: string }[] = [];
   selectedImageIndex: number | null = null;
-  //baseUrl = 'http://localhost/frameBase';
-  baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; // Add your base URL here
 
   // Array to store multiple product entries
   productEntries: ProductEntry[] = [
@@ -136,7 +134,7 @@ loadGalleryData() {
       // Map gallery items to include full image URLs
       this.galleryItems = response.map(item => ({
         ...item,
-        nGalleryImage: `${this.baseUrl}/${item.nGalleryImage}`
+        nGalleryImage: `${item.nGalleryImage}`
       }));
       this.isUploading = false; // Reset uploading flag
     },
@@ -173,7 +171,7 @@ submitPriceChange(pictureID: any, price: any): void {
         this.galleryItems = response.map((item: { pictureID: any; price: any; nGalleryImage: any }) => ({
           pictureID: item.pictureID,
           price: parseFloat(parseFloat(item.price).toFixed(2)),
-          nGalleryImage: `${this.baseUrl}/${item.nGalleryImage}`,
+          nGalleryImage: `${item.nGalleryImage}`,
         }));
         this.loadGalleryData(); // Reload gallery data
       } else {

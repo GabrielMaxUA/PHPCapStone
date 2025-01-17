@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require 'connection.php'; // Ensure this includes your database connection
+require_once 'connection.php'; // Ensure this includes your database connection
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -87,4 +87,5 @@ if ($method === 'GET') {
     http_response_code(405);
     echo json_encode(['message' => 'Method not allowed']);
 }
+$con->close();
 ?>

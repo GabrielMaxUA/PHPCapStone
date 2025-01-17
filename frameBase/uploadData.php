@@ -5,8 +5,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require 'connection.php'; // Ensure this includes your database connection
-
+require_once 'connection.php'; // Ensure this includes your database connection
+require 'baseUrl.php';
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
@@ -25,11 +25,11 @@ if ($method === 'GET') {
             $row = mysqli_fetch_assoc($result);
             echo json_encode([
                 'sText' => $row['sText'],
-                'sImageMain' => $row['sImageMain'],
+                'sImageMain' => $baseUrl . '/' . $row['sImageMain'],
                 'nText' => $row['nText'],
-                'nImageMain' => $row['nImageMain'],
+                'nImageMain' => $baseUrl . '/' . $row['nImageMain'],
                 'aText' => $row['aText'],
-                'aImageMain' => $row['aImageMain']
+                'aImageMain' => $baseUrl . '/' . $row['aImageMain']
             ]);
         } else {
             http_response_code(404);
@@ -105,59 +105,61 @@ if ($method === 'GET') {
             }
         }
         echo json_encode($response);
-    } elseif ($action === 'updateAboutPage') {
-        // Parse the request input
-        $input = json_decode(file_get_contents('php://input'), true);
+    }
+    //  elseif ($action === 'updateAboutPage') {
+    //     // Parse the request input
+    //     $input = json_decode(file_get_contents('php://input'), true);
 
-        if ($input !== null && isset($input['bio'])) {
-            $bioText = mysqli_real_escape_string($con, $input['bio']);
-            $query = "UPDATE aboutPage SET bioText = '$bioText' WHERE id = 1";
+    //     if ($input !== null && isset($input['bio'])) {
+    //         $bioText = mysqli_real_escape_string($con, $input['bio']);
+    //         $query = "UPDATE aboutPage SET bioText = '$bioText' WHERE id = 1";
 
-            if (mysqli_query($con, $query)) {
-                echo json_encode(['message' => 'Bio updated successfully']);
-            } else {
-                http_response_code(500);
-                echo json_encode(['message' => 'Failed to update bio']);
-            }
-            exit;
-        }
+    //         if (mysqli_query($con, $query)) {
+    //             echo json_encode(['message' => 'Bio updated successfully']);
+    //         } else {
+    //             http_response_code(500);
+    //             echo json_encode(['message' => 'Failed to update bio']);
+    //         }
+    //         exit;
+    //     }
 
-        // Handle image upload
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'uploads/main/';
-            $originalFileName = basename($_FILES['image']['name']);
-            $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+    //     // Handle image upload
+    //     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    //         $uploadDir = 'uploads/main/';
+    //         $originalFileName = basename($_FILES['image']['name']);
+    //         $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
 
-            $newFileName = time() . '_Main.' . $fileExtension;
-            $targetFilePath = $uploadDir . $newFileName;
+    //         $newFileName = time() . '_Main.' . $fileExtension;
+    //         $targetFilePath = $uploadDir . $newFileName;
 
-            $query = "SELECT mainImage FROM aboutPage WHERE id = 1";
-            $result = mysqli_query($con, $query);
-            if ($result && mysqli_num_rows($result) > 0) {
-                $row = mysqli_fetch_assoc($result);
-                $oldImagePath = $row['mainImage'];
-                if ($oldImagePath && file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
-            }
+    //         $query = "SELECT mainImage FROM aboutPage WHERE id = 1";
+    //         $result = mysqli_query($con, $query);
+    //         if ($result && mysqli_num_rows($result) > 0) {
+    //             $row = mysqli_fetch_assoc($result);
+    //             $oldImagePath = $row['mainImage'];
+    //             if ($oldImagePath && file_exists($oldImagePath)) {
+    //                 unlink($oldImagePath);
+    //             }
+    //         }
 
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
-                $updateQuery = "UPDATE aboutPage SET mainImage = '$targetFilePath' WHERE id = 1";
-                if (mysqli_query($con, $updateQuery)) {
-                    echo json_encode([
-                        'message' => 'Image uploaded successfully',
-                        'imageUrl' => $targetFilePath
-                    ]);
-                } else {
-                    http_response_code(500);
-                    echo json_encode(['message' => 'Failed to update image in database']);
-                }
-            } else {
-                http_response_code(500);
-                echo json_encode(['message' => 'Failed to upload image']);
-            }
-        }
-    } else {
+    //         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
+    //             $updateQuery = "UPDATE aboutPage SET mainImage = '$targetFilePath' WHERE id = 1";
+    //             if (mysqli_query($con, $updateQuery)) {
+    //                 echo json_encode([
+    //                     'message' => 'Image uploaded successfully',
+    //                     'imageUrl' => $targetFilePath
+    //                 ]);
+    //             } else {
+    //                 http_response_code(500);
+    //                 echo json_encode(['message' => 'Failed to update image in database']);
+    //             }
+    //         } else {
+    //             http_response_code(500);
+    //             echo json_encode(['message' => 'Failed to upload image']);
+    //         }
+    //     }
+    // } 
+    else {
         http_response_code(400);
         echo json_encode(['message' => 'Invalid action for POST']);
     }
@@ -165,4 +167,6 @@ if ($method === 'GET') {
     http_response_code(405);
     echo json_encode(['message' => 'Method not allowed']);
 }
+
+$con->close();
 ?>

@@ -1,8 +1,16 @@
-
 // Import necessary modules and services from Angular, RxJS, and other libraries.
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, catchError, forkJoin, map, Observable, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  forkJoin,
+  map,
+  Observable,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from './user.service'; // Custom service to manage user-related data and logic.
 import { DialogOkComponent } from '../dialog-ok/dialog-ok.component'; // Dialog component for displaying messages.
@@ -15,8 +23,8 @@ import { CartItem, OrderResponse, User } from '../Models/interfaces'; // Interfa
 })
 export class Service {
   // Base URL for making HTTP requests to the backend API.
-  //baseUrl = 'http://localhost/frameBase';
-  baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; 
+  private baseUrl = 'http://localhost/frameBase';
+  //private baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase';
 
   // Observable flags and data properties for managing UI and state.
   showDialog = false; // Boolean to control the display of dialog boxes.
@@ -29,7 +37,7 @@ export class Service {
   private currentCustomerID: number | null = null; // Currently logged-in customer's ID.
 
   // Public observables for components to subscribe to cart data and count changes.
-  public readonly cartItems$ = this.cartItemsSubject.asObservable(); 
+  public readonly cartItems$ = this.cartItemsSubject.asObservable();
   public readonly cartCount$ = this.cartCountSubject.asObservable();
 
   // Heartbeat interval for session validation.
@@ -55,7 +63,6 @@ export class Service {
             customerID: response.customerID,
           });
           this.loadCartFromStorage(); // Load the cart after session validation.
-          
         } else {
           this.userService.clearUser();
           this.currentCustomerID = null; // Clear the current user ID.
@@ -73,6 +80,82 @@ export class Service {
     });
   }
 
+
+    /**
+   * Handles generic GET requests.
+   * @param endpoint API endpoint to call.
+   * @returns Observable of the response.
+   */
+    getRequest<T>(
+      endpoint: string,
+      options: { headers?: HttpHeaders; withCredentials?: boolean } = {}
+    ): Observable<T> {
+      let headers = options.headers || new HttpHeaders();
+  
+      // If no custom headers are provided and withCredentials is not specified, set default headers.
+      if (!options.headers && !options.withCredentials) {
+        headers = headers.set('Accept', 'application/json'); // Set default header to accept JSON responses.
+      }
+  
+      return this.http.get<T>(`${this.baseUrl}/${endpoint}`, {
+        ...options,
+        headers,
+      }); // Send GET request with the provided options.
+    }
+  
+    /**
+     * Handles generic DELETE requests.
+     * @param endpoint API endpoint to call.
+     * @returns Observable of the response.
+     */
+    deleteRequest<T>(endpoint: string): Observable<T> {
+      return this.http.delete<T>(`${this.baseUrl}/${endpoint}`); // Send DELETE request to the specified endpoint.
+    }
+  
+    /**
+     * Handles generic POST requests.
+     * @param endpoint API endpoint to call.
+     * @param payload Data to send in the request body.
+     * @param isFormData Indicates if the payload is FormData.
+     * @returns Observable of the response.
+     */
+    postRequest<T>(
+      endpoint: string,
+      payload: any,
+      options: { headers?: HttpHeaders; withCredentials?: boolean } = {}
+    ): Observable<T> {
+      let headers = options.headers || new HttpHeaders();
+      if (!options.headers && !options.withCredentials) {
+        headers = headers.set('Content-Type', 'application/json'); // Set JSON content type if not using FormData.
+      }
+      return this.http.post<T>(`${this.baseUrl}/${endpoint}`, payload, {
+        ...options,
+        headers,
+      }); // Send POST request to the endpoint.
+    }
+  
+    /**
+     * Retrieves the content for the main galleries page.
+     * @returns Observable containing gallery content data.
+     */
+    getMainGalleriesPageContent(): Observable<{
+      sText: string;
+      sImageMain: string;
+      nText: string;
+      nImageMain: string;
+      aText: string;
+      aImageMain: string;
+    }> {
+      return this.getRequest<{
+        sText: string;
+        sImageMain: string;
+        nText: string;
+        nImageMain: string;
+        aText: string;
+        aImageMain: string;
+      }>('uploadData?action=mainGallery', { withCredentials: true });
+    }
+    
   /**
    * Logs in a user with email and password.
    * @param data Object containing `email` and `password` fields.
@@ -81,7 +164,10 @@ export class Service {
   login(data: { email: string; password: string }): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' }); // Set JSON headers.
 
-    return this.http.post(`${this.baseUrl}/login`, data, { headers, withCredentials: true }).pipe(
+    return this.postRequest(`login`, data, {
+      headers,
+      withCredentials: true,
+    }).pipe(
       map((response: any) => {
         console.log('Login response:', response); // Debug log for login response.
         if (response.success) {
@@ -105,7 +191,7 @@ export class Service {
    * @returns Observable of the session check response.
    */
   checkSession(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/check_session`, { withCredentials: true }).pipe(
+    return this.getRequest(`check_session`, { withCredentials: true }).pipe(
       map((response: any) => {
         console.log('Session check response:', response); // Debug log for session response.
         if (response?.authenticated) {
@@ -137,7 +223,7 @@ export class Service {
     this.currentCustomerID = null; // Clear the currently logged-in user ID.
     this.cartItems = []; // Clear the in-memory cart.
     this.cartItemsSubject.next([]); // Notify subscribers that the cart is now empty.
-    return this.http.get(`${this.baseUrl}/logout`, { withCredentials: true, responseType: 'json' }); // Call the logout endpoint.
+    return this.getRequest(`logout`, { withCredentials: true }); // Call the logout endpoint.
   }
 
   /**
@@ -147,7 +233,7 @@ export class Service {
    */
   register(user: User) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' }); // Set JSON headers.
-    return this.http.post<User>(`${this.baseUrl}/register`, user, { headers }); // Send registration data to the server.
+    return this.postRequest<User>(`register`, user, { headers }); // Send registration data to the server.
   }
 
   /**
@@ -155,7 +241,7 @@ export class Service {
    * @returns Observable of the list of customers.
    */
   getCustomers() {
-    return this.http.get(`${this.baseUrl}/list`).pipe(
+    return this.getRequest(`list`).pipe(
       map((response: any) => {
         return response['data']; // Extract the 'data' field from the response.
       })
@@ -170,7 +256,12 @@ export class Service {
    * @param lastName Customer's last name.
    * @returns Observable of the update response.
    */
-  updateUserStatus(customerID: number, status: string, firstName: string, lastName: string): Observable<any> {
+  updateUserStatus(
+    customerID: number,
+    status: string,
+    firstName: string,
+    lastName: string
+  ): Observable<any> {
     const payload = {
       data: {
         customerID: customerID, // The customer ID to update.
@@ -179,62 +270,7 @@ export class Service {
         lastName: lastName, // Customer's last name.
       },
     };
-    return this.postRequest('cEdit', payload, true); // Send the update request to the server.
-  }
-
-  /**
-   * Handles generic GET requests.
-   * @param endpoint API endpoint to call.
-   * @returns Observable of the response.
-   */
-  getRequest<T>(endpoint: string): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}/${endpoint}`); // Send GET request to the specified endpoint.
-  }
-
-  /**
-   * Handles generic DELETE requests.
-   * @param endpoint API endpoint to call.
-   * @returns Observable of the response.
-   */
-  deleteRequest<T>(endpoint: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${endpoint}`); // Send DELETE request to the specified endpoint.
-  }
-
-  /**
-   * Handles generic POST requests.
-   * @param endpoint API endpoint to call.
-   * @param payload Data to send in the request body.
-   * @param isFormData Indicates if the payload is FormData.
-   * @returns Observable of the response.
-   */
-  postRequest<T>(endpoint: string, payload: any, isFormData = false): Observable<T> {
-    let headers = new HttpHeaders();
-    if (!isFormData) {
-      headers = headers.set('Content-Type', 'application/json'); // Set JSON content type if not using FormData.
-    }
-    return this.http.post<T>(`${this.baseUrl}/${endpoint}`, payload, { headers }); // Send POST request to the endpoint.
-  }
-
-  /**
-   * Retrieves the content for the main galleries page.
-   * @returns Observable containing gallery content data.
-   */
-  getMainGalleriesPageContent(): Observable<{
-    sText: string;
-    sImageMain: string;
-    nText: string;
-    nImageMain: string;
-    aText: string;
-    aImageMain: string;
-  }> {
-    return this.getRequest<{
-      sText: string;
-      sImageMain: string;
-      nText: string;
-      nImageMain: string;
-      aText: string;
-      aImageMain: string;
-    }>('uploadData?action=mainGallery');
+    return this.postRequest('cEdit', payload, { withCredentials: true }); // Send the update request to the server.
   }
 
   /**
@@ -243,7 +279,9 @@ export class Service {
    * @returns Observable of the submission response.
    */
   submitMainGalleryChanges(formData: FormData): Observable<any> {
-    return this.postRequest('uploadData?action=mainGallery', formData, true);
+    return this.postRequest('uploadData?action=mainGallery', formData, {
+      withCredentials: true,
+    });
   }
 
   /**
@@ -253,7 +291,9 @@ export class Service {
    * @returns Observable of the submission response.
    */
   submitGalleriesData(formData: FormData, action: string): Observable<any> {
-    return this.postRequest(`galleriesData?action=${action}`, formData, true);
+    return this.postRequest(`galleriesData?action=${action}`, formData, {
+      withCredentials: true,
+    });
   }
 
   /**
@@ -263,31 +303,50 @@ export class Service {
    * @returns Observable of the submission response.
    */
   submitPriceChange(formData: FormData, action: string): Observable<any> {
-    return this.postRequest(`editGalleriesData?action=${action}`, formData, true);
+    return this.postRequest(`editGalleriesData?action=${action}`, formData, {
+      withCredentials: true,
+    });
   }
 
   /**
    * Retrieves content for the Nature Gallery.
    * @returns Observable of nature gallery items.
    */
-  getNatureContent(): Observable<{ pictureID: number; nGalleryImage: string; price: number }[]> {
-    return this.getRequest<{ pictureID: number; nGalleryImage: string; price: number }[]>('galleriesData?action=natureGallery');
+  getNatureContent(): Observable<
+    { pictureID: number; nGalleryImage: string; price: number }[]
+  > {
+    return this.getRequest<
+      { pictureID: number; nGalleryImage: string; price: number }[]
+    >('galleriesData?action=natureGallery', { withCredentials: true });
   }
 
   /**
    * Retrieves content for the Staged Gallery.
    * @returns Observable of staged gallery items.
    */
-  getStagedContent(): Observable<{ pictureID: number; sGalleryImage: string; price: number; type: string }[]> {
-    return this.getRequest<{ pictureID: number; sGalleryImage: string; price: number; type: string }[]>('galleriesData?action=stagedGallery');
+  getStagedContent(): Observable<
+    { pictureID: number; sGalleryImage: string; price: number; type: string }[]
+  > {
+    return this.getRequest<
+      {
+        pictureID: number;
+        sGalleryImage: string;
+        price: number;
+        type: string;
+      }[]
+    >('galleriesData?action=stagedGallery', { withCredentials: true });
   }
 
   /**
    * Retrieves content for the Architecture Gallery.
    * @returns Observable of architecture gallery items.
    */
-  getArchitectureContent(): Observable<{ pictureID: number; aGalleryImage: string; price: number }[]> {
-    return this.getRequest<{ pictureID: number; aGalleryImage: string; price: number }[]>('galleriesData?action=architectureGallery');
+  getArchitectureContent(): Observable<
+    { pictureID: number; aGalleryImage: string; price: number }[]
+  > {
+    return this.getRequest<
+      { pictureID: number; aGalleryImage: string; price: number }[]
+    >('galleriesData?action=architectureGallery', { withCredentials: true });
   }
 
   /**
@@ -295,7 +354,9 @@ export class Service {
    * @returns Observable containing bio and image data.
    */
   getBio(): Observable<{ bioText: string; mainImage: string }> {
-    return this.getRequest<{ bioText: string; mainImage: string }>('uploadData?action=aboutPage');
+    return this.getRequest<{ bioText: string; mainImage: string }>('bio', {
+      withCredentials: true,
+    });
   }
 
   /**
@@ -307,7 +368,9 @@ export class Service {
     if (!orderNumber) {
       return throwError(() => new Error('Order number is required'));
     }
-    return this.http.get<any[]>(`${this.baseUrl}/orders.php?orderNumber=${orderNumber}`).pipe(
+    return this.getRequest<any[]>(`orders.php?orderNumber=${orderNumber}`, {
+      withCredentials: true,
+    }).pipe(
       map((orders) => orders || []), // Map response to an array (or empty array if null).
       catchError((error) => {
         console.error('Error fetching orders:', error);
@@ -326,7 +389,9 @@ export class Service {
     if (!customerID) {
       return throwError(() => new Error('Customer ID is required')); // Throw an error if no customer ID is provided.
     }
-    return this.http.get<OrderResponse>(`${this.baseUrl}/orderDetails.php?customerID=${customerID}`).pipe(
+    return this.getRequest<OrderResponse>(
+      `orderDetails.php?customerID=${customerID}`
+    ).pipe(
       catchError((error) => {
         console.error('Error fetching order data:', error); // Log any errors during the request.
         return throwError(() => new Error('Failed to fetch order data')); // Return a user-friendly error.
@@ -341,7 +406,7 @@ export class Service {
    */
   saveBio(bio: string): Observable<any> {
     const payload = { bio }; // Payload containing the bio text.
-    return this.postRequest('uploadData?action=updateAboutPage', payload); // Call the API to save the bio.
+    return this.postRequest('bio', payload); // Call the API to save the bio.
   }
 
   /**
@@ -352,7 +417,9 @@ export class Service {
   uploadMainImage(file: File): Observable<any> {
     const formData = new FormData(); // Create a FormData object to hold the file.
     formData.append('image', file); // Append the image file to the FormData.
-    return this.postRequest('uploadData?action=updateAboutPage', formData, true); // Call the API to upload the image.
+    return this.postRequest('bio', formData, {
+      withCredentials: true,
+    }); // Call the API to upload the image.
   }
 
   /**
@@ -363,7 +430,9 @@ export class Service {
    */
   deleteImage(pictureID: number, action: string): Observable<any> {
     console.log('Passing to server:', pictureID, action); // Debug log for the deletion request.
-    return this.deleteRequest(`deleteImage?pictureID=${pictureID}&action=${action}`); // Call the API to delete the image.
+    return this.deleteRequest(
+      `deleteImage?pictureID=${pictureID}&action=${action}`
+    ); // Call the API to delete the image.
   }
 
   /**
@@ -402,8 +471,12 @@ export class Service {
    * @param data Object containing items, total, and customer ID.
    * @returns Observable of the payment initiation response.
    */
-  initiatePayment(data: { items: CartItem[]; total: number; customerID: number | null }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/payment.php`, data); // Call the API to initiate the payment process.
+  initiatePayment(data: {
+    items: CartItem[];
+    total: number;
+    customerID: number | null;
+  }): Observable<any> {
+    return this.postRequest(`payment.php`, data); // Call the API to initiate the payment process.
   }
 
   /**
@@ -413,8 +486,12 @@ export class Service {
    * @param customerID The customer ID associated with the checkout.
    * @returns Observable of the checkout response.
    */
-  checkout(orderNumber: string, cartItems: CartItem[], customerID: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/checkout.php`, {
+  checkout(
+    orderNumber: string,
+    cartItems: CartItem[],
+    customerID: number
+  ): Observable<any> {
+    return this.postRequest(`checkout.php`, {
       orderNumber, // The order number for this transaction.
       cartItems, // The items being purchased.
       customerID, // The ID of the customer.
@@ -428,23 +505,32 @@ export class Service {
    * @returns Observable of the Blob containing the product data.
    */
   downloadProduct(pictureID: number, customerID: number): Observable<Blob> {
+    
     const headers = new HttpHeaders({
-      'Accept': 'application/octet-stream', // Specify the expected response type.
+      Accept: 'application/octet-stream', // Specify the expected response type.
       'Content-Type': 'application/json', // Specify the request content type.
     });
 
     return this.checkSession().pipe(
       map((sessionData) => {
-        if (!sessionData.authenticated || sessionData.customerID !== customerID) {
+        if (
+          !sessionData.authenticated ||
+          sessionData.customerID !== customerID
+        ) {
           throw new Error('Unauthorized access'); // Throw an error if the user is unauthorized.
         }
         return sessionData.customerID; // Return the customer ID if authorized.
       }),
       switchMap(() => {
-        return this.http.post(`${this.baseUrl}/download-product`, { pictureID, customerID }, { 
-          responseType: 'blob', // Expect the response as a binary Blob.
-          headers: headers, // Attach the headers to the request.
-        });
+        console.log(pictureID, customerID);
+        return this.http.post(
+          `${this.baseUrl}/download-product`,
+          { pictureID, customerID },
+          {
+            responseType: 'blob', // Expect the response as a binary Blob.
+            headers: headers, // Attach the headers to the request.
+          }
+        );
       })
     );
   }
@@ -463,10 +549,13 @@ export class Service {
         return sessionData.customerID; // Return the customer ID if authenticated.
       }),
       switchMap((customerID) => {
-        return this.http.post<any>(`${this.baseUrl}/check-purchase-status.php`, {
-          pictureID, // ID of the product to check.
-          customerID, // ID of the customer making the request.
-        });
+        return this.postRequest<any>(
+          `check-purchase-status.php`,
+          {
+            pictureID, // ID of the product to check.
+            customerID, // ID of the customer making the request.
+          }
+        );
       })
     );
   }
@@ -478,7 +567,7 @@ export class Service {
    * @returns Observable of the update response.
    */
   updateImageStatus(pictureID: number, status: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/update-image-status.php`, {
+    return this.postRequest(`update-image-status.php`, {
       pictureID, // ID of the image to update.
       status, // New status for the image.
     });
@@ -513,10 +602,10 @@ export class Service {
       console.error('Cannot load cart: No customer ID'); // Log an error if no customer ID exists.
       return;
     }
-  
+
     const key = `cart_${this.currentCustomerID}`; // Generate the local storage key.
     const savedCart = localStorage.getItem(key); // Retrieve the cart from local storage.
-  
+
     if (savedCart) {
       try {
         const cartData = JSON.parse(savedCart); // Parse the cart data.
@@ -533,7 +622,7 @@ export class Service {
     }
   }
 
-   /**
+  /**
    * Updates the cart by checking the status of each item and notifying subscribers.
    */
 
@@ -543,19 +632,19 @@ export class Service {
       this.cartCountSubject.next(0); // Set the cart count to zero.
       return;
     }
-  
+
     // Create an array of status-check observables for all cart items.
     const statusChecks = this.cartItems.map((item) =>
       this.checkPurchaseStatus(item.pictureID)
     );
-  
+
     if (statusChecks.length === 0) {
       this.cartItemsSubject.next([]); // Notify subscribers that the cart is empty.
       this.cartCountSubject.next(0); // Set the cart count to zero.
       this.saveCartToStorage(); // Save the empty cart state to local storage.
       return;
     }
-  
+
     // Use forkJoin to execute all status-check observables in parallel.
     forkJoin(statusChecks).subscribe({
       next: (responses) => {
@@ -569,30 +658,29 @@ export class Service {
           }
           return item; // Return the item unchanged if no valid response.
         });
-  
+
         this.cartItemsSubject.next(this.cartItems); // Notify subscribers of the updated cart.
-  
+
         // **Filter items by status 'active' and calculate the total**
         const totalActiveItems = this.cartItems
           .filter((item) => item.status === 'active') // Only include items with status 'active'
           .reduce((sum, item) => sum + (item.quantity || 1), 0); // Sum the quantities of active items.
-  
+
         this.cartCountSubject.next(totalActiveItems); // Notify subscribers of the updated cart count.
         this.saveCartToStorage(); // Save the updated cart state to local storage.
       },
       error: (error) => {
         console.error('Error updating cart:', error); // Log errors during cart update.
-  
+
         // **Filter items by status 'active' for the fallback cart count**
         const totalActiveItems = this.cartItems
           .filter((item) => item.status === 'active') // Only include items with status 'active'
           .reduce((sum, item) => sum + (item.quantity || 1), 0); // Sum the quantities of active items.
-  
+
         this.cartCountSubject.next(totalActiveItems); // Notify subscribers of the updated cart count.
       },
     });
   }
-  
 
   /**
    * Adds an item to the cart after checking its purchase status.
@@ -613,7 +701,10 @@ export class Service {
       // Show a dialog informing the user that the item is already in the cart.
       this.dialog.open(DialogOkComponent, {
         width: '400px',
-        data: { header: 'Attention', message: 'Theis item is already in your cart' },
+        data: {
+          header: 'Attention',
+          message: 'Theis item is already in your cart',
+        },
       });
       return;
     }
@@ -723,9 +814,6 @@ export class Service {
    * @returns Total item count.
    */
   getCartCount() {
-    return this.cartItems.reduce(
-      (sum, item) => sum + (item.quantity || 1),
-      0
-    ); // Sum up the quantities of all items in the cart.
+    return this.cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0); // Sum up the quantities of all items in the cart.
   }
 }

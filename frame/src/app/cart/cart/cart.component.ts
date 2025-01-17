@@ -20,8 +20,6 @@ export class CartComponent implements OnInit {
   private customerID: number | null = null;
   purchasedItems: Set<number> = new Set();
   isDownloading: boolean = false;
-  //baseUrl = 'http://localhost/frameBase';
-  baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; 
 
   constructor(
     private service: Service, 
@@ -154,8 +152,8 @@ private startDownload(pictureID: number): void {
       console.error('Customer ID is null. Cannot proceed with the download.');
       return;
     }
-
     this.service.downloadProduct(pictureID, this.customerID).subscribe({
+      
       next: (blob: Blob) => {
         try {
           // Create a URL for the downloaded Blob

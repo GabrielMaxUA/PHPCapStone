@@ -46,6 +46,7 @@ if (isset($postdata) && !empty($postdata)) {
             $userType = $user['type'];
             $userStatus = $user['status'];
             $customerID = $user['customerID'];
+            $customerName = $user['firstName'] . ' ' . $user['lastName'];
 
             // After successful login validation...
             $_SESSION['userType'] = $userType;
@@ -67,7 +68,8 @@ if (isset($postdata) && !empty($postdata)) {
                 'token' => $token,
                 'userType' => $userType,
                 'userStatus' => $userStatus,
-                'customerID' => $user['customerID']
+                'customerID' => $user['customerID'],
+                'userName' => $customerName
             ]);
         } else {
             http_response_code(401);
@@ -85,3 +87,5 @@ if (isset($postdata) && !empty($postdata)) {
     http_response_code(400);
     echo json_encode(['error' => 'Invalid request']);
 }
+$con->close();
+?>

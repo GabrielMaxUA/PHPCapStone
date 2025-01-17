@@ -18,4 +18,6 @@ if ($result) {
 } else {
     echo json_encode(['message' => 'Query failed', 'error' => mysqli_error($con)]);
 }
+
+$con->close();
 ?>

@@ -26,8 +26,6 @@ export class GalleryComponent {
   sImageUrl: string = '';
   nImageUrl: string = '';
   aImageUrl: string = '';
-  //baseUrl = 'http://localhost/frameBase'; //  base URL here
-  baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; // base URL here
   nText: string = '';
   sText: string = '';
   aText: string = '';
@@ -74,11 +72,11 @@ loadGalleryData(): void {
     (response) => {
       // Populate the gallery texts and image URLs with the response data
       this.sText = response.sText;
-      this.sImageUrl = `${this.baseUrl}/${response.sImageMain}`;
+      this.sImageUrl = `${response.sImageMain}`;
       this.nText = response.nText;
-      this.nImageUrl = `${this.baseUrl}/${response.nImageMain}`;
+      this.nImageUrl = `${response.nImageMain}`;
       this.aText = response.aText;
-      this.aImageUrl = `${this.baseUrl}/${response.aImageMain}`;
+      this.aImageUrl = `${response.aImageMain}`;
 
       // Pre-fill allChanges object with the initial data from the server
       this.allChanges.nText = this.nText;

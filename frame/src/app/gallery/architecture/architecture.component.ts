@@ -17,8 +17,6 @@ export class ArchitectureComponent {
     user: User | null = null;
     galleryItems: { pictureID: number, aGalleryImage: string; price: number, status?: string }[] = [];
     selectedImageIndex: number | null = null;
-   //baseUrl = 'http://localhost/frameBase';
-     baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; // Add your base URL here
     
     // Array to store multiple product entries
     productEntries: ProductEntry[] = [
@@ -131,7 +129,7 @@ export class ArchitectureComponent {
           // Map gallery items to include the full image URL
           this.galleryItems = response.map(item => ({
             ...item,
-            aGalleryImage: `${this.baseUrl}/${item.aGalleryImage}`
+            aGalleryImage: `${item.aGalleryImage}`
           }));
           this.isUploading = false; // Reset the uploading flag
         },
@@ -168,7 +166,7 @@ export class ArchitectureComponent {
             this.galleryItems = response.map((item: { pictureID: any; price: any; aGalleryImage: any }) => ({
               pictureID: item.pictureID,
               price: parseFloat(parseFloat(item.price).toFixed(2)),
-              aGalleryImage: `${this.baseUrl}/${item.aGalleryImage}`,
+              aGalleryImage: `${item.aGalleryImage}`,
             }));
             this.loadGalleryData(); // Reload gallery data
           } else {

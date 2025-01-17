@@ -15,9 +15,6 @@ export class AboutComponent implements OnInit {
   imageUrl: string = ''; // URL for the user's profile image
   selectedFile: File | null = null; // Holds the file selected for upload
   isUploading: boolean = false; // Flag to indicate if an image is being uploaded
-  // Base URL for API requests; adjusted for production or development environments
-  //baseUrl = 'http://localhost/frameBase';
-  baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; 
 
   // Constructor injects the required services for dependency management
   constructor(private userService: UserService, private service: Service) {}
@@ -72,7 +69,7 @@ export class AboutComponent implements OnInit {
     this.service.getBio().subscribe(
       (response) => {
         this.bioText = response.bioText; // Update the bio text
-        this.imageUrl = `${this.baseUrl}/${response.mainImage}`; // Construct the image URL
+        this.imageUrl = `${response.mainImage}`; // Construct the image URL
       },
       (error: any) => {
         console.error('Error fetching bio:', error); // Log error response

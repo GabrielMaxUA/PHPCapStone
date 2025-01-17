@@ -82,3 +82,5 @@ try {
         'error' => $e->getMessage()
     ]);
 }
+$con->close();
+?>

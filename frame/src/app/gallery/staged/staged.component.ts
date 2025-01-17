@@ -17,8 +17,6 @@ import { MatDialog } from '@angular/material/dialog';
 export class StagedComponent {
   user: User | null = null;
   isUploading: boolean = false;
-  //baseUrl = 'http://localhost/frameBase';
-  baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; 
   
   galleryItems: { pictureID: number; sGalleryImage: string; price: number; type: string, status?: string }[] = [];
 filteredGalleryItems: { pictureID: number; sGalleryImage: string; price: number; type: string }[] = [];
@@ -153,10 +151,9 @@ loadGalleryData(): void {
 
   this.service.getStagedContent().subscribe({
     next: (response) => {
-      console.log('Raw response:', response);
       this.galleryItems = response.map((item) => ({
         ...item,
-        sGalleryImage: `${this.baseUrl}/${item.sGalleryImage}`,
+        sGalleryImage: `${item.sGalleryImage}`,
       }));
       this.filteredGalleryItems = [...this.galleryItems];
       this.isUploading = false;
@@ -182,7 +179,7 @@ submitPriceChange(pictureID: any, price: any): void {
         this.galleryItems = response.map((item: { pictureID: number; price: number; sGalleryImage: string; type: string }) => ({
           pictureID: item.pictureID,
           price: parseFloat(item.price.toFixed(2)),
-          sGalleryImage: `${this.baseUrl}/${item.sGalleryImage}`,
+          sGalleryImage: `${item.sGalleryImage}`,
           type: item.type,
         }));
         this.filteredGalleryItems = [...this.galleryItems];

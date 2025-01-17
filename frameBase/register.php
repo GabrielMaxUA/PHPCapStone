@@ -80,4 +80,6 @@ if (isset($postdata) && !empty($postdata)) {
     http_response_code(400);
     echo json_encode(['error' => 'No input data provided.']);
 }
+
+$con->close();
 ?>

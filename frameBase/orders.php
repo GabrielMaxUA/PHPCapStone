@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json');
+require 'baseUrl.php';
 require_once 'connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -24,6 +25,8 @@ if (isset($_GET['orderNumber'])) {
         $result = $stmt->get_result();
         $orderItems = [];
         while ($row = $result->fetch_assoc()) {
+          $row['imageLow'] = $baseUrl . '/' . $row['imageLow'];
+          $row['imageHigh'] = $baseUrl . '/' . $row['imageHigh'];
             $orderItems[] = $row;
         }
         echo json_encode($orderItems);

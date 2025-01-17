@@ -1,5 +1,7 @@
 <nav>
   <div class="border border-black"></div>
+  <!-- Menu Icon for Responsive Mode -->
+
   <div class="navbar" [class.show-dropdown]="isDropdownOpen">
     <div class="linkholder">
       <a routerLink="/about" 
@@ -8,9 +10,8 @@
          (click)="toggleDropdown($event)">
         Home
       </a>
-      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && isActive('/about')">▼</span>
     </div>
-    
+
     <div class="linkholder">
       <a [routerLink]="isChildGalleryActive ? '/gallery' : '/gallery'" 
          routerLinkActive="active" 
@@ -18,39 +19,30 @@
          (click)="toggleDropdown($event)">
         {{ isResponsiveMode && isChildGalleryActive ? '\< Back' : 'Gallery' }}
       </a>
-      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && !isChildGalleryActive && isActive('/gallery')">▼</span>
     </div>
-    
+
     <div class="text-center" *ngIf="user?.type === 'customer'">
       <a class="cartLink" 
          routerLink="/cart" 
          routerLinkActive="active"
-         (click)="toggleDropdown($event)">Cart
-        <span class="counter" *ngIf="cartCount > 0">{{cartCount}}</span>
+         (click)="toggleDropdown($event)">
+        Cart
+        <span class="counter" *ngIf="cartCount > 0">{{ cartCount }}</span>
       </a>
-      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && isActive('/cart')">▼</span>
     </div>
-    
+
     <div class="linkholder" *ngIf="!user">
-      <a 
-         routerLink="/signin" 
-         routerLinkActive="active"
-         (click)="toggleDropdown($event)">SignIn/Register
-      </a>  
-      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && isActive('/signin')">▼</span>
+      <a routerLink="/signin" routerLinkActive="active"
+      (click)="toggleDropdown($event)">SignIn/Register</a>
     </div>
-    
+
     <div class="linkholder" *ngIf="user?.type === 'admin'">
-      <a routerLink="/customers" 
-         routerLinkActive="active"
-         (click)="toggleDropdown($event)">Customers
-      </a>
-      <span class="arrow" *ngIf="isResponsiveMode && !isDropdownOpen && isActive('/customers')">▼</span>
+      <a routerLink="/customers" routerLinkActive="active"
+      (click)="toggleDropdown($event)">Customers</a>
     </div>
-    
+
     <div class="linkholder" *ngIf="user">
-      <a class="social" 
-         (click)="logout()">Logout</a>
+      <a class="social" (click)="logout()">Logout</a>
     </div>
   </div>
 </nav>

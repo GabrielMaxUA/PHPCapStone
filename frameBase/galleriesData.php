@@ -5,7 +5,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require 'connection.php'; 
+require 'baseUrl.php';
+require_once 'connection.php'; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   http_response_code(200);
@@ -35,7 +36,7 @@ if ($method === 'GET') {
               while($row = mysqli_fetch_assoc($result)){
                   $response[] = [
                       'pictureID' => $row['pictureID'],
-                      'nGalleryImage' => $row['imageLow'],
+                      'nGalleryImage' =>$baseUrl . '/' .  $row['imageLow'],
                       'price' => $row['price'],
                   ];
               }
@@ -60,7 +61,7 @@ if ($method === 'GET') {
               while($row = mysqli_fetch_assoc($result)){
                   $response[] = [
                       'pictureID' => $row['pictureID'],
-                      'aGalleryImage' => $row['imageLow'],
+                      'aGalleryImage' => $baseUrl . '/' .  $row['imageLow'],
                       'price' => $row['price'],
                   ];
               }
@@ -87,7 +88,7 @@ if ($method === 'GET') {
                 $type = (strpos($row['imageLow'], 'Color') !== false) ? 'color' : 'black';
                 $response[] = [
                     'pictureID' => $row['pictureID'],
-                    'sGalleryImage' => $row['imageLow'],
+                    'sGalleryImage' =>$baseUrl . '/' .  $row['imageLow'],
                     'price' => $row['price'],
                     'type' => $type,
                 ];
@@ -391,4 +392,5 @@ function resizeImage($sourcePath, $targetPath, $maxWidth, $maxHeight)
 
     return $success;
 }
+$con->close();
 ?>

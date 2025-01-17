@@ -15,8 +15,6 @@ export class OrderDetailsComponent implements OnInit {
   orderItems: any[] = [];
   searchQuery: string = ''; // Binds to search input
 
-//baseUrl = 'http://localhost/frameBase'; // Add your base URL here
-private readonly baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase';
   constructor(private route: ActivatedRoute, private service: Service ) {}
 
   ngOnInit() {
@@ -58,7 +56,7 @@ private readonly baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frame
     const cleanPath = path.startsWith('/') ? path.substring(1) : path;
   
     // Combine the base URL with the cleaned path to generate the full URL
-    return `${this.baseUrl}/${cleanPath}`;
+    return `${cleanPath}`;
   }
   
   toggleImage(item: any) {
