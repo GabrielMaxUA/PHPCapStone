@@ -20,9 +20,6 @@ export class GalleryComponent {
   user: User | null = null;
   showDialog = false; // Whether the dialog is visible
   dialogMessage = ''; // Message to display in the dialog
-  isUploadingNature: boolean = false;
-  isUploadingArchitecture: boolean = false;
-  isUploadingStaged: boolean = false;
   sImageUrl: string = '';
   nImageUrl: string = '';
   aImageUrl: string = '';
@@ -96,7 +93,6 @@ onFileSelected(event: Event, category: string): void {
   
   if (input.files && input.files.length > 0) {
     const file = input.files[0];
-
     // Validate the file type before proceeding
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
@@ -107,18 +103,18 @@ onFileSelected(event: Event, category: string): void {
     // Assign the selected file to the appropriate category
     if (category === 'n') {
       this.allChanges.nFile = file;
-      this.isUploadingNature = true; // Indicate that the nature gallery image is being uploaded
     } else if (category === 'a') {
       this.allChanges.aFile = file;
-      this.isUploadingArchitecture = true; // Indicate that the architecture gallery image is being uploaded
     } else if (category === 's') {
       this.allChanges.sFile = file;
-      this.isUploadingStaged = true; // Indicate that the staged gallery image is being uploaded
+      
     }
   }
 }
 
 submitAllChanges(): void {
+   // Set loading state to true to show the spinner
+  this.isUploading = true;
   // Submit all changes (text and images) to the server
   console.log('Submitting changes:', this.allChanges);
 
@@ -144,21 +140,22 @@ submitAllChanges(): void {
   this.service.submitMainGalleryChanges(formData).subscribe({
     next: (response: any) => {
       console.log('Submitted successfully:', response);
-
+      this.isUploading = true;
       // Update image URLs and reset upload states if response contains updated URLs
       if (response.nImageUrl) {
         this.nImageUrl = response.nImageUrl;
-        this.isUploadingNature = false;
+        this.isUploading = false;
       }
       if (response.aImageUrl) {
         this.aImageUrl = response.aImageUrl;
-        this.isUploadingArchitecture = false;
+        this.isUploading = false;
       }
       if (response.sImageUrl) {
         this.sImageUrl = response.sImageUrl;
-        this.isUploadingStaged = false;
+        this.isUploading = false;
       }
-
+  // Reset the loading state
+      this.isUploading = false;
       // Reload gallery data to reflect the changes
       this.loadGalleryData();
     },
@@ -166,9 +163,7 @@ submitAllChanges(): void {
       console.error('Error submitting changes:', error);
 
       // Reset upload states in case of error
-      this.isUploadingNature = false;
-      this.isUploadingArchitecture = false;
-      this.isUploadingStaged = false;
+      this.isUploading = false;
     },
   });
 }

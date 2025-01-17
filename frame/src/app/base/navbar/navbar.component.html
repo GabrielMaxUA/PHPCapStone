@@ -1,8 +1,12 @@
 <nav>
   <div class="border border-black"></div>
   <!-- Menu Icon for Responsive Mode -->
-
-  <div class="navbar" [class.show-dropdown]="isDropdownOpen">
+  <button class="menu" [class.show-dropdown]="isDropdownOpen" *ngIf="isResponsiveMode" (click)="toggleDropdown($event)">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </button>
+  <aside class="navbar" [class.show-dropdown]="isDropdownOpen">
     <div class="linkholder">
       <a routerLink="/about" 
          routerLinkActive="active" 
@@ -44,5 +48,5 @@
     <div class="linkholder" *ngIf="user">
       <a class="social" (click)="logout()">Logout</a>
     </div>
-  </div>
+  </aside>
 </nav>

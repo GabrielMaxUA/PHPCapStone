@@ -1,6 +1,6 @@
-<div class="text-center  p-2">
+<div class="text-center p-2">
   <!-- Search Input -->
-   <h1>Customers List</h1>
+  <h1>Customers List</h1>
   <input
     type="text"
     placeholder="Search by name or email"
@@ -9,8 +9,11 @@
     class="search-input"
   />
 
-  <!-- Customers Table -->
-  <table class="table table-bordered" *ngIf="filteredCustomers.length > 0; else noResults">
+  <!-- Customers Table for Regular Screens -->
+  <table
+    class="table table-bordered"
+    *ngIf="!isSmallScreen && filteredCustomers.length > 0; else cardLayout"
+  >
     <thead>
       <tr>
         <th id="itemID">Customer ID</th>
@@ -28,30 +31,32 @@
     <tbody>
       <tr *ngFor="let item of filteredCustomers">
         <td id="itemID">{{ item.customerID }}</td>
-        <td data-label="Firtt name:">{{ item.firstName }}</td>
-        <td data-label="Last name:">{{ item.lastName }}</td>
-        <td data-label="Email:">{{ item.email }}</td>
-        <td data-label="Phone:">{{ item.phone }}</td>
-        <td data-label="Orders:">
-          <button 
+        <td>{{ item.firstName }}</td>
+        <td>{{ item.lastName }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.phone }}</td>
+        <td>
+          <button
             *ngIf="item.orderDetailsID !== undefined && item.orderDetailsID > 0"
-            class="btn btn-primary btn-m p-2" 
-            [routerLink]="['/orders']" 
-            [queryParams]="{ customerID: item.customerID }">
+            class="btn btn-primary btn-m p-2"
+            [routerLink]="['/orders']"
+            [queryParams]="{ customerID: item.customerID }"
+          >
             Orders
           </button>
         </td>
-        <td data-label="Created at:">{{ item.created_at }}</td>
-        <td data-label="DOB">{{ item.dob }}</td>
-        <td data-label="Type:">{{ item.type }}</td>
-        <td data-label="Status" *ngIf="item.type === 'customer'" class="d-flex flex-row justify-content-start">
+        <td>{{ item.created_at }}</td>
+        <td>{{ item.dob }}</td>
+        <td>{{ item.type }}</td>
+        <td *ngIf="item.type === 'customer'" class="d-flex flex-row justify-content-start">
           <label>
             <input
               type="radio"
               [checked]="item.status === 'active'"
               (change)="toggleStatus(item)"
               value="active"
-            /> Active
+            />
+            Active
           </label>
           <label>
             <input
@@ -59,12 +64,63 @@
               [checked]="item.status === 'blocked'"
               (change)="toggleStatus(item)"
               value="blocked"
-            /> Blocked
+            />
+            Blocked
           </label>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <!-- Card Layout for Smaller Screens -->
+  <ng-template #cardLayout>
+    <div class="card-container" *ngIf="filteredCustomers.length > 0; else noResults">
+      <div class="card" *ngFor="let item of filteredCustomers">
+        <div class="card-body">
+          <p><strong>Customer ID:</strong> {{ item.customerID }}</p>
+          <p><strong>First Name:</strong> {{ item.firstName }}</p>
+          <p><strong>Last Name:</strong> {{ item.lastName }}</p>
+          <p><strong>Email:</strong> {{ item.email }}</p>
+          <p><strong>Phone:</strong> {{ item.phone }}</p>
+          <p>
+            <strong>Orders:</strong>
+            <button
+              *ngIf="item.orderDetailsID !== undefined && item.orderDetailsID > 0"
+              class="btn btn-primary btn-m p-2"
+              [routerLink]="['/orders']"
+              [queryParams]="{ customerID: item.customerID }"
+            >
+              Orders
+            </button>
+          </p>
+          <p><strong>Joined:</strong> {{ item.created_at }}</p>
+          <p><strong>DOB:</strong> {{ item.dob }}</p>
+          <p><strong>Type:</strong> {{ item.type }}</p>
+          <div *ngIf="item.type === 'customer'" class="status-toggle">
+            <strong>Status:</strong>
+            <label>
+              <input
+                type="radio"
+                [checked]="item.status === 'active'"
+                (change)="toggleStatus(item)"
+                value="active"
+              />
+              Active
+            </label>
+            <label>
+              <input
+                type="radio"
+                [checked]="item.status === 'blocked'"
+                (change)="toggleStatus(item)"
+                value="blocked"
+              />
+              Blocked
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 
   <!-- No Results Message -->
   <ng-template #noResults>

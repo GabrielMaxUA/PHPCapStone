@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { User } from '../Models/interfaces';
 import { MatDialog } from '@angular/material/dialog';
 import { Service } from '../service/service';
@@ -20,11 +20,19 @@ export class CustomersComponent {
   selectedItem: any; // Selected item for confirmation
   filteredCustomers: User[] = []; // Holds filtered results
   searchQuery: string = ''; // Binds to search input
+  isSmallScreen = false;
+
+ 
   constructor(private service: Service, private dialog: MatDialog, private router: Router) {}
 
   ngOnInit(): void {
     // Component initialization
+    this.onResize(); // Set initial state
     this.getCustomers(); // Fetch the list of customers when the component loads
+}
+@HostListener('window:resize', ['$event'])
+onResize() {
+  this.isSmallScreen = window.innerWidth <= 1024;
 }
 
 getCustomers(): void {

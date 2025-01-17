@@ -35,7 +35,9 @@ img {
   background: hsl(0, 0%, 100%);shape-outside: margin-box; /* This helps text wrap naturally around the image */
   border-radius: 0;
 }
-
+input{
+  max-width: 40vw;
+}
 .bio {
   margin: 0;
   text-align: center;
@@ -184,57 +186,53 @@ img {
   }
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
   .about {
-    display: flex;
-    flex-flow: column nowrap;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0 auto;
   }
-  
-  .image-wrapper{
-    padding: 15px;
-    max-width: fit-content;
-    border: 10px solid hsla(0, 0%, 0%, 0.836);
-    margin: 0 auto;
-    margin-bottom: 40px;
+
+  .image-wrapper {
+      padding: 10px;
+      max-width: 100%;
+      border: 10px solid hsla(0, 0%, 0%, 0.836);
+      margin: 0 auto 20px;
   }
-  
+
   img {
-    width: calc(50vw - 20px);
-    height: auto;
-    background: hsl(0, 0%, 100%);
-    border-radius: 0;
+      width: 100%;
+      max-width: 90%; /* Ensure image scales with the parent */
+      height: auto;
   }
-  
+
   .bio {
-    margin: 0;
-    text-align: center;
-    font-size: 1rem;
-    line-height: 1.4;
-    color: #333;
+      margin: 10px 0;
+      text-align: center;
+      font-size: 1rem;
+      line-height: 1.4;
+      color: #333;
   }
-  
+
   .admin {
-    clear: both; 
-    width: 90vw;
-    padding: 20px;
-    margin: 0 auto;
-    margin-top: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    font-size: 1rem;
+      width: 90%;
+      padding: 20px;
+      margin: 20px auto 0;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
-  
+
   .admin textarea.bio {
-    width: 100%;
-    min-height: 90vw;
-    padding: 6px;
-    margin-bottom: 15px;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    resize: vertical;
-    
+      width: 100%;
+      min-height: 200px;
+      padding: 8px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      resize: vertical;
   }
-  
 }
+
 

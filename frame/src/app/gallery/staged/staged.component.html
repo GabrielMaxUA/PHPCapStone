@@ -19,17 +19,9 @@
       <!-- Color Images Column -->
       <div class="upload-column">
         <h3 class="column-title">Color Images</h3>
-        
-        <!-- Table-like header -->
-        <!-- <div class="form-header">
-          <div class="header-item">#</div>
-          <div class="header-item">Image</div>
-          <div class="header-item">Price</div>
-          <div class="header-item">Actions</div>
-        </div> -->
 
         <!-- Color entries container -->
-        <div class="entries-container">
+        <div class="entries-container" #entriesContainer>
           <div *ngFor="let entry of colorUploads; let i = index" class="entry-row"
           [class.filled]="entry.file && entry.price">
             <!-- Entry number -->
@@ -71,12 +63,12 @@
           </div>
         </div>
 
-        <button 
+        <!-- <button 
           type="button" 
           class="add-btn"
           (click)="addUploadEntry('color')">
           Add Color Image
-        </button>
+        </button> -->
       </div>
 
       <!-- Black & White Images Column -->
@@ -92,7 +84,7 @@
         </div>
 
         <!-- Black & White entries container -->
-        <div class="entries-container">
+        <div class="entries-container" #entriesContainer>
           <div *ngFor="let entry of blackUploads; let i = index" class="entry-row"
           [class.filled]="entry.file && entry.price">
             <!-- Entry number -->
@@ -134,12 +126,12 @@
           </div>
         </div>
 
-        <button 
+        <!-- <button 
           type="button" 
           class="add-btn"
           (click)="addUploadEntry('black')">
           Add B&W Image
-        </button>
+        </button> -->
       </div>
     </div>
 

@@ -60,10 +60,11 @@ export class ArchitectureComponent {
     // Validate an entry
     validateEntry(index: number) {
       const entry = this.productEntries[index];
-      entry.isValid = entry.file !== null && entry.price !== null && entry.price > 0; // Check if entry is valid
+      // Check if the file and price are valid
+      entry.isValid = entry.file !== null && entry.price !== null && entry.price > 0;
     
       if (index === this.productEntries.length - 1 && entry.isValid) {
-        // Automatically add a new entry if the last one is valid
+        // Add a new entry if the last one is valid
         this.addProductEntry();
       }
     }
@@ -217,23 +218,24 @@ export class ArchitectureComponent {
       }
     }
     
-    // Scroll to the bottom of the product entries container
-    private scrollToBottom(): void {
-      setTimeout(() => {
-        const container = this.entriesContainer?.nativeElement;
-        if (container) {
-          const unfilledEntries = container.querySelectorAll('.entry-row:not(.filled)');
-          if (unfilledEntries.length > 0) {
-            const firstUnfilled = unfilledEntries[0];
-            const scrollPosition = firstUnfilled.offsetTop - container.clientHeight + firstUnfilled.clientHeight;
-            container.scrollTo({
-              top: scrollPosition,
-              behavior: 'smooth' // Smooth scrolling animation
-            });
-          }
-        }
-      });
+ // Scroll to the bottom of the entries container
+private scrollToBottom(): void {
+  setTimeout(() => {
+    const container = this.entriesContainer?.nativeElement;
+    if (container) {
+      const unfilledEntries = container.querySelectorAll('.entry-row:not(.filled)');
+      if (unfilledEntries.length > 0) {
+        const firstUnfilled = unfilledEntries[0];
+        const scrollPosition = firstUnfilled.offsetTop - container.clientHeight + firstUnfilled.clientHeight;
+        container.scrollTo({
+          top: scrollPosition,
+          behavior: 'smooth' // Smooth scrolling
+        });
+      }
     }
+  });
+}
+
     
     // Handle link click and decide action based on user authentication
     handleLinkClick(pictureID: number) {

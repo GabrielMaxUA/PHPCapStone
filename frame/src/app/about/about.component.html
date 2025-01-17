@@ -14,6 +14,9 @@
 
   <!-- Bio Edit -->
    <div *ngIf="user?.type === 'admin'" class=" admin text-end">
+    <div *ngIf="isUploading" class="loading-overlay">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
     <textarea [(ngModel)]="bioText" class="bio"></textarea>
     <div *ngIf="user?.type === 'admin'" class="filePick">
       <input type="file" (change)="onFileSelected($event)" />

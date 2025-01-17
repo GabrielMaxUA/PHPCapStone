@@ -96,33 +96,34 @@ onPriceChange(type: 'color' | 'black', index: number, value: number): void {
 /** Submit valid uploads */
 submitGalleryChanges(): void {
   const formData = new FormData();
-  let uploadCount = 0;
-
+  
+  // Get valid uploads
+  const validColorUploads = this.colorUploads.filter(entry => entry.isValid);
+  const validBlackUploads = this.blackUploads.filter(entry => entry.isValid);
+  
+  // Add count parameters
+  formData.append('colorCount', validColorUploads.length.toString());
+  formData.append('blackCount', validBlackUploads.length.toString());
+  
   // Append color images with indexed names
-  this.colorUploads
-    .filter(entry => entry.isValid)
-    .forEach((entry, index) => {
-      formData.append(`colorImage_${index}`, entry.file!);
-      formData.append(`colorImagePrice_${index}`, entry.price?.toString() || '0');
-      uploadCount++;
-    });
+  validColorUploads.forEach((entry, index) => {
+    formData.append(`colorImage_${index}`, entry.file!);
+    formData.append(`colorImagePrice_${index}`, entry.price?.toString() || '0');
+  });
 
   // Append black images with indexed names
-  this.blackUploads
-    .filter(entry => entry.isValid)
-    .forEach((entry, index) => {
-      formData.append(`blackImage_${index}`, entry.file!);
-      formData.append(`blackImagePrice_${index}`, entry.price?.toString() || '0');
-      uploadCount++;
-    });
+  validBlackUploads.forEach((entry, index) => {
+    formData.append(`blackImage_${index}`, entry.file!);
+    formData.append(`blackImagePrice_${index}`, entry.price?.toString() || '0');
+  });
 
-  if (uploadCount === 0) {
+  if (validColorUploads.length + validBlackUploads.length === 0) {
     alert('Please add valid images with prices.');
     return;
   }
 
   this.isUploading = true;
-
+  
   // Single request with all images
   this.service.submitGalleriesData(formData, 'stagedGallery').subscribe({
     next: (response) => {
@@ -132,6 +133,9 @@ submitGalleryChanges(): void {
     },
     error: (error) => {
       console.error('Error submitting changes:', error);
+      this.isUploading = false;
+    },
+    complete: () => {
       this.isUploading = false;
     }
   });

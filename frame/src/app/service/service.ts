@@ -291,6 +291,10 @@ export class Service {
    * @returns Observable of the submission response.
    */
   submitGalleriesData(formData: FormData, action: string): Observable<any> {
+    console.log('FormData content before sending:', formData);
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
     return this.postRequest(`galleriesData?action=${action}`, formData, {
       withCredentials: true,
     });

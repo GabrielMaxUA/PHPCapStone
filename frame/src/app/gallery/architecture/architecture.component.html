@@ -8,17 +8,9 @@
     <app-loading-spinner></app-loading-spinner>
   </div>
   <form #form="ngForm" (ngSubmit)="submitChanges()" novalidate>
-    <!-- Table-like header -->
-    <!-- <div class="form-header">
-      <div class="header-item">Entry #</div>
-      <div class="header-item">Image Upload</div>
-      <div class="header-item">Price</div>
-      <div class="header-item">Actions</div>
-      <div class="header-item">Status</div>
-    </div> -->
 
     <!-- Dynamic product entries in rows -->
-    <div class="entries-container">
+    <div class="entries-container" #entriesContainer>
       <div *ngFor="let entry of productEntries; let i = index" class="entry-row"
       [class.filled]="entry.file && entry.price">
         <!-- Entry number -->
