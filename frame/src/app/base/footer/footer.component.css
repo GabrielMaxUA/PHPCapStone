@@ -22,7 +22,7 @@ footer {
   margin: 0 auto;
 }
 
-.social img {
+.social img, svg {
   width: 2rem;
   border-radius: 8px;
   transition: width 0.4s ease-in-out;
@@ -35,7 +35,7 @@ footer {
     padding: 5px;
   }
 
-  .social img {
+  .social img, svg {
     width: 1.5rem;
     border-radius: 8px;
     transition: width 0.4s ease-in-out;

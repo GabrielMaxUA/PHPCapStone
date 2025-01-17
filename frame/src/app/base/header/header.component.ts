@@ -1,4 +1,7 @@
-import { Component, HostListener } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { Service } from '../../service/service';
+import { User } from '../../Models/interfaces';
+import { UserService } from '../../service/user.service';
 
 @Component({
     selector: 'app-header',
@@ -9,6 +12,36 @@ import { Component, HostListener } from '@angular/core';
 
 export class HeaderComponent {
   menuActive = false;
+  cartCount: number = 1;
+  isResponsiveMode = false;
+  user: User | null = null;
+  
+  constructor( private service: Service, private cdr: ChangeDetectorRef,
+    private userService: UserService){}
+
+
+ngOnInit(){
+  this.cartCount = this.service.getCartCount();
+  this.userService.user$.subscribe((user) => {
+    this.user = user;
+    if (user) {
+      this.service.getCartItems();
+    } else {
+      this.cartCount = 0;
+    }
+  });
+  this.service.cartCount$.subscribe(count => {
+    this.cartCount = count;
+    this.cdr.detectChanges();
+  });
+
+  this.checkResponsiveMode();
+}
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkResponsiveMode();
+  }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
@@ -24,9 +57,8 @@ export class HeaderComponent {
     }
   }
 
-  toggleMenu() {
-    this.menuActive = !this.menuActive;
-    // Stop event propagation to prevent immediate closing
-    event?.stopPropagation();
+  private checkResponsiveMode(): void {
+    this.isResponsiveMode = window.innerWidth <= 768;
   }
+ 
 }

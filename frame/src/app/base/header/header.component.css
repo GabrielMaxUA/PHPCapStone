@@ -13,6 +13,35 @@ header {
   margin: 20px auto;
 }
 
+svg{
+  position: absolute;
+  width: 2rem;
+  top: 0;
+  left: 0;
+  margin: 15px;
+}
+
+.cartLink {
+  width: fit-content;
+  text-decoration: none;
+}
+
+.counter {
+  width: 2rem;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
+  height: auto; /* Width of the circle */
+  color: rgb(255, 255, 255); /* White text color */
+  font-size: 1rem; /* Adjust font size */
+  font-weight: bolder;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 17px;
+  margin-top: 10px;
+}
 /* .menu {
   position: fixed;
   top: 8px;

@@ -19,14 +19,14 @@
 }
 
 .cart-item {
-  max-width: 300px;
+  max-width: 200px;
   height: fit-content;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
   border: 1px solid #ddd;
-  padding: 15px;
+  padding: 10px;
   border-radius: 8px;
   background: white;
 }
@@ -49,21 +49,21 @@
   align-items: center;
   gap: 10px;
   margin-top: 1vw;
-  padding: 1vw;
+  padding: 1vw auto;
 }
 
 .delete-btn{
   border: none;
+  background: none;
 }
 
 .price{
-  font-size: 2.1rem;
+  font-size: 1.4rem;
 }
 
 .delete-btn svg{
-  width: 1.2rem;
+  width: 1rem;
   height: auto;
-  background: none;
 }
 
 .cart-summary {
@@ -160,6 +160,11 @@
 
 
 @media screen and (max-width: 1024px){
+  .price{
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
   .clear-btn {
     padding: 5px 10px;
     background: hsl(0, 0%, 44%);
@@ -171,9 +176,7 @@
   }
   
   .cart-item {
-    max-width: 20vw;
-    height: fit-content;
-    padding: 5px;
+    padding: 10px;
   }
 
   .continue-btn{
@@ -181,8 +184,6 @@
   }
 
 }
-
-
 
  @media screen and (max-width: 768px) {
   .clear-btn {
@@ -195,14 +196,49 @@
     margin: 10px 5px;
   }
   
+  .price{
+    font-size: 0.7rem;
+    margin: 0;
+  }
+
   .cart-item {
-    max-width: 30vw;
-    height: fit-content;
-    padding: 5px;
+    width: 30vw;
+    padding: 8px;
   }
 
   .continue-btn{
     font-size: 0.8rem;
   }
+ 
+  .delete-btn svg{
+    width: 0.7rem;
+    height: auto;
+    background: none;
+    margin: 0;
+  }
+
+  .clear-btn {
+    width: 20vw;
+    font-size: 0.7rem;
+  }
+
+  #paypal-button-container{
+    margin: 20px auto;
+    margin-top: 10px;
+    max-width: fit-content;
+    font-size: 0.9rem;
+  }
+
+  h3{
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  /* .chechout-btn{
+    width: 20vw;
+    font-size: 0.7rem;
+  } */
+
+  
 
  }
