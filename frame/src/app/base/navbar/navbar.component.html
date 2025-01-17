@@ -6,7 +6,8 @@
     <div class="bar"></div>
     <div class="bar"></div>
   </button>
-  <aside class="navbar" [class.show-dropdown]="isDropdownOpen">
+  <aside class="navbar aside" [class.show-dropdown]="isDropdownOpen">
+    <div class="menu-holder">
     <div class="linkholder">
       <a routerLink="/about" 
          routerLinkActive="active" 
@@ -25,8 +26,8 @@
       </a>
     </div>
 
-    <div class="text-center" *ngIf="user?.type === 'customer'">
-      <a class="cartLink" 
+    <div  *ngIf="user?.type === 'customer'">
+      <a class="cartLink linkholder" 
          routerLink="/cart" 
          routerLinkActive="active"
          (click)="toggleDropdown($event)">
@@ -48,5 +49,6 @@
     <div class="linkholder" *ngIf="user">
       <a class="social" (click)="logout()">Logout</a>
     </div>
+  </div>
   </aside>
 </nav>

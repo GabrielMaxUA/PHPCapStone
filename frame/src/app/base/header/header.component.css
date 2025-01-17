@@ -13,7 +13,7 @@ header {
   margin: 20px auto;
 }
 
-.menu {
+/* .menu {
   position: fixed;
   top: 8px;
   right: -18px;
@@ -33,7 +33,7 @@ header {
   margin: 6px auto;
   background: #000000;
   border-radius: 1000px;
-  transition: all 0.4s ease-in-out;  /* Changed to all for smoother transitions */
+  transition: all 0.4s ease-in-out; 
 }
 
 .menu.active .bar:nth-child(1) {
@@ -43,9 +43,9 @@ header {
 }
 
 .menu.active .bar:nth-child(2) {
-  opacity: 0;  /* Use opacity instead of width */
-  transform: translateX(20px);  /* Add translation for smoother movement */
-  width: 40px;  /* Keep consistent width */
+  opacity: 0;
+  transform: translateX(20px);  
+  width: 40px;  
 }
 
 .menu.active .bar:nth-child(3) {
@@ -79,8 +79,8 @@ header {
 }
 
 .menu:not(.active) .bar:nth-child(2) {
-  opacity: 1;  /* Ensure full opacity when visible */
-  transform: translateX(0);  /* Reset translation */
+  opacity: 1;  
+  transform: translateX(0); 
   width: 40px;
   height: 2px;
 }
@@ -101,9 +101,9 @@ aside.active {
   top: 0;
   z-index: 5;
   background: none;
-}
+} */
 
-.nav_social {
+/* .nav_social {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -120,9 +120,9 @@ aside.active {
 
 .social img:hover{
   width: 40px;
-}
+} */
 
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   .social img {
     width: 25px;
     border-radius: 8px;
@@ -159,7 +159,7 @@ aside.active {
   }
   
   .menu.active .bar:nth-child(2) {
-    width: 30px;  /* Keep consistent width */
+    width: 30px;  
   }
   
   .menu.active .bar:nth-child(3) {
@@ -185,5 +185,5 @@ aside.active {
   .menu:not(.active) .bar:nth-child(2) {
     width: 30px;
   }
-}
+} */
 

@@ -14,12 +14,31 @@ footer {
   margin: 0 auto;
 }
 
+.nav_social {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.social img {
+  width: 2rem;
+  border-radius: 8px;
+  transition: width 0.4s ease-in-out;
+}
 @media screen and (max-width: 768px){
   p{
     font-size: 0.8rem;
     width: 80%;
     margin: 0 auto;
     padding: 5px;
+  }
+
+  .social img {
+    width: 1.5rem;
+    border-radius: 8px;
+    transition: width 0.4s ease-in-out;
   }
 
 }

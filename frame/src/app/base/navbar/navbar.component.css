@@ -64,7 +64,10 @@ nav {
 
 .linkholder{
   width: fit-content;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem auto ;
 }
 
 .dropMenu{
@@ -74,10 +77,8 @@ nav {
 
 a {
   font-family: 'Heading1-font', 'Arial Narrow', Arial, sans-serif;
-  float: left;
   font-size: 1.4em;
   cursor: pointer;
-  margin:0;
   background: none;
   color: hsl(0, 1%, 14%);
   text-decoration: none;
@@ -94,7 +95,7 @@ a:hover {
 }
 
 .cartLink {
-  width: fit-content;
+  width: auto;
   display: inline-flex;
   align-items: center;
 }
@@ -113,6 +114,13 @@ a:hover {
   padding-bottom: 4px;
 }
 
+.menu-holder{
+  width: 50%;
+  padding: 10vw;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
 
 /* Media query for smaller screens */
 @media screen and (max-width: 768px) {
@@ -132,10 +140,10 @@ a:hover {
   width: auto;
   height: 100vh;
   background: hsla(51, 72%, 93%, 0.95);
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: start;
-  align-items: center;
+  align-items: center; */
   transition: 0.4s ease-in-out;
   z-index: 1001;
 }
@@ -161,7 +169,7 @@ a:hover {
     width: 100%;
   }
   /* Hide all links by default */
-  a, .cartLink {
+  a {
     width: 100%;
     text-align: center;
     margin-top: 10px;
@@ -171,7 +179,7 @@ a:hover {
   /* Only show the currently active link */
   a.active {
     display: block;
-    text-decoration: none;
+    text-decoration: underline;
   }
 
   /* Show gallery link only when in gallery routes */
@@ -188,7 +196,7 @@ a:hover {
   }
 
   /* Show all links when dropdown is open */
-  .navbar.show-dropdown a,
+  .navbar.show-dropdown  a,
   .navbar.show-dropdown .cartLink {
     display: flex;
     justify-content: center;
