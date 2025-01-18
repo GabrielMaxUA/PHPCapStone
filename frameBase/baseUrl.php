@@ -1,4 +1,4 @@
 <?php
- $baseUrl = 'http://localhost/frameBase';
-//private baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase'; 
+$baseUrl = 'http://localhost/frameBase/';
+//$baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase/'; 
 ?>

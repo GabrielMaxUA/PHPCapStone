@@ -25,7 +25,7 @@ if ($method === 'GET') {
         $row = mysqli_fetch_assoc($result);
         echo json_encode([
           'bioText' => $row['bioText'],
-          'mainImage' => $baseUrl . '/' . $row['mainImage'] // Concatenate the base URL with the image path
+          'mainImage' => $baseUrl . $row['mainImage'] // Concatenate the base URL with the image path
       ]);
       
     } else {

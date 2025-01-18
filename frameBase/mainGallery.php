@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once 'connection.php'; // Ensure this includes your database connection
-
+require_once 'baseUrl.php';
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
@@ -17,11 +17,11 @@ if ($method === 'GET') {
         $row = mysqli_fetch_assoc($result);
         echo json_encode([
             'sText' => $row['sText'],
-            'sImageMain' => $row['sImageMain'],
+            'sImageMain' =>$baseUrl .  $row['sImageMain'],
             'nText' => $row['nText'],
-            'nImageMain' => $row['nImageMain'],
+            'nImageMain' =>$baseUrl  .  $row['nImageMain'],
             'aText' => $row['aText'],
-            'aImageMain' => $row['aImageMain']
+            'aImageMain' => $baseUrl  . $row['aImageMain']
         ]);
     } else {
         http_response_code(404);

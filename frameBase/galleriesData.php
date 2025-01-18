@@ -12,6 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   http_response_code(200);
   exit;
 }
+error_log("FILES: " . print_r($_FILES, true));
+error_log("POST: " . print_r($_POST, true));
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? ''; // Use an 'action' parameter to differentiate requests
@@ -36,7 +38,7 @@ if ($method === 'GET') {
               while($row = mysqli_fetch_assoc($result)){
                   $response[] = [
                       'pictureID' => $row['pictureID'],
-                      'nGalleryImage' =>$baseUrl . '/' .  $row['imageLow'],
+                      'nGalleryImage' =>$baseUrl . $row['imageLow'],
                       'price' => $row['price'],
                   ];
               }
@@ -61,7 +63,7 @@ if ($method === 'GET') {
               while($row = mysqli_fetch_assoc($result)){
                   $response[] = [
                       'pictureID' => $row['pictureID'],
-                      'aGalleryImage' => $baseUrl . '/' .  $row['imageLow'],
+                      'aGalleryImage' => $baseUrl . $row['imageLow'],
                       'price' => $row['price'],
                   ];
               }
@@ -88,7 +90,7 @@ if ($method === 'GET') {
                 $type = (strpos($row['imageLow'], 'Color') !== false) ? 'color' : 'black';
                 $response[] = [
                     'pictureID' => $row['pictureID'],
-                    'sGalleryImage' =>$baseUrl . '/' .  $row['imageLow'],
+                    'sGalleryImage' =>$baseUrl . $row['imageLow'],
                     'price' => $row['price'],
                     'type' => $type,
                 ];

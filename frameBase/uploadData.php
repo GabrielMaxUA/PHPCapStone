@@ -25,11 +25,11 @@ if ($method === 'GET') {
             $row = mysqli_fetch_assoc($result);
             echo json_encode([
                 'sText' => $row['sText'],
-                'sImageMain' => $baseUrl . '/' . $row['sImageMain'],
+                'sImageMain' => $baseUrl . $row['sImageMain'],
                 'nText' => $row['nText'],
-                'nImageMain' => $baseUrl . '/' . $row['nImageMain'],
+                'nImageMain' => $baseUrl . $row['nImageMain'],
                 'aText' => $row['aText'],
-                'aImageMain' => $baseUrl . '/' . $row['aImageMain']
+                'aImageMain' => $baseUrl . $row['aImageMain']
             ]);
         } else {
             http_response_code(404);
