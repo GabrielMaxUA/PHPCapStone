@@ -23,8 +23,8 @@ import { CartItem, OrderResponse, User } from '../Models/interfaces'; // Interfa
 })
 export class Service {
   // Base URL for making HTTP requests to the backend API.
-  private baseUrl = 'http://localhost/frameBase';
-  //private baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase';
+  //private baseUrl = 'http://localhost/frameBase';
+  private baseUrl = 'https://triosdevelopers.com/~Max.Gabriel/frame/frameBase';
 
   // Observable flags and data properties for managing UI and state.
   showDialog = false; // Boolean to control the display of dialog boxes.
